@@ -3,7 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
-/// <summary>The plugin command searches for commands</summary>
+/// <summary>The plugin command searches for commands in Composer's globally required modules
+/// for the "xp-framework" vendor.</summary>
 public class Plugin : Command
 {
     private string name;
