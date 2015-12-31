@@ -1,8 +1,27 @@
 XP Runners
 ==========
 
+Setup:
+
+```sh
+$ cp ~/bin/class-main.php . # From current XP runners
+```
+
 Compile:
 
 ```sh
 $ csc /target:exe /out:xp.exe src\\*.cs src\\commands\\*.cs
+```
+
+Test:
+
+```sh
+$ ./xp.exe -v
+XP 6.9.2-dev { PHP 7.0.0 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
+Copyright (c) 2001-2015 the XP group
+FileSystemCL<...\xp\core\src\main\php\>
+FileSystemCL<...\xp\core\src\test\php\>
+FileSystemCL<...\xp\core\src\main\resources\>
+FileSystemCL<...\xp\core\src\test\resources\>
+FileSystemCL<...\cygwin\home\Timm\devel\runners\>
 ```
