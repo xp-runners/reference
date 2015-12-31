@@ -1,0 +1,8 @@
+XP Runners
+==========
+
+Compile:
+
+```sh
+$ csc /target:exe /out:xp.exe src\\*.cs
+```
