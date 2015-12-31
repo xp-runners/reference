@@ -29,7 +29,7 @@ FileSystemCL<...\cygwin\home\Timm\devel\runners\>
 Plugins:
 
 ```sh
-$ composer global require xp-framework/unittest
+$ composer global require xp-framework/unittest:dev-master
 # ...
 
 $ ./xp.exe unittest -e '$this->assertTrue(true)'
