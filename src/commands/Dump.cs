@@ -9,6 +9,6 @@ public class Dump : Command
     /// <summary>Command line arguments.</summary>
     protected override IEnumerable<string> ArgumentsFor(CommandLine cmd)
     {
-        return (new string[] { "xp.runtime.Dump" }).Concat(cmd.Arguments);
+        return (new string[] { "xp.runtime.Dump", "-d" }).Concat(cmd.Arguments);
     }
 }

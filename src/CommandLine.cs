@@ -4,23 +4,18 @@ using System.Collections.Generic;
 
 public class CommandLine
 {
-    struct MapTo {
-        public string Command;
-        public bool Pass;
-    }
-
     private static Dictionary<string, string> OPTIONS = new Dictionary<string, string>()
     {
         { "-cp", "classpath" },
         { "-m", "modules" }
     };
-    private static Dictionary<string, MapTo> COMMANDS = new Dictionary<string, MapTo>()
+    private static Dictionary<string, string> COMMANDS = new Dictionary<string, string>()
     {
-        { "-v", new MapTo { Command = "version", Pass = false } },
-        { "-e", new MapTo { Command = "eval", Pass = false } },
-        { "-w", new MapTo { Command = "dump", Pass = true } },
-        { "-d", new MapTo { Command = "dump", Pass = true } },
-        { "-?", new MapTo { Command = "help", Pass = false } }
+        { "-v", "version" },
+        { "-e", "eval" },
+        { "-w", "write" },
+        { "-d", "dump" },
+        { "-?", "help" }
     };
 
     private Dictionary<string, List<string>> options = new Dictionary<string, List<string>>()
@@ -73,9 +68,8 @@ public class CommandLine
             }
             else if (COMMANDS.ContainsKey(argv[i]))
             {
-                var mapped = COMMANDS[argv[i]];
-                command = mapped.Command;
-                offset = mapped.Pass ? i++ : ++i;
+                command = COMMANDS[argv[i]];
+                offset = ++i;
                 break;
             }
             else if (IsOption(argv[i]))
