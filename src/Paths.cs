@@ -38,7 +38,7 @@ static class Paths
         }
         if (expect && !found)
         {
-            throw new FileNotFoundException("Cannot find [" + String.Join(", ", files) + "] in [" + String.Join(", ", new List<string>(bases).ToArray()) + "]");
+            throw new FileNotFoundException("Cannot find [" + string.Join(", ", files) + "] in [" + string.Join(", ", bases) + "]");
         }
     }
 
