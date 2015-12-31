@@ -9,6 +9,11 @@ public class CommandLine
         { "-cp", "classpath" },
         { "-m", "modules" }
     };
+    private static Dictionary<string, string> COMMANDS = new Dictionary<string, string>()
+    {
+        { "-v", "version" },
+        { "-?", "help" }
+    };
 
     private Dictionary<string, List<string>> options = new Dictionary<string, List<string>>()
     {
@@ -57,6 +62,12 @@ public class CommandLine
             {
                 options[OPTIONS[argv[i]]].Add(argv[++i]);
                 offset = i + 1;
+            }
+            else if (COMMANDS.ContainsKey(argv[i]))
+            {
+                command = COMMANDS[argv[i]];
+                offset = ++i;
+                break;
             }
             else if (IsOption(argv[i]))
             {
