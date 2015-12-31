@@ -13,7 +13,7 @@ static class Paths
     }
 
     /// <summary>Returns the directory name of a given file name</summary>
-    public static string DirName(string filename)
+    public static string DirName(this string filename)
     {
         return filename.Substring(0, filename.LastIndexOf(Path.DirectorySeparatorChar) + 1);
     }

@@ -13,7 +13,7 @@ public class Xp
             new IniConfigSource(new Ini(Paths.Compose(".", ini))),
             null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
             new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
-            new IniConfigSource(new Ini(Paths.Compose(Paths.DirName(Paths.Binary()), ini)))
+            new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
         );
     }
 

@@ -9,7 +9,7 @@ public class Run : Command
     protected override string ArgumentsFor(CommandLine cmd)
     {
         var use = Configuration.GetUse();
-        var main = Paths.Locate(new string[] { Paths.DirName(Paths.Binary()) }, new string[] { "class-main.php" }).First();
+        var main = Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { "class-main.php" }).First();
 
         return string.Format(
             "-C -q -d include_path=\".{0}{1}{0}{0}.{0}{2}\" -d encoding=utf-7 -d date.timezone={3} -d magic_quotes_gpc=0 {4} {5}",
