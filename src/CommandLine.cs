@@ -9,13 +9,13 @@ public class CommandLine
         { "-cp", "classpath" },
         { "-m", "modules" }
     };
-    private static Dictionary<string, string> COMMANDS = new Dictionary<string, string>()
+    private static Dictionary<string, Type> COMMANDS = new Dictionary<string, Type>()
     {
-        { "-v", "version" },
-        { "-e", "eval" },
-        { "-w", "write" },
-        { "-d", "dump" },
-        { "-?", "help" }
+        { "-v", typeof(Version) },
+        { "-e", typeof(Eval) },
+        { "-w", typeof(Write) },
+        { "-d", typeof(Dump) },
+        { "-?", typeof(Help) }
     };
 
     private Dictionary<string, List<string>> options = new Dictionary<string, List<string>>()
@@ -23,7 +23,7 @@ public class CommandLine
         { "classpath", new List<string>() },
         { "modules", new List<string>() }
     };
-    private string command = "help";
+    private Command command;
     private IEnumerable<string> arguments;
 
     /// <summary>Global options</summary>
@@ -33,9 +33,9 @@ public class CommandLine
     }
 
     /// <summary>Subcommand name</summary>
-    public string Command
+    public Command Command
     {
-        get { return command; }
+        get { return command ?? new Help(); }
     }
 
     /// <summary>Subcommand arguments</summary>
@@ -56,6 +56,20 @@ public class CommandLine
         return arg.All(char.IsLower);
     }
 
+    /// <summary>Returns a command by a given name</summary>
+    private Command AsCommand(string arg)
+    {
+        var type = Type.GetType(arg);
+        if (null == type)
+        {
+            return new Plugin(arg);
+        }
+        else
+        {
+            return Activator.CreateInstance(type) as Command;
+        }
+    }
+
     public CommandLine(string[] argv)
     {
         var offset = 0;
@@ -68,7 +82,7 @@ public class CommandLine
             }
             else if (COMMANDS.ContainsKey(argv[i]))
             {
-                command = COMMANDS[argv[i]];
+                command = Activator.CreateInstance(COMMANDS[argv[i]]) as Command;
                 offset = ++i;
                 break;
             }
@@ -78,13 +92,13 @@ public class CommandLine
             }
             else if (IsCommand(argv[i]))
             {
-                command = argv[i];
+                command = AsCommand(argv[i]);
                 offset = ++i;
                 break;
             }
             else
             {
-                command = "run";
+                command = new Run();
                 offset = i;
                 break;
             }

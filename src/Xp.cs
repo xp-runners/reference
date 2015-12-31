@@ -21,17 +21,9 @@ public class Xp
     public static int Main(string[] args)
     {
         var cmd = new CommandLine(args);
-
-        var command = Type.GetType(cmd.Command.UpperCaseFirst());
-        if (null == command)
-        {
-            Console.Error.WriteLine("Unknown command `{0}`", cmd.Command);
-            return 2;
-        }
-
         try
         {
-            return (Activator.CreateInstance(command, new object[] { TheConfiguration() }) as Command).Execute(cmd);
+            return cmd.Command.Execute(cmd, TheConfiguration());
         }
         catch (EntryPointNotFoundException e) 
         {
