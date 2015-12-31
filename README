@@ -25,3 +25,17 @@ FileSystemCL<...\xp\core\src\main\resources\>
 FileSystemCL<...\xp\core\src\test\resources\>
 FileSystemCL<...\cygwin\home\Timm\devel\runners\>
 ```
+
+Plugins:
+
+```sh
+$ composer global require xp-framework/unittest
+# ...
+
+$ ./xp.exe unittest -e '$this->assertTrue(true)'
+[.]
+
+✓: 1/1 run (0 skipped), 1 succeeded, 0 failed
+Memory used: 1267.07 kB (1417.43 kB peak)
+Time taken: 0.000 seconds
+```
