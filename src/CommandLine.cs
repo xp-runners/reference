@@ -56,6 +56,7 @@ public class CommandLine
             if (OPTIONS.ContainsKey(argv[i]))
             {
                 options[OPTIONS[argv[i]]].Add(argv[++i]);
+                offset = i + 1;
             }
             else if (IsOption(argv[i]))
             {
