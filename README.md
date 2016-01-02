@@ -17,7 +17,7 @@ Test:
 
 ```sh
 $ ./xp.exe version
-XP 6.9.2-dev { PHP 7.0.0 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
+XP 7.0.0-dev { PHP 7.0.0 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
 Copyright (c) 2001-2015 the XP group
 FileSystemCL<...\xp\core\src\main\php\>
 FileSystemCL<...\xp\core\src\test\php\>
