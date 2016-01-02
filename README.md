@@ -41,13 +41,15 @@ If no command line arguments are given, the help command is run. If command line
 
 Plugins
 -------
-Libraries may provide commands by adding a vendor binary to their composer.json named xp.[vendor].[name] - for the [unittest](https://github.com/xp-framework/unittest/blob/master/bin/xp.xp-framework.unittest) command, the entry is:
+Libraries may provide commands by adding a vendor binary to their composer.json named xp.{vendor}.{name}[.{command}] - for the [unittest](https://github.com/xp-framework/unittest/blob/master/bin/xp.xp-framework.unittest) command, the entry is:
 
 ```json
 {
   "bin": ["bin/xp.xp-framework.unittest"]
 }
 ```
+
+The `xp.{module}.{ucfirst(command)}Runner` class serves as the entry point (if the command name is omitted, it will simply be `xp.{module}.Runner`).
 
 By installing the package globally, it becomes available in any directory.
 
@@ -62,3 +64,5 @@ $ ./xp.exe unittest -e '$this->assertTrue(true)'
 Memory used: 1267.07 kB (1417.43 kB peak)
 Time taken: 0.000 seconds
 ```
+
+*The above is the short form of `./xp.exe -m /path/to/unittest [-m /path/to/dependencies/of/unittest] xp.unittest.Runner ...`*
