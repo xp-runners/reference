@@ -26,17 +26,18 @@ FileSystemCL<...\xp\core\src\test\resources\>
 FileSystemCL<...\cygwin\home\Timm\devel\runners\>
 ```
 
-Supported command line options
-------------------------------
-The following command line options are supported as short versions of the commands:
+Commands
+--------
+The following commands are builtin:
 
-* `-v`: version - Displays version and exits
-* `-e`: eval - Evaluates code
-* `-w`: write - Evaluates code, writes result to Console
-* `-d`: dump - Evaluates code, var_dump()s result
-* `-?`: help - Displays help
+* **version** - Displays version and exits - *also `-v`*
+* **eval [code]** - Evaluates code - *also `-e [code]`*
+* **write [code]** - Evaluates code, writes result to Console - *also `-w [code]`*
+* **dump [code]** - Evaluates code, var_dump()s result - *also `-d [code]`*
+* **help** - Displays help - *also `-?`*
+* **run** - Runs a class
 
-The default command is *run*.
+If no command line arguments are given, the help command is run. If command line arguments are given, but no command is passed, the command defaults to *run*.
 
 Plugins
 -------
