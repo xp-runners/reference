@@ -59,7 +59,7 @@ public class CommandLine
     /// <summary>Returns a command by a given name</summary>
     private Command AsCommand(string arg)
     {
-        var type = Type.GetType(arg);
+        var type = Type.GetType(arg.UpperCaseFirst());
         if (null == type)
         {
             return new Plugin(arg);
