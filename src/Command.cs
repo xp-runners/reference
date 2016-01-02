@@ -51,7 +51,7 @@ public abstract class Command
             Paths.Separator,
             string.Join(Paths.Separator, configuration.GetUse().Concat(cmd.Options["modules"]).Concat(ModulesFor(cmd))),
             string.Join(Paths.Separator, cmd.Options["classpath"]),
-            string.Join(" ", IniSettings(configuration.GetArgs(runtime).Concat(ini))),
+            string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
             MainFor(cmd),
             string.Join(" ", ArgumentsFor(cmd).Select(Strings.AsArgument))
         );
