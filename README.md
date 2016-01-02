@@ -10,7 +10,7 @@ $ cp ~/bin/class-main.php . # From current XP runners
 Compile:
 
 ```sh
-$ csc /target:exe /out:xp.exe src\\*.cs src\\commands\\*.cs
+$ csc /target:exe /out:xp.exe src\\*.cs src\\commands\\*.cs src\\exec\\*.cs
 ```
 
 Test:
@@ -66,3 +66,12 @@ Time taken: 0.000 seconds
 ```
 
 *The above is the short form of `./xp.exe -m /path/to/unittest [-m /path/to/dependencies/of/unittest] xp.unittest.Runner ...`*
+
+Execution
+---------
+There are two execution models:
+
+1. Run once, exit (*this is the default*)
+2. Watch a directory, spawn process every time a change occurs (*via `-watch {directory}`*)
+
+The second model is useful e.g. to implement continuous unittest running, see [here](https://github.com/xp-framework/xp-runners/pull/24).

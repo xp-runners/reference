@@ -77,19 +77,6 @@ public abstract class Command
         );
 
         // Console.WriteLine("php {0}", proc.StartInfo.Arguments);
-        try
-        {
-            proc.Start();
-            proc.WaitForExit(); 
-            return proc.ExitCode;
-        }
-        catch (SystemException e) 
-        {
-            throw new EntryPointNotFoundException(proc.StartInfo.FileName + ": " + e.Message, e);
-        } 
-        finally
-        {
-            proc.Close();
-        }
+        return cmd.ExecutionModel.Execute(proc);
     }
 }

@@ -25,6 +25,7 @@ public class CommandLine
     };
     private Command command;
     private IEnumerable<string> arguments;
+    private ExecutionModel executionModel;
 
     /// <summary>Global options</summary>
     public Dictionary<string, List<string>> Options
@@ -42,6 +43,11 @@ public class CommandLine
     public IEnumerable<string> Arguments
     {
         get { return arguments; }
+    }
+
+    public ExecutionModel ExecutionModel
+    {
+        get { return executionModel ?? new RunOnce(); }
     }
 
     /// <summary>Determines if a command line arg is an option</summary>
@@ -86,6 +92,11 @@ public class CommandLine
                 offset = ++i;
                 break;
             }
+            else if ("-watch".Equals(argv[i]))
+            {
+                executionModel = new RunWatching(argv[++i]);
+                offset = i + 1;
+            }
             else if (IsOption(argv[i]))
             {
                 throw new ArgumentException("Unknown option `" + argv[i] + "`");
@@ -112,10 +123,7 @@ public class CommandLine
         return string.Format(
             "{0}(Options: {1}, Command: {2}, Arguments: [{3}])",
             typeof(CommandLine),
-            string.Join(", ", options.Select(pair =>
-            {
-                return string.Format("{0}=[{1}]", pair.Key, string.Join(", ", pair.Value));
-            })),
+            string.Join(", ", options.Select(pair => string.Format("{0}=[{1}]", pair.Key, string.Join(", ", pair.Value)))),
             command,
             string.Join(", ", arguments)
         );
