@@ -41,6 +41,15 @@ If no command line arguments are given, the help command is run. If command line
 
 Plugins
 -------
+Libraries may provide commands by adding a vendor binary to their composer.json named xp.[vendor].[name] - for the [unittest](https://github.com/xp-framework/unittest/blob/master/bin/xp.xp-framework.unittest) command, the entry is:
+
+```json
+{
+  "bin": ["bin/xp.xp-framework.unittest"]
+}
+```
+
+By installing the package globally, it becomes available in any directory.
 
 ```sh
 $ composer global require xp-framework/unittest:dev-master
