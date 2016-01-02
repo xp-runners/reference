@@ -45,6 +45,7 @@ public class CommandLine
         get { return arguments; }
     }
 
+    /// <summary>Execution model - once, watching(dir), ...</summary>
     public ExecutionModel ExecutionModel
     {
         get { return executionModel ?? new RunOnce(); }
@@ -76,6 +77,7 @@ public class CommandLine
         }
     }
 
+    /// <summary>Creates the commandline representation from argv</summary>
     public CommandLine(string[] argv)
     {
         var offset = 0;
