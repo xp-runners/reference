@@ -7,26 +7,28 @@ using System.Collections.Generic;
 public class Plugin : Command
 {
     private string name;
+    private string composer;
     private string module;
 
     public Plugin(string name)
     {
-        var composer = Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", "vendor");
-        var bin = Directory.GetFiles(Paths.Compose(composer, "bin"), "xp.*." + name).FirstOrDefault();
-
-        if (null == bin)
+        foreach (var composer in ComposerLocations().Where(Directory.Exists))
         {
-            throw new NotImplementedException(name);
-        }
+            var bin = Directory.GetFiles(Paths.Compose(composer, "bin"), "xp.*." + name).FirstOrDefault();
+            if (null == bin) continue;
 
-        this.name = name;
-        this.module = Paths.Compose(composer, Path.GetFileName(bin).Substring("xp.".Length).Replace('.', Path.DirectorySeparatorChar));
+            this.name = name;
+            this.composer = composer;
+            this.module = Path.GetFileName(bin).Substring("xp.".Length).Replace('.', Path.DirectorySeparatorChar);
+            return;
+        }
+        throw new NotImplementedException(name);
     }
 
     /// <summary>Additional modules to load. Overwrite in subclasses if necessary!</summary>
     protected override IEnumerable<string> ModulesFor(CommandLine cmd)
     {
-        return new string[] { this.module };
+        return new string[] { Paths.Compose(this.composer, this.module) };
     }
 
     /// <summary>Command line arguments.</summary>

@@ -1,10 +1,20 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.IO;
 using System.Collections.Generic;
 
 public abstract class Command
 {
+    const string VENDOR = "vendor";
+
+    /// <summary>Returns well-known locations of Composer directories. Local installations have precedence!</summary>
+    protected IEnumerable<string> ComposerLocations()
+    {
+        yield return Paths.Compose(".", VENDOR);
+        yield return Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", VENDOR);
+    }
+
     /// <summary>Main script, e.g. "class-main.php". Overwrite in subclasses if necessary!</summary>
     protected virtual string MainFor(CommandLine cmd)
     {
@@ -13,6 +23,12 @@ public abstract class Command
 
     /// <summary>Additional modules to load. Overwrite in subclasses if necessary!</summary>
     protected virtual IEnumerable<string> ModulesFor(CommandLine cmd)
+    {
+        return new string[] { };
+    }
+
+    /// <summary>Additional class path entries to load. Overwrite in subclasses if necessary!</summary>
+    protected virtual IEnumerable<string> ClassPathFor(CommandLine cmd)
     {
         return new string[] { };
     }
@@ -41,6 +57,10 @@ public abstract class Command
             { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? "UTC" } },
             { "extension", configuration.GetExtensions(runtime) }
         };
+        var use = configuration.GetUse() ?? new string[]
+        {
+            ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists).First()
+        };
 
         proc.StartInfo.RedirectStandardOutput = false;
         proc.StartInfo.RedirectStandardError = false;
@@ -49,13 +69,14 @@ public abstract class Command
         proc.StartInfo.Arguments = string.Format(
             "-C -q -d include_path=\".{0}{1}{0}{0}.{0}{2}\" {3} {4} {5}",
             Paths.Separator,
-            string.Join(Paths.Separator, configuration.GetUse().Concat(cmd.Options["modules"]).Concat(ModulesFor(cmd))),
-            string.Join(Paths.Separator, cmd.Options["classpath"]),
+            string.Join(Paths.Separator, use.Concat(cmd.Options["modules"].Concat(ModulesFor(cmd)))),
+            string.Join(Paths.Separator, cmd.Options["classpath"].Concat(ClassPathFor(cmd))),
             string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
             MainFor(cmd),
             string.Join(" ", ArgumentsFor(cmd).Select(Strings.AsArgument))
         );
 
+        // Console.WriteLine("php {0}", proc.StartInfo.Arguments);
         try
         {
             proc.Start();
