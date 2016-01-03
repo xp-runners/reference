@@ -110,5 +110,25 @@ namespace Xp.Runners.Test
                 new CommandLine(new string[] { "-m", "test", "-m", "data" }).Options["modules"].ToArray()
             );
         }
+
+        [Fact]
+        public void runonce_is_default_execution_model()
+        {
+            Assert.IsType<RunOnce>(new CommandLine(new string[] { }).ExecutionModel);
+        }
+
+        [Fact]
+        public void watch_execution_model()
+        {
+            Assert.IsType<RunWatching>(new CommandLine(new string[] { "-watch", "." }).ExecutionModel);
+        }
+
+        [Theory]
+        [InlineData(".")]
+        [InlineData("src")]
+        public void watch_execution_model_path(string path)
+        {
+            Assert.Equal(path, (new CommandLine(new string[] { "-watch", path }).ExecutionModel as RunWatching).Path);
+        }
     }
 }

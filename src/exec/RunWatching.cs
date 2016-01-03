@@ -17,6 +17,9 @@ namespace Xp.Runners
             };
         }
 
+        /// <summary>The path being watched</summary>
+        public string Path { get { return watcher.Path; }}
+
         /// <summary>Execute the process and return its exitcode</summary>
         public override int Execute(Process proc)
         {
