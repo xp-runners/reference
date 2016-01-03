@@ -62,14 +62,14 @@ The `xp.{module}.{ucfirst(command)}Runner` class serves as the entry point (if t
 By installing the package globally, it becomes available in any directory.
 
 ```sh
-$ composer global require xp-framework/unittest:dev-master
+$ composer global require xp-framework/unittest
 # ...
 
-$ ./xp.exe unittest -e '$this->assertTrue(true)'
+$ xp test -e '$this->assertTrue(true)'
 [.]
 
-✓: 1/1 run (0 skipped), 1 succeeded, 0 failed
-Memory used: 1267.07 kB (1417.43 kB peak)
+♥: 1/1 run (0 skipped), 1 succeeded, 0 failed
+Memory used: 1265.94 kB (1416.26 kB peak)
 Time taken: 0.000 seconds
 ```
 
