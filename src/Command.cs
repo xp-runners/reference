@@ -82,7 +82,7 @@ namespace Xp.Runners
             // Console.WriteLine("php {0}", proc.StartInfo.Arguments);
             var encoding = Console.OutputEncoding;
 
-            Console.CancelKeyPress += (sender, args) => { Console.OutputEncoding = encoding; };
+            Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = encoding;
             Console.OutputEncoding = Encoding.UTF8;
             try
             {
