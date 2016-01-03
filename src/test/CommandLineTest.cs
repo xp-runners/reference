@@ -130,5 +130,29 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(path, (new CommandLine(new string[] { "-watch", path }).ExecutionModel as RunWatching).Path);
         }
+
+        [Fact]
+        public void arguments_initially_empty()
+        {
+            Assert.Equal(new string[] { }, new CommandLine(new string[] { }).Arguments);
+        }
+
+        [Fact]
+        public void one_argument()
+        {
+            Assert.Equal(
+                new string[] { "Test" },
+                new CommandLine(new string[] { "run", "Test" }).Arguments
+            );
+        }
+
+        [Fact]
+        public void multiple_arguments()
+        {
+            Assert.Equal(
+                new string[] { "Test", "1", "2", "3" },
+                new CommandLine(new string[] { "run", "Test", "1", "2", "3" }).Arguments
+            );
+        }
     }
 }
