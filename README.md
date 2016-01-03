@@ -1,6 +1,9 @@
 XP Runners
 ==========
+This is the reference implementation of [XP RFC #0303: Subcommands](https://github.com/xp-framework/rfc/issues/303).
 
+Getting started
+---------------
 Setup:
 
 ```sh
@@ -65,7 +68,7 @@ Memory used: 1267.07 kB (1417.43 kB peak)
 Time taken: 0.000 seconds
 ```
 
-*The above is the short form of `./xp.exe -m /path/to/unittest [-m /path/to/dependencies/of/unittest] xp.unittest.Runner ...`*
+*The above is the short form of `./xp.exe -m /path/to/unittest [-m /path/to/dependencies/of/unittest ...] xp.unittest.Runner ...`*
 
 Execution
 ---------
