@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 
 public abstract class Command
@@ -77,6 +78,15 @@ public abstract class Command
         );
 
         // Console.WriteLine("php {0}", proc.StartInfo.Arguments);
-        return cmd.ExecutionModel.Execute(proc);
+        var encoding = Console.OutputEncoding;
+        Console.OutputEncoding = Encoding.UTF8;
+        try
+        {
+            return cmd.ExecutionModel.Execute(proc);
+        }
+        finally
+        {
+            Console.OutputEncoding = encoding;
+        }
     }
 }
