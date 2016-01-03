@@ -128,5 +128,19 @@ namespace Xp.Runners.Test
                 Paths.Translate(".", new string[] { "~/devel" }).ToArray()
             );
         }
+
+        [Fact]
+        public void locate_dotnet_framework()
+        {
+            var framework = Paths.Compose(Environment.SpecialFolder.Windows, "Microsoft.NET", "Framework");
+            if (!Directory.Exists(framework)) return;   // Skip
+
+            var search = Directory.GetDirectories(framework, "v*.*");
+
+            Assert.NotEqual(
+                new string[] { },
+                Paths.Locate(search, new string[] { "csc.exe" }).ToArray()
+            );
+        }
     }
 }
