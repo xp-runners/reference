@@ -76,7 +76,7 @@ namespace Xp.Runners
                 string.Join(Paths.Separator, cmd.Options["classpath"].Concat(ClassPathFor(cmd))),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
                 MainFor(cmd),
-                string.Join(" ", ArgumentsFor(cmd).Select(Strings.AsArgument))
+                string.Join(" ", ArgumentsFor(cmd).Select(Arguments.AsArgument))
             );
 
             // Console.WriteLine("php {0}", proc.StartInfo.Arguments);
