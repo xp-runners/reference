@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 
 namespace Xp.Runners
@@ -23,8 +24,13 @@ namespace Xp.Runners
         /// <summary>Run the process and return its exitcode</summary>
         protected int Run(Process proc)
         {
+            var encoding = Console.OutputEncoding;
+
             proc.StartInfo.RedirectStandardOutput = !Console.IsOutputRedirected;
             proc.StartInfo.RedirectStandardError = !Console.IsErrorRedirected;
+
+            Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = encoding;
+            Console.OutputEncoding = Encoding.UTF8;
 
             try
             {
@@ -43,6 +49,7 @@ namespace Xp.Runners
             }
             finally
             {
+                Console.OutputEncoding = encoding;
                 proc.Close();
             }
         }

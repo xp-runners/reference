@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
-using System.Text;
 using System.Collections.Generic;
 
 namespace Xp.Runners
@@ -65,8 +64,6 @@ namespace Xp.Runners
                 ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists).First()
             };
 
-            proc.StartInfo.RedirectStandardOutput = false;
-            proc.StartInfo.RedirectStandardError = false;
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.FileName = configuration.GetExecutable(runtime) ?? "php";
             proc.StartInfo.Arguments = string.Format(
@@ -79,19 +76,7 @@ namespace Xp.Runners
                 string.Join(" ", ArgumentsFor(cmd).Select(Arguments.AsArgument))
             );
 
-            // Console.WriteLine("php {0}", proc.StartInfo.Arguments);
-            var encoding = Console.OutputEncoding;
-
-            Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = encoding;
-            Console.OutputEncoding = Encoding.UTF8;
-            try
-            {
-                return cmd.ExecutionModel.Execute(proc);
-            }
-            finally
-            {
-                Console.OutputEncoding = encoding;
-            }
+            return cmd.ExecutionModel.Execute(proc);
         }
     }
 }
