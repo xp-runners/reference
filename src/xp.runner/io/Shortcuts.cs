@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Xp.Runners
+namespace Xp.Runners.IO
 {
     static class Shortcuts
     {

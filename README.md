@@ -15,6 +15,7 @@ Compile:
 ```sh
 $ csc /target:exe /out:xp.exe \
  src\\xp.runner\\*.cs \
+ src\\xp.runner\\io\\*.cs \
  src\\xp.runner\\commands\\*.cs \
  src\\xp.runner\\config\\*.cs \
  src\\xp.runner\\exec\\*.cs

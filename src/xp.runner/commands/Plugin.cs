@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Json;
 using Xp.Runners;
+using Xp.Runners.IO;
 
 namespace Xp.Runners.Commands
 {

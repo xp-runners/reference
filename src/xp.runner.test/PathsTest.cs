@@ -1,8 +1,8 @@
 using Xunit;
-using Xp.Runners;
 using System;
 using System.Linq;
 using System.IO;
+using Xp.Runners.IO;
 
 namespace Xp.Runners.Test
 {
