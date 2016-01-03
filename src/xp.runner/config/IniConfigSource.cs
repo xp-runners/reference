@@ -11,7 +11,8 @@ namespace Xp.Runners.Config
         private Ini ini;
 
         /// Returns whether this config source is valid
-        public bool Valid() {
+        public bool Valid() 
+        {
             return ini.Exists();
         }
 

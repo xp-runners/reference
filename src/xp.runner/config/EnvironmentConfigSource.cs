@@ -9,7 +9,8 @@ namespace Xp.Runners.Config
     class EnvironmentConfigSource : ConfigSource 
     {
         /// Returns whether this config source is valid
-        public bool Valid() {
+        public bool Valid() 
+        {
             return true;
         }
 

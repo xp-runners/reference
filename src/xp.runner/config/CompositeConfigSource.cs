@@ -26,7 +26,8 @@ namespace Xp.Runners.Config
         }
 
         /// Returns whether this config source is valid
-        public bool Valid() {
+        public bool Valid()
+        {
             return true;
         }
 
