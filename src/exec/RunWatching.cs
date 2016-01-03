@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Diagnostics;
 
@@ -16,26 +15,14 @@ public class RunWatching : ExecutionModel
     }
 
     /// <summary>Execute the process and return its exitcode</summary>
-    public int Execute(Process proc)
+    public override int Execute(Process proc)
     {
-        using (watcher) 
+        using (watcher)
         {
             watcher.EnableRaisingEvents = true;
             do
             {
-                try
-                {
-                    proc.Start();
-                    proc.WaitForExit();
-                }
-                catch (SystemException e) 
-                {
-                    throw new EntryPointNotFoundException(proc.StartInfo.FileName + ": " + e.Message, e);
-                }
-                finally
-                {
-                    proc.Close();
-                }
+                Run(proc);
             } while (!watcher.WaitForChanged(WatcherChangeTypes.Changed).TimedOut);
         }
 
