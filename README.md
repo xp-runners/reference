@@ -13,7 +13,11 @@ $ cp ~/bin/class-main.php . # From current XP runners
 Compile:
 
 ```sh
-$ csc /target:exe /out:xp.exe src\\*.cs src\\commands\\*.cs src\\config\\*.cs src\\exec\\*.cs
+$ csc /target:exe /out:xp.exe \
+ src\\xp.runner\\*.cs \
+ src\\xp.runner\\commands\\*.cs \
+ src\\xp.runner\\config\\*.cs \
+ src\\xp.runner\\exec\\*.cs
 ```
 
 Test:
