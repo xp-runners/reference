@@ -1,31 +1,35 @@
 using System.IO;
 using System.Diagnostics;
 
-public class RunWatching : ExecutionModel
+namespace Xp.Runners
 {
-    private FileSystemWatcher watcher;
 
-    public RunWatching(string path)
+    public class RunWatching : ExecutionModel
     {
-        watcher = new FileSystemWatcher {
-            Path = path,
-            IncludeSubdirectories = true,
-            Filter = "*.*"
-        };
-    }
+        private FileSystemWatcher watcher;
 
-    /// <summary>Execute the process and return its exitcode</summary>
-    public override int Execute(Process proc)
-    {
-        using (watcher)
+        public RunWatching(string path)
         {
-            watcher.EnableRaisingEvents = true;
-            do
-            {
-                Run(proc);
-            } while (!watcher.WaitForChanged(WatcherChangeTypes.Changed).TimedOut);
+            watcher = new FileSystemWatcher {
+                Path = path,
+                IncludeSubdirectories = true,
+                Filter = "*.*"
+            };
         }
 
-        return 0;
+        /// <summary>Execute the process and return its exitcode</summary>
+        public override int Execute(Process proc)
+        {
+            using (watcher)
+            {
+                watcher.EnableRaisingEvents = true;
+                do
+                {
+                    Run(proc);
+                } while (!watcher.WaitForChanged(WatcherChangeTypes.Changed).TimedOut);
+            }
+
+            return 0;
+        }
     }
 }

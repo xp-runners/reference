@@ -1,17 +1,20 @@
 using System.Linq;
 using System.Collections.Generic;
 
-/// <summary>help [$command]</summary>
-public class Help : Command
+namespace Xp.Runners
 {
-    /// <summary>Command line arguments.</summary>
-    protected override IEnumerable<string> ArgumentsFor(CommandLine cmd)
+    /// <summary>help [$command]</summary>
+    public class Help : Command
     {
-        return new string[]
+        /// <summary>Command line arguments.</summary>
+        protected override IEnumerable<string> ArgumentsFor(CommandLine cmd)
         {
-            "xp.runtime.ShowResource",
-            (cmd.Arguments.FirstOrDefault() ?? "usage") + ".txt",
-            "1"
-        };
+            return new string[]
+            {
+                "xp.runtime.ShowResource",
+                (cmd.Arguments.FirstOrDefault() ?? "usage") + ".txt",
+                "1"
+            };
+        }
     }
 }

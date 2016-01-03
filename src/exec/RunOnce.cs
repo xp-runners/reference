@@ -1,11 +1,13 @@
 using System.Diagnostics;
 
-public class RunOnce : ExecutionModel
+namespace Xp.Runners
 {
-
-    /// <summary>Execute the process and return its exitcode</summary>
-    public override int Execute(Process proc)
+    public class RunOnce : ExecutionModel
     {
-        return Run(proc);
+        /// <summary>Execute the process and return its exitcode</summary>
+        public override int Execute(Process proc)
+        {
+            return Run(proc);
+        }
     }
 }

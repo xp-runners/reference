@@ -1,17 +1,20 @@
 using System;
 using System.IO;
 
-public class PassThrough : IStdStreamReader
+namespace Xp.Runners
 {
-    /// <summary>Creates a new reader</summary>
-    public void Start(StreamReader reader) 
+    public class PassThrough : IStdStreamReader
     {
-        // NOOP
-    }
+        /// <summary>Creates a new reader</summary>
+        public void Start(StreamReader reader) 
+        {
+            // NOOP
+        }
 
-    /// <summary>Wait until we've read until the end</summary>
-    public bool WaitForEnd()
-    {
-        return true;
+        /// <summary>Wait until we've read until the end</summary>
+        public bool WaitForEnd()
+        {
+            return true;
+        }
     }
 }

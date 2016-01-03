@@ -1,34 +1,37 @@
 using System;
 
-public class Xp
+namespace Xp.Runners
 {
-    const string ini = "xp.ini";
-
-    /// <summary>Retrieve configuration via xp.ini</summary>
-    private static ConfigSource TheConfiguration()
+    public class Xp
     {
-        var home = Environment.GetEnvironmentVariable("HOME");
-        return new CompositeConfigSource(
-            new EnvironmentConfigSource(),
-            new IniConfigSource(new Ini(Paths.Compose(".", ini))),
-            null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
-            new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
-            new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
-        );
-    }
+        const string ini = "xp.ini";
 
-    /// <summary>Entry point</summary>
-    public static int Main(string[] args)
-    {
-        var cmd = new CommandLine(args);
-        try
+        /// <summary>Retrieve configuration via xp.ini</summary>
+        private static ConfigSource TheConfiguration()
         {
-            return cmd.Command.Execute(cmd, TheConfiguration());
+            var home = Environment.GetEnvironmentVariable("HOME");
+            return new CompositeConfigSource(
+                new EnvironmentConfigSource(),
+                new IniConfigSource(new Ini(Paths.Compose(".", ini))),
+                null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
+                new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
+                new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
+            );
         }
-        catch (EntryPointNotFoundException e) 
+
+        /// <summary>Entry point</summary>
+        public static int Main(string[] args)
         {
-            Console.Error.WriteLine("Executing command {0} raised {1}", cmd.Command, e.Message);
-            return 2;
-        } 
+            var cmd = new CommandLine(args);
+            try
+            {
+                return cmd.Command.Execute(cmd, TheConfiguration());
+            }
+            catch (EntryPointNotFoundException e) 
+            {
+                Console.Error.WriteLine("Executing command {0} raised {1}", cmd.Command, e.Message);
+                return 2;
+            } 
+        }
     }
 }
