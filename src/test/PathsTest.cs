@@ -1,6 +1,7 @@
 using Xunit;
 using Xp.Runners;
 using System;
+using System.Linq;
 using System.IO;
 
 namespace Xp.Runners.Test
@@ -73,6 +74,58 @@ namespace Xp.Runners.Test
             Assert.Equal(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "Composer",
                 Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer")
+            );
+        }
+
+        [Fact]
+        public void binary()
+        {
+            Assert.NotEqual("", Paths.Binary());
+        }
+
+        [Fact]
+        public void translate_empty_paths()
+        {
+            Assert.Equal(new string[] { }, Paths.Translate(".", new string[] { }).ToArray());
+        }
+
+        [Fact]
+        public void translate_absolute_path()
+        {
+            var cwd = Directory.GetCurrentDirectory();
+            Assert.Equal(
+                new string[] { cwd },
+                Paths.Translate(".", new string[] { cwd }).ToArray()
+            );
+        }
+
+        [Fact]
+        public void translate_relative_path()
+        {
+            var cwd = Directory.GetCurrentDirectory();
+            Assert.Equal(
+                new string[] { Paths.Compose(cwd, "src") },
+                Paths.Translate(cwd, new string[] { "src" }).ToArray()
+            );
+        }
+
+        [Fact]
+        public void translate_home_path()
+        {
+            var home = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            Assert.Equal(
+                new string[] { home },
+                Paths.Translate(".", new string[] { "~" }).ToArray()
+            );
+        }
+
+        [Fact]
+        public void translate_path_inside_home()
+        {
+            var home = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            Assert.Equal(
+                new string[] { Paths.Compose(home, "devel") },
+                Paths.Translate(".", new string[] { "~/devel" }).ToArray()
             );
         }
     }
