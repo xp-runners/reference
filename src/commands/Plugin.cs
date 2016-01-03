@@ -43,12 +43,13 @@ namespace Xp.Runners
         /// <summary>Finds command by name in a given directory</summary>
         private bool FindCommand(string dir, string name)
         {
-            if (!Directory.Exists(dir)) return false;
+            var bin = Paths.Compose(dir, "bin");
+            if (!Directory.Exists(bin)) return false;
 
-            var bin = Directory.GetFiles(Paths.Compose(dir, "bin"), "xp.*." + name).FirstOrDefault();
-            if (null == bin) return false;
+            var spec = Directory.GetFiles(bin, "xp.*." + name).FirstOrDefault();
+            if (null == spec) return false;
 
-            var file = Path.GetFileName(bin).Split('.');
+            var file = Path.GetFileName(spec).Split('.');
 
             module = file[VENDOR] + "/" + file[NAME];
             entry = string.Format(
