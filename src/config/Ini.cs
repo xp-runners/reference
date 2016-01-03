@@ -8,100 +8,101 @@ namespace Xp.Runners
 {
     class Ini
     {
-        private static int KEY = 0;
-        private static int VALUE = 1;
-        private static char[] KVAL_SEPARATOR = new char[] { '=' };
+        private const int KEY = 0;
+        private const int VALUE = 1;
+        private static char[] SEPARATOR = new char[] { '=' };
 
         private string file;
         private Dictionary<string, Dictionary<string, List<string>>> sections;
         private bool parsed;
 
+        /// <summary>Filename which to parse</summary>
         public string FileName 
         {
-            get { return this.file; }
+            get { return file; }
             set { 
-                this.file = value; 
-                this.sections = new Dictionary<string, Dictionary<string, List<string>>>();
-                this.parsed = false;
+                file = value;
+                sections = new Dictionary<string, Dictionary<string, List<string>>>();
+                parsed = false;
             }
         }
 
+        /// <summary>Creates a new INI file</summary>
         public Ini(string file) 
         {
-            this.FileName = file;
+            FileName = file;
         }
 
+        /// <summary>Test whether the underlying file exists yet</summary>
         public bool Exists()
         {
-            return File.Exists(this.FileName);
+            return File.Exists(FileName);
         }
 
-        public void Parse(bool reset)
+        /// <summary>Parse</summary>
+        private void Parse(bool reset)
         {
+            if (!Exists()) return;
+
             lock(this) 
             {
-                if (this.parsed && !reset) return;    // Short-circuit this
-                if (!this.Exists()) return;
+                if (parsed && !reset) return;    // Short-circuit this
 
                 string section = "default";
-                this.sections[section] = new Dictionary<string, List<string>>();
-                foreach (string line in File.ReadAllLines(this.FileName))
+                sections[section] = new Dictionary<string, List<string>>();
+                foreach (string line in File.ReadAllLines(FileName))
                 {
-                    if (line == "" || line.StartsWith(";")) 
+                    if (string.IsNullOrEmpty(line) || line.StartsWith(";")) 
                     {
                         continue;
                     } 
                     else if (line.StartsWith("[")) 
                     {
                         section = line.Substring(1, line.Length - 1 - 1);    
-                        this.sections[section] = new Dictionary<string, List<string>>();
+                        sections[section] = new Dictionary<string, List<string>>();
                         continue;
-                    } else {
-                        string[] parsed = line.Split(KVAL_SEPARATOR, 2);
-                        if (!this.sections[section].ContainsKey(parsed[KEY])) 
+                    }
+                    else
+                    {
+                        var pair = line.Split(SEPARATOR, 2);
+                        if (!sections[section].ContainsKey(pair[KEY])) 
                         {
-                            this.sections[section][parsed[KEY]] = new List<string>();
+                            sections[section][pair[KEY]] = new List<string>();
                         }
-                        if (!String.IsNullOrEmpty(parsed[VALUE]))
+                        if (!String.IsNullOrEmpty(pair[VALUE]))
                         {
-                            this.sections[section][parsed[KEY]].Add(parsed[VALUE]);
+                            sections[section][pair[KEY]].Add(pair[VALUE]);
                         }
                     }
                 }
-                this.parsed = true;
+                parsed = true;
             }
         }
 
-        public string Get(string section, string key, string defaultValue) {
-            this.Parse(false);
-            if (!this.sections.ContainsKey(section)) return defaultValue;
-            if (!this.sections[section].ContainsKey(key)) return defaultValue;
-            return this.sections[section][key].FirstOrDefault();
+        /// <summary>Gets a single value for a given key</summary>
+        public string Get(string section, string key, string defaultValue = null)
+        {
+            Parse(false);
+            if (!sections.ContainsKey(section)) return defaultValue;
+            if (!sections[section].ContainsKey(key)) return defaultValue;
+            return sections[section][key].FirstOrDefault();
         }   
 
-        public string Get(string section, string key) {
-            return this.Get(section, key, null);
-        }
-
-        public IEnumerable<string> GetAll(string section, string key, IEnumerable<string> defaultValue) {
-            this.Parse(false);
-            if (!this.sections.ContainsKey(section)) return defaultValue;
-            if (!this.sections[section].ContainsKey(key)) return defaultValue;
-            return this.sections[section][key];
+        /// <summary>Gets all values for a key</summary>
+        public IEnumerable<string> GetAll(string section, string key, IEnumerable<string> defaultValue = null)
+        {
+            Parse(false);
+            if (!sections.ContainsKey(section)) return defaultValue;
+            if (!sections[section].ContainsKey(key)) return defaultValue;
+            return sections[section][key];
         }   
 
-        public IEnumerable<string> GetAll(string section, string key) {
-            return this.GetAll(section, key, null);
-        }
-
-        public IEnumerable<string> Keys(string section, IEnumerable<string> defaultValue) {
-            this.Parse(false);
-            if (!this.sections.ContainsKey(section)) return defaultValue;
-            return this.sections[section].Keys;
-        }
-
-        public IEnumerable<string> Keys(string section) {
-            return this.Keys(section, null);
+        /// <summary>Gets all keys in a section</summary>
+        public IEnumerable<string> Keys(string section, IEnumerable<string> defaultValue = null)
+        {
+            Parse(false);
+            if (!sections.ContainsKey(section)) return defaultValue;
+            return sections[section].Keys;
         }
     }
 }
