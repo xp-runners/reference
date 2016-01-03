@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Xp.Runners
+namespace Xp.Runners.Exec
 {
     public class RunOnce : ExecutionModel
     {

@@ -1,7 +1,8 @@
 using System.Runtime.Serialization;
 using System.Collections.Generic;
+using Xp.Runners;
 
-namespace Xp.Runners
+namespace Xp.Runners.Commands
 {
     /// <summary>A stripped-down representation of a composer.json file</summary>
     [DataContract]

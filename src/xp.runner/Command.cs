@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
+using Xp.Runners.Config;
 
 namespace Xp.Runners
 {

@@ -1,5 +1,7 @@
 using Xunit;
 using Xp.Runners;
+using Xp.Runners.Commands;
+using Xp.Runners.Exec;
 
 namespace Xp.Runners.Test
 {

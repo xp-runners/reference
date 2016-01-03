@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Xp.Runners
+namespace Xp.Runners.Exec
 {
     public interface IStdStreamReader
     {

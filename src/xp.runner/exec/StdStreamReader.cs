@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 
-namespace Xp.Runners
+namespace Xp.Runners.Exec
 {
 
     public class DataReceived : EventArgs

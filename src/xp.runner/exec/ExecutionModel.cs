@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
-namespace Xp.Runners
+namespace Xp.Runners.Exec
 {
     public abstract class ExecutionModel
     {

@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 using System.Linq;
 
-namespace Xp.Runners
+namespace Xp.Runners.Config
 {
     class Ini
     {

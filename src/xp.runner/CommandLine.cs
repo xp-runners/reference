@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Xp.Runners.Exec;
 
 namespace Xp.Runners
 {
@@ -13,11 +14,11 @@ namespace Xp.Runners
         };
         private static Dictionary<string, Type> COMMANDS = new Dictionary<string, Type>()
         {
-            { "-v", typeof(Version) },
-            { "-e", typeof(Eval) },
-            { "-w", typeof(Write) },
-            { "-d", typeof(Dump) },
-            { "-?", typeof(Help) }
+            { "-v", typeof(Commands.Version) },
+            { "-e", typeof(Commands.Eval) },
+            { "-w", typeof(Commands.Write) },
+            { "-d", typeof(Commands.Dump) },
+            { "-?", typeof(Commands.Help) }
         };
 
         private Dictionary<string, List<string>> options = new Dictionary<string, List<string>>()
@@ -38,7 +39,7 @@ namespace Xp.Runners
         /// <summary>Subcommand name</summary>
         public Command Command
         {
-            get { return command ?? new Help(); }
+            get { return command ?? new Commands.Help(); }
         }
 
         /// <summary>Subcommand arguments</summary>
@@ -68,10 +69,10 @@ namespace Xp.Runners
         /// <summary>Returns a command by a given name</summary>
         private Command AsCommand(string arg)
         {
-            var type = Type.GetType("Xp.Runners." + arg.UpperCaseFirst());
+            var type = Type.GetType("Xp.Runners.Commands." + arg.UpperCaseFirst());
             if (null == type)
             {
-                return new Plugin(arg);
+                return new Commands.Plugin(arg);
             }
             else
             {
@@ -113,7 +114,7 @@ namespace Xp.Runners
                 }
                 else
                 {
-                    command = new Run();
+                    command = new Commands.Run();
                     offset = i;
                     break;
                 }

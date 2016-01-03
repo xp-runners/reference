@@ -1,4 +1,5 @@
 using System;
+using Xp.Runners.Config;
 
 namespace Xp.Runners
 {

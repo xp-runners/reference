@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Xp.Runners
+namespace Xp.Runners.Config
 {
     public interface ConfigSource 
     {

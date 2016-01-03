@@ -1,7 +1,8 @@
 using System.Linq;
 using System.Collections.Generic;
+using Xp.Runners;
 
-namespace Xp.Runners
+namespace Xp.Runners.Commands
 {
     /// <summary>dump $code [$arg0 [$arg1 [...]]]</summary>
     public class Dump : Command

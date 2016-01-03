@@ -1,7 +1,8 @@
 using System.Linq;
 using System.Collections.Generic;
+using Xp.Runners;
 
-namespace Xp.Runners
+namespace Xp.Runners.Commands
 {
     /// <summary>version</summary>
     public class Version : Command

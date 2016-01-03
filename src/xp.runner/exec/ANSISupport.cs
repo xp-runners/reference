@@ -3,7 +3,7 @@ using System.Text;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Xp.Runners
+namespace Xp.Runners.Exec
 {
     public class ANSISupport : TextWriter
     {
