@@ -6,7 +6,7 @@ namespace Xp.Runners
     static class Arguments
     {
         /// <summary>Encode string suitable as a binary-safe command line argument</summary>
-        public static string AsArgument(this string self)
+        public static string Encode(this string self)
         {
             var bytes = Encoding.UTF7.GetBytes(self);
             var ret = new StringBuilder();
