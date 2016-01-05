@@ -20,9 +20,12 @@ namespace Xp.Runners
         }
 
         /// <summary>Main script, e.g. "class-main.php". Overwrite in subclasses if necessary!</summary>
-        protected virtual string MainFor(CommandLine cmd)
+        protected virtual string MainFor(CommandLine cmd, ConfigSource configuration)
         {
-            return Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { "class-main.php" }).First();
+            return
+                Paths.TryLocate(configuration.GetUse(), new string[] { Paths.Compose("tools", "class.php") }).FirstOrDefault() ??
+                Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { "class-main.php" }).First()
+            ;
         }
 
         /// <summary>Additional modules to load. Overwrite in subclasses if necessary!</summary>
@@ -74,7 +77,7 @@ namespace Xp.Runners
                 string.Join(Paths.Separator, use.Concat(cmd.Options["modules"].Concat(ModulesFor(cmd)))),
                 string.Join(Paths.Separator, cmd.Options["classpath"].Concat(ClassPathFor(cmd))),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
-                MainFor(cmd),
+                MainFor(cmd, configuration),
                 string.Join(" ", ArgumentsFor(cmd).Select(Arguments.AsArgument))
             );
 
