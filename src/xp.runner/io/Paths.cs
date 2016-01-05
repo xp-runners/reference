@@ -20,11 +20,10 @@ namespace Xp.Runners.IO
             return filename.Substring(0, filename.LastIndexOf(Path.DirectorySeparatorChar) + 1);
         }
 
-        /// <summary>Locate a given file inside multiple base paths. Similar to what is done when
-        /// looking up program names in $ENV{PATH}.</summary>
-        public static IEnumerable<string> Locate(IEnumerable<string> bases, IEnumerable<string> files, bool expect = true)
+        /// <summary>Try to locate a given file inside multiple base paths. Same as Locate() but does not
+        /// throw an exception but yields an empty result.</summary>
+        public static IEnumerable<string> TryLocate(IEnumerable<string> bases, IEnumerable<string> files)
         {
-            bool found = false;
             foreach (var path in bases)
             {
                 foreach (var file in files)
@@ -32,13 +31,25 @@ namespace Xp.Runners.IO
                     var qualified = path.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + file;
                     if (File.Exists(qualified))
                     {
-                        found = true;
                         yield return qualified;
                     }
                 }
-
             }
-            if (expect && !found)
+        }
+
+
+        /// <summary>Locate a given file inside multiple base paths. Throw an exception if the file cannot
+        /// be found. Similar to what is done when looking up program names in $ENV{PATH}.</summary>
+        public static IEnumerable<string> Locate(IEnumerable<string> bases, IEnumerable<string> files)
+        {
+            var found = false;
+            foreach (var result in TryLocate(bases, files))
+            {
+                yield return result;
+                found = true;
+            }
+
+            if (!found)
             {
                 throw new FileNotFoundException("Cannot find [" + string.Join(", ", files) + "] in [" + string.Join(", ", bases) + "]");
             }

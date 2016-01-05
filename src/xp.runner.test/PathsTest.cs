@@ -142,5 +142,21 @@ namespace Xp.Runners.Test
                 Paths.Locate(search, new string[] { "csc.exe" }).ToArray()
             );
         }
+
+        [Fact]
+        public void locate_non_existant_file()
+        {
+            Assert.Throws<FileNotFoundException>(() => Paths.Locate(new string[] { "." }, new string[] { "this-file-does-not-exist" }).ToArray());
+        }
+
+        [Fact]
+        public void try_locate_file()
+        {
+            Assert.Equal(
+                new string[] { },
+                Paths.TryLocate(new string[] { "." }, new string[] { "this-file-does-not-exist" }).ToArray()
+            );
+        }
+
     }
 }
