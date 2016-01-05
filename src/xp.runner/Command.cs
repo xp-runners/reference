@@ -19,13 +19,10 @@ namespace Xp.Runners
             yield return Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", VENDOR);
         }
 
-        /// <summary>Main script, e.g. "class-main.php". Overwrite in subclasses if necessary!</summary>
-        protected virtual string MainFor(CommandLine cmd, ConfigSource configuration)
+        /// <summary>Main script, e.g. "class". Overwrite in subclasses if necessary!</summary>
+        protected virtual string MainFor(CommandLine cmd)
         {
-            return
-                Paths.TryLocate(configuration.GetUse(), new string[] { Paths.Compose("tools", "class.php") }).FirstOrDefault() ??
-                Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { "class-main.php" }).First()
-            ;
+            return "class";
         }
 
         /// <summary>Additional modules to load. Overwrite in subclasses if necessary!</summary>
@@ -59,7 +56,6 @@ namespace Xp.Runners
             var runtime = configuration.GetRuntime();
             var ini = new Dictionary<string, IEnumerable<string>>()
             {
-                { "encoding", new string[] { "utf-7" } },
                 { "magic_quotes_gpc", new string[] { "0" } },
                 { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? "UTC" } },
                 { "extension", configuration.GetExtensions(runtime) }
@@ -69,6 +65,15 @@ namespace Xp.Runners
                 ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists).First()
             };
 
+            var main = Paths.TryLocate(configuration.GetUse(), new string[] { Paths.Compose("tools", MainFor(cmd) + ".php") }).FirstOrDefault();
+            Func<string, string> args = Arguments.Escape;
+            if (null == main)
+            {
+                main = Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { MainFor(cmd) + "-main.php" }).First();
+                args = Arguments.Encode;
+                ini["encoding"] = new string[] { "utf-7" };
+            }
+
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.FileName = configuration.GetExecutable(runtime) ?? "php";
             proc.StartInfo.Arguments = string.Format(
@@ -77,8 +82,8 @@ namespace Xp.Runners
                 string.Join(Paths.Separator, use.Concat(cmd.Options["modules"].Concat(ModulesFor(cmd)))),
                 string.Join(Paths.Separator, cmd.Options["classpath"].Concat(ClassPathFor(cmd))),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
-                MainFor(cmd, configuration),
-                string.Join(" ", ArgumentsFor(cmd).Select(Arguments.AsArgument))
+                main,
+                string.Join(" ", ArgumentsFor(cmd).Select(args))
             );
 
             return cmd.ExecutionModel.Execute(proc);
