@@ -20,6 +20,12 @@ namespace Xp.Runners
             yield return Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", VENDOR);
         }
 
+        /// <summary>Initialize this command</summary>
+        protected virtual void Initialize(CommandLine cmd, ConfigSource configuration)
+        {
+            // NOOP
+        }
+
         /// <summary>Main script, e.g. "class". Overwrite in subclasses if necessary!</summary>
         protected virtual string MainFor(CommandLine cmd)
         {
@@ -53,6 +59,8 @@ namespace Xp.Runners
         /// <summary>Entry point</summary>
         public int Execute(CommandLine cmd, ConfigSource configuration)
         {
+            Initialize(cmd, configuration);
+
             var proc = new Process();
             var runtime = configuration.GetRuntime();
             var ini = new Dictionary<string, IEnumerable<string>>()

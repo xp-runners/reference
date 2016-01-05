@@ -36,6 +36,10 @@ namespace Xp.Runners.Commands
             throw new NotImplementedException(name);
         }
 
+        public EntryPoint EntryPoint { get { return entry; }}
+
+        public IEnumerable<string> Modules { get { return modules; }}
+
         /// <summary>Finds command by name in a given directory</summary>
         private EntryPoint FindEntryPoint(string dir, string name)
         {
