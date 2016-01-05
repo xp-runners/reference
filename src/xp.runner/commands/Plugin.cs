@@ -11,12 +11,7 @@ namespace Xp.Runners.Commands
     /// <summary>The plugin command searches for XP commands in Composer's vendor/bin directory</summary>
     public class Plugin : Command
     {
-        const int VENDOR = 1;
-        const int NAME = 2;
-        const int COMMAND = 3;
-
-        private string entry;
-        private string module;
+        private EntryPoint entry;
         private IEnumerable<string> modules;
         private static DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(Composer), new DataContractJsonSerializerSettings {
             UseSimpleDictionaryFormat = true
@@ -26,14 +21,13 @@ namespace Xp.Runners.Commands
         {
             foreach (var dir in ComposerLocations())
             {
-                if (FindCommand(dir, name))
-                {
-                    modules = DependenciesAndSelf(dir, module, new HashSet<string>());
-                    return;
-                }
+                if (null == (entry = FindEntryPoint(dir, name))) continue;
+
+                modules = DependenciesAndSelf(dir, entry.Module, new HashSet<string>());
+                return;
             }
 
-            if (FindCommand(".", name)) 
+            if (null != (entry = FindEntryPoint(".", name)))
             {
                 modules = new string[] { "." };
                 return;
@@ -43,23 +37,17 @@ namespace Xp.Runners.Commands
         }
 
         /// <summary>Finds command by name in a given directory</summary>
-        private bool FindCommand(string dir, string name)
+        private EntryPoint FindEntryPoint(string dir, string name)
         {
             var bin = Paths.Compose(dir, "bin");
-            if (!Directory.Exists(bin)) return false;
-
-            var spec = Directory.GetFiles(bin, "xp.*." + name).FirstOrDefault();
-            if (null == spec) return false;
-
-            var file = Path.GetFileName(spec).Split('.');
-
-            module = file[VENDOR] + "/" + file[NAME];
-            entry = string.Format(
-                "xp.{0}.{1}Runner",
-                file[NAME],
-                file.Length > COMMAND ? file[COMMAND].UpperCaseFirst() : string.Empty
-            );
-            return true;
+            if (Directory.Exists(bin))
+            {
+                return Directory.GetFiles(bin, "xp.*." + name)
+                    .Select((file) => new EntryPoint(Path.GetFileName(file)))
+                    .FirstOrDefault()
+                ;
+            }
+            return null;
         }
 
         /// <summary>Returns the given module and a unique list of dependencies of a given module</summary>
@@ -93,7 +81,7 @@ namespace Xp.Runners.Commands
         /// <summary>Command line arguments.</summary>
         protected override IEnumerable<string> ArgumentsFor(CommandLine cmd)
         {
-            return (new string[] { entry }).Concat(cmd.Arguments);
+            return (new string[] { entry.Type }).Concat(cmd.Arguments);
         }
     }
 }
