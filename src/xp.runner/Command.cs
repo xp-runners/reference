@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
@@ -19,10 +20,10 @@ namespace Xp.Runners
             yield return Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", VENDOR);
         }
 
-        /// <summary>Main script, e.g. "class-main.php". Overwrite in subclasses if necessary!</summary>
+        /// <summary>Main script, e.g. "class". Overwrite in subclasses if necessary!</summary>
         protected virtual string MainFor(CommandLine cmd)
         {
-            return Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { "class-main.php" }).First();
+            return "class";
         }
 
         /// <summary>Additional modules to load. Overwrite in subclasses if necessary!</summary>
@@ -56,7 +57,6 @@ namespace Xp.Runners
             var runtime = configuration.GetRuntime();
             var ini = new Dictionary<string, IEnumerable<string>>()
             {
-                { "encoding", new string[] { "utf-7" } },
                 { "magic_quotes_gpc", new string[] { "0" } },
                 { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? "UTC" } },
                 { "extension", configuration.GetExtensions(runtime) }
@@ -66,6 +66,22 @@ namespace Xp.Runners
                 ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists).First()
             };
 
+            Encoding encoding;
+            Func<string, string> args;
+            var main = Paths.TryLocate(configuration.GetUse(), new string[] { Paths.Compose("tools", MainFor(cmd) + ".php") }).FirstOrDefault();
+            if (null == main)
+            {
+                main = Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { MainFor(cmd) + "-main.php" }).First();
+                args = Arguments.Encode;
+                encoding = Encoding.UTF8;
+                ini["encoding"] = new string[] { "utf-7" };
+            }
+            else
+            {
+                args = Arguments.Escape;
+                encoding = Encoding.GetEncoding("iso-8859-1");
+            }
+
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.FileName = configuration.GetExecutable(runtime) ?? "php";
             proc.StartInfo.Arguments = string.Format(
@@ -74,11 +90,11 @@ namespace Xp.Runners
                 string.Join(Paths.Separator, use.Concat(cmd.Options["modules"].Concat(ModulesFor(cmd)))),
                 string.Join(Paths.Separator, cmd.Options["classpath"].Concat(ClassPathFor(cmd))),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
-                MainFor(cmd),
-                string.Join(" ", ArgumentsFor(cmd).Select(Arguments.Encode))
+                main,
+                string.Join(" ", ArgumentsFor(cmd).Select(args))
             );
 
-            return cmd.ExecutionModel.Execute(proc);
+            return cmd.ExecutionModel.Execute(proc, encoding);
         }
     }
 }
