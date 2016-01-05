@@ -3,6 +3,10 @@ XP Runners change log
 
 ## 7.0.0 / ????-??-??
 
+* Merged PR #3: Support XP5. The new XP runners also support XP 5.X checkouts
+  although **this is to be considered deprecated** (for the discussion, see
+  https://github.com/xp-runners/reference/issues/1#issuecomment-168872536)
+  (@thekid)
 * Added support for ANSI color escape sequences inside Windows Console
   (@thekid)
 * Implemented plugin architecture based on Composer and file naming conventions
