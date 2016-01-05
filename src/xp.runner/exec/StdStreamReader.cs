@@ -21,11 +21,23 @@ namespace Xp.Runners.Exec
         private byte[] buffer = new byte[bufferSize];
         private StringBuilder queue = new StringBuilder();
         private ManualResetEvent done = new ManualResetEvent(false);
+        private Encoding encoding;
         
         /// <summary>Add an event to this reader</summary>
         public event EventHandler<DataReceived> DataReceivedEvent;
 
+        /// <summary>Creates a new reader with UTF-8 as encoding</summary>
+        public StdStreamReader() : this(Encoding.UTF8)
+        {
+        }
+
         /// <summary>Creates a new reader</summary>
+        public StdStreamReader(Encoding encoding)
+        {
+            this.encoding = encoding;
+        }
+
+        /// <summary>Starts reading</summary>
         public void Start(StreamReader reader)
         {
             reader.BaseStream.BeginRead(buffer, 0, bufferSize, ReaderCallback, reader.BaseStream);
@@ -45,7 +57,7 @@ namespace Xp.Runners.Exec
             {
                 if (count > 0)
                 {
-                    var bytes = Encoding.UTF8.GetString(buffer, 0, count);
+                    var bytes = encoding.GetString(buffer, 0, count);
 
                     Monitor.Enter(queue);
                     queue.Append(bytes);

@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using System.Diagnostics;
 
 namespace Xp.Runners.Exec
@@ -21,14 +22,14 @@ namespace Xp.Runners.Exec
         public string Path { get { return watcher.Path; }}
 
         /// <summary>Execute the process and return its exitcode</summary>
-        public override int Execute(Process proc)
+        public override int Execute(Process proc, Encoding encoding)
         {
             using (watcher)
             {
                 watcher.EnableRaisingEvents = true;
                 do
                 {
-                    Run(proc);
+                    Run(proc, encoding);
                 } while (!watcher.WaitForChanged(WatcherChangeTypes.Changed).TimedOut);
             }
 

@@ -11,26 +11,26 @@ namespace Xp.Runners.Exec
         private static PassThrough passThrough = new PassThrough();
 
         /// <summary>Execute the process and return its exitcode</summary>
-        public abstract int Execute(Process proc);
+        public abstract int Execute(Process proc, Encoding encoding);
 
         private IStdStreamReader Redirect(StreamReader input, TextWriter output)
         {
-            var reader = new StdStreamReader();
+            var reader = new StdStreamReader(output.Encoding);
             reader.DataReceivedEvent += (sender, e) => output.Write(e.Data);
             reader.Start(input);
             return reader;
         }
 
         /// <summary>Run the process and return its exitcode</summary>
-        protected int Run(Process proc)
+        protected int Run(Process proc, Encoding encoding)
         {
-            var encoding = Console.OutputEncoding;
+            var original = Console.OutputEncoding;
 
             proc.StartInfo.RedirectStandardOutput = !Console.IsOutputRedirected;
             proc.StartInfo.RedirectStandardError = !Console.IsErrorRedirected;
 
-            Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = encoding;
-            Console.OutputEncoding = Encoding.UTF8;
+            Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
+            Console.OutputEncoding = encoding;
 
             try
             {
@@ -49,7 +49,7 @@ namespace Xp.Runners.Exec
             }
             finally
             {
-                Console.OutputEncoding = encoding;
+                Console.OutputEncoding = original;
                 proc.Close();
             }
         }

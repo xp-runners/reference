@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
@@ -65,13 +66,20 @@ namespace Xp.Runners
                 ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists).First()
             };
 
+            Encoding encoding;
+            Func<string, string> args;
             var main = Paths.TryLocate(configuration.GetUse(), new string[] { Paths.Compose("tools", MainFor(cmd) + ".php") }).FirstOrDefault();
-            Func<string, string> args = Arguments.Escape;
             if (null == main)
             {
                 main = Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { MainFor(cmd) + "-main.php" }).First();
                 args = Arguments.Encode;
+                encoding = Encoding.UTF8;
                 ini["encoding"] = new string[] { "utf-7" };
+            }
+            else
+            {
+                args = Arguments.Escape;
+                encoding = Encoding.GetEncoding("iso-8859-1");
             }
 
             proc.StartInfo.UseShellExecute = false;
@@ -86,7 +94,7 @@ namespace Xp.Runners
                 string.Join(" ", ArgumentsFor(cmd).Select(args))
             );
 
-            return cmd.ExecutionModel.Execute(proc);
+            return cmd.ExecutionModel.Execute(proc, encoding);
         }
     }
 }
