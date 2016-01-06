@@ -8,6 +8,7 @@ namespace Xp.Runners.IO
 {
     static class Cygwin
     {
+        private const string CYGDRIVE_PATH = "/cygdrive/";
         private const string INSTALLATIONS = @"Software\Cygwin\Installations";
         private static byte[] SYMLINK_COOKIE = new byte[] { 33, 60, 115, 121, 109, 108, 105, 110, 107, 62 };
         private static IEnumerable<string> cygpath;
@@ -55,9 +56,9 @@ namespace Xp.Runners.IO
         /// <summary>Resolve directory. Supports absolute paths and home directories</summary>
         public static string Resolve(string path)
         {
-            if (path.StartsWith("/cygdrive/"))
+            if (path.StartsWith(CYGDRIVE_PATH))
             {
-                return path["/cygdrive/".Length] + ":" + path.Substring("/cygdrive/".Length + 1);
+                return path[CYGDRIVE_PATH.Length] + ":" + path.Substring(CYGDRIVE_PATH.Length + 1);
             }
 
             var absolute = Expand(path).Replace("/", Path.DirectorySeparatorChar.ToString());
