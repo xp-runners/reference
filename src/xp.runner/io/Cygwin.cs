@@ -27,7 +27,7 @@ namespace Xp.Runners.IO
 
             return installed.GetValueNames()
                 .Select(key => installed.GetValue(key) as string)
-                .Select(path => path.Replace(@"\??\", ""))
+                .Select(path => path.Replace(@"\??\", "").TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar)
             ;
         }
 
@@ -40,11 +40,7 @@ namespace Xp.Runners.IO
             }
 
             var absolute = path.Replace("/", Path.DirectorySeparatorChar.ToString());
-            return Installations()
-                .Where(Directory.Exists)
-                .Select(root => root + absolute)
-                .FirstOrDefault()
-            ;
+            return Installations().Where(Directory.Exists).Select(root => root + absolute).FirstOrDefault();
         }
 
         /// <summary>Checks whether a file is a cygwin symlink file, and resolves it. See the
