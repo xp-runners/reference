@@ -36,23 +36,6 @@ namespace Xp.Runners.IO
             return cygpath;
         }
 
-        /// <summary>Expands home directories in path</summary>
-        public static string Expand(string path)
-        {
-            if ("~" == path || path.StartsWith("~/"))  // ~ = /home/$USER, ~/bin := /home/$USER/bin
-            {
-                return "/home" + Path.DirectorySeparatorChar + Environment.UserName + path.Substring(1);
-            }
-            else if (path.StartsWith("~"))             // ~thekid/bin := /home/thekid/bin
-            {
-                return "/home" + Path.DirectorySeparatorChar + path.Substring(1);
-            }
-            else
-            {
-                return path;
-            }
-        }
-
         /// <summary>Resolve directory. Supports absolute paths and home directories</summary>
         public static string Resolve(string path)
         {
@@ -61,7 +44,7 @@ namespace Xp.Runners.IO
                 return path[CYGDRIVE_PATH.Length] + ":" + path.Substring(CYGDRIVE_PATH.Length + 1);
             }
 
-            var absolute = Expand(path).Replace("/", Path.DirectorySeparatorChar.ToString());
+            var absolute = path.Replace("/", Path.DirectorySeparatorChar.ToString());
             return Installations()
                 .Where(Directory.Exists)
                 .Select(root => root + absolute)
