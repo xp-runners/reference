@@ -95,13 +95,14 @@ namespace Xp.Runners
             proc.StartInfo.Arguments = string.Format(
                 "-C -q -d include_path=\".{0}{1}{0}{0}.{0}{2}\" {3} {4} {5}",
                 Paths.Separator,
-                string.Join(Paths.Separator, use.Concat(cmd.Options["modules"].Concat(ModulesFor(cmd)))),
-                string.Join(Paths.Separator, cmd.Options["classpath"].Concat(ClassPathFor(cmd))),
+                string.Join(Paths.Separator, use.Concat(cmd.Options["modules"].Concat(ModulesFor(cmd)).Select(Paths.Resolve))),
+                string.Join(Paths.Separator, cmd.Options["classpath"].Concat(ClassPathFor(cmd)).Select(Paths.Resolve)),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
                 main,
                 string.Join(" ", ArgumentsFor(cmd).Select(args))
             );
 
+            // DEBUG Console.WriteLine("php {0}", proc.StartInfo.Arguments);
             return cmd.ExecutionModel.Execute(proc, encoding);
         }
     }

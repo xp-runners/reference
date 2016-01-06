@@ -94,3 +94,4 @@ Less configuration:
 Better Windows integration:
 
 * ANSI color escape sequences are also supported when running in Windows Console
+* Support for Cygwin paths in `-cp` and `-m`, resolved to their Windows counterparts

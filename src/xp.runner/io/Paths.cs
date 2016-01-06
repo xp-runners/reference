@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Xp.Runners.IO
@@ -55,20 +56,32 @@ namespace Xp.Runners.IO
             }
         }
 
-        /// <summary>Resolve a path. If the path is actually a shell link (.lnk file), this link's target path is used</summary>
+        /// <summary>Resolve a path. If we're inside Cygwin, try to resolve absolute paths and
+        /// paths pointing to home directories relative to its installation directory. Otherwise,
+        /// if the file doesn't exist or is not a directory, also check for shortcuts and symlinks</summary>
         public static string Resolve(string path)
         {
+            if (Cygwin.Active && path.StartsWith("/"))
+            {
+                path = Cygwin.Resolve(path) ?? path;
+            }
+
             var info = new FileInfo(path);
             var normalized = info.FullName.TrimEnd(Path.DirectorySeparatorChar);
+
             if (!info.Exists)
             {
                 var link = normalized + ".lnk";
-                if (File.Exists(link)) 
-                {
-                    return Shortcuts.Resolve(link);
-                }
+                return File.Exists(link) ? Shortcuts.Resolve(link) : normalized;
             }
-            return normalized;
+            else if ((info.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                return normalized;
+            }
+            else
+            {
+                return Cygwin.TryResolveSymlinkFile(info) ?? normalized;
+            }
         }
 
         /// <summary>Translate a list of paths</summary>
