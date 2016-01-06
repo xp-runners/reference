@@ -61,7 +61,7 @@ namespace Xp.Runners.IO
         /// if the file doesn't exist or is not a directory, also check for shortcuts and symlinks</summary>
         public static string Resolve(string path)
         {
-            if (Cygwin.Active && path.StartsWith("/") || path.StartsWith("~"))
+            if (Cygwin.Active && path.StartsWith("/"))
             {
                 path = Cygwin.Resolve(path) ?? path;
             }
