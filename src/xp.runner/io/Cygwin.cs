@@ -55,6 +55,11 @@ namespace Xp.Runners.IO
         /// <summary>Resolve directory. Supports absolute paths and home directories</summary>
         public static string Resolve(string path)
         {
+            if (path.StartsWith("/cygdrive/"))
+            {
+                return path["/cygdrive/".Length] + ":" + path.Substring("/cygdrive/".Length + 1);
+            }
+
             var absolute = Expand(path).Replace("/", Path.DirectorySeparatorChar.ToString());
             return Installations()
                 .Where(Directory.Exists)
