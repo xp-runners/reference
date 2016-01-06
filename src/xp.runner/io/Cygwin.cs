@@ -10,30 +10,25 @@ namespace Xp.Runners.IO
     {
         private const string CYGDRIVE_PATH = "/cygdrive/";
         private const string INSTALLATIONS = @"Software\Cygwin\Installations";
+
         private static byte[] SYMLINK_COOKIE = new byte[] { 33, 60, 115, 121, 109, 108, 105, 110, 107, 62 };
-        private static IEnumerable<string> cygpath;
 
         /// <summary>Determine whether we're runnning inside Cygwin</summary>
         public static bool Active { get { return null != Environment.GetEnvironmentVariable("SHELL"); } }
 
         /// <summary>Determine Cygwin installation directories. Caches information</summary>
-        public static IEnumerable<string> Installations(bool cached = true)
+        public static IEnumerable<string> Installations()
         {
-            if (cygpath == null || !cached)
+            var installed = Registry.CurrentUser.OpenSubKey(INSTALLATIONS) ?? Registry.LocalMachine.OpenSubKey(INSTALLATIONS);
+            if (null == installed)
             {
-                var installed = Registry.CurrentUser.OpenSubKey(INSTALLATIONS) ?? Registry.LocalMachine.OpenSubKey(INSTALLATIONS);
-                if (null == installed)
-                {
-                    throw new NotSupportedException("Cannot determine Cygwin path via registry [" + INSTALLATIONS + "]");
-                }
-
-                cygpath = installed.GetValueNames()
-                    .Select(key => installed.GetValue(key) as string)
-                    .Select(path => path.Replace(@"\??\", ""))
-                    .ToArray()
-                ;
+                throw new NotSupportedException("Cannot determine Cygwin path via registry [" + INSTALLATIONS + "]");
             }
-            return cygpath;
+
+            return installed.GetValueNames()
+                .Select(key => installed.GetValue(key) as string)
+                .Select(path => path.Replace(@"\??\", ""))
+            ;
         }
 
         /// <summary>Resolve directory. Supports /cygdrive and absolute paths</summary>
