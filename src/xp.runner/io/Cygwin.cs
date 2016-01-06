@@ -36,7 +36,7 @@ namespace Xp.Runners.IO
             return cygpath;
         }
 
-        /// <summary>Resolve directory. Supports absolute paths and home directories</summary>
+        /// <summary>Resolve directory. Supports /cygdrive and absolute paths</summary>
         public static string Resolve(string path)
         {
             if (path.StartsWith(CYGDRIVE_PATH))
