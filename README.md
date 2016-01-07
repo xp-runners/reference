@@ -43,7 +43,7 @@ The following commands are builtin:
 * **write [code]** - Evaluates code, writes result to Console - *also `-w [code]`*
 * **dump [code]** - Evaluates code, var_dump()s result - *also `-d [code]`*
 * **help** - Displays help - *also `-?`*
-* **run** - Runs a class
+* **run [class]** - Runs a class, class file or xar
 
 If no command line arguments are given, the help command is run. If command line arguments are given, but no command is passed, the command defaults to *run*.
 
