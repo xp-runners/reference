@@ -53,32 +53,26 @@ namespace Xp.Runners.Exec
             var stream = (Stream)result.AsyncState;
             var count = 0;
             try { count = stream.EndRead(result); } catch { count = 0; }
-            try
-            {
-                if (count > 0)
-                {
-                    var bytes = encoding.GetString(buffer, 0, count);
 
-                    lock (queue)
+            if (count > 0)
+            {
+                var bytes = encoding.GetString(buffer, 0, count);
+
+                lock (queue)
+                {
+                    queue.Append(bytes);
+                    if (DataReceivedEvent != null)
                     {
-                        queue.Append(bytes);
-                        if (DataReceivedEvent != null)
-                        {
-                            DataReceivedEvent(stream, new DataReceived { Data = queue.ToString() });
-                            queue.Clear();
-                        }
+                        DataReceivedEvent(stream, new DataReceived { Data = queue.ToString() });
+                        queue.Clear();
                     }
+                }
 
-                    stream.BeginRead(buffer, 0, bufferSize, ReaderCallback, stream);
-                }
-                else
-                {
-                    done.Set();
-                }
+                stream.BeginRead(buffer, 0, bufferSize, ReaderCallback, stream);
             }
-            catch
+            else
             {
-                Monitor.Exit(queue);
+                done.Set();
             }
         }
     }
