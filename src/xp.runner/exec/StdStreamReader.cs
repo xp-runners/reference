@@ -45,12 +45,12 @@ namespace Xp.Runners.Exec
 
         public void ReaderCallback(IAsyncResult result)
         {
-            if (result == null) return;
-            var stream = (Stream)result.AsyncState;
-            var count = 0;
-
             lock (synchronization)
             {
+                if (result == null) return;
+                var stream = (Stream)result.AsyncState;
+                var count = 0;
+
                 try { count = stream.EndRead(result); } catch { count = 0; }
 
                 if (count > 0)
