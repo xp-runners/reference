@@ -59,16 +59,17 @@ namespace Xp.Runners.Exec
                 {
                     var bytes = encoding.GetString(buffer, 0, count);
 
-                    Monitor.Enter(queue);
-                    queue.Append(bytes);
-                    if (DataReceivedEvent != null)
+                    lock (queue)
                     {
-                        DataReceivedEvent(stream, new DataReceived { Data = queue.ToString() });
-                        queue.Clear();
+                        queue.Append(bytes);
+                        if (DataReceivedEvent != null)
+                        {
+                            DataReceivedEvent(stream, new DataReceived { Data = queue.ToString() });
+                            queue.Clear();
+                        }
                     }
-                    Monitor.Exit(queue);
 
-                    stream.BeginRead(buffer, 0, bufferSize, ReaderCallback, result.AsyncState);
+                    stream.BeginRead(buffer, 0, bufferSize, ReaderCallback, stream);
                 }
                 else
                 {
