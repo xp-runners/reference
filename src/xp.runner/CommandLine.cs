@@ -92,6 +92,11 @@ namespace Xp.Runners
                     options["classpath"].Add(argv[++i]);
                     offset = i + 1;
                 }
+                else if ("-cp?" == argv[i] || "-cp!" == argv[i])
+                {
+                    options["classpath"].Add(argv[i].Substring("-cp".Length) + argv[++i]);
+                    offset = i + 1;
+                }
                 else if ("-m" == argv[i])
                 {
                     options["modules"].Add(argv[++i]);

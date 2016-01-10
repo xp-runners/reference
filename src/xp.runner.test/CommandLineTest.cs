@@ -90,6 +90,24 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
+        public void overlay_classpath_entry()
+        {
+            Assert.Equal(
+                new string[] { "!src/main/php" },
+                new CommandLine(new string[] { "-cp!", "src/main/php" }).Options["classpath"].ToArray()
+            );
+        }
+
+        [Fact]
+        public void optional_classpath_entry()
+        {
+            Assert.Equal(
+                new string[] { "?src/main/php" },
+                new CommandLine(new string[] { "-cp?", "src/main/php" }).Options["classpath"].ToArray()
+            );
+        }
+
+        [Fact]
         public void modules_initially_empty()
         {
             Assert.Equal(new string[] { }, new CommandLine(new string[] { }).Options["modules"].ToArray());

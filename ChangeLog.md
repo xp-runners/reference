@@ -3,6 +3,11 @@ XP Runners change log
 
 ## 7.0.0 / ????-??-??
 
+* Made path files and `-cp` behave consistently, see xp-runners/reference#11:
+  * New `-cp?` argument, which declares an optional class path
+  * New `-cp!` argument, which declares an overlay class path
+  * Added support for `.php` files in class path
+  (@thekid)
 * Merged PR #3: Support XP5. The new XP runners also support XP 5.X checkouts
   although **this is to be considered deprecated** (for the discussion, see
   https://github.com/xp-runners/reference/issues/1#issuecomment-168872536)
