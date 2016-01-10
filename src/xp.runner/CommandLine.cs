@@ -7,12 +7,7 @@ namespace Xp.Runners
 {
     public class CommandLine
     {
-        private static Dictionary<string, string> OPTIONS = new Dictionary<string, string>()
-        {
-            { "-cp", "classpath" },
-            { "-m", "modules" }
-        };
-        private static Dictionary<string, Type> COMMANDS = new Dictionary<string, Type>()
+        private static Dictionary<string, Type> aliases = new Dictionary<string, Type>()
         {
             { "-v", typeof(Commands.Version) },
             { "-e", typeof(Commands.Eval) },
@@ -86,16 +81,21 @@ namespace Xp.Runners
             var offset = 0;
             for (var i = 0; i < argv.Length; i++)
             {
-                if (OPTIONS.ContainsKey(argv[i]))
+                if (aliases.ContainsKey(argv[i]))
                 {
-                    options[OPTIONS[argv[i]]].Add(argv[++i]);
-                    offset = i + 1;
-                }
-                else if (COMMANDS.ContainsKey(argv[i]))
-                {
-                    command = Activator.CreateInstance(COMMANDS[argv[i]]) as Command;
+                    command = Activator.CreateInstance(aliases[argv[i]]) as Command;
                     offset = ++i;
                     break;
+                }
+                else if ("-cp" == argv[i])
+                {
+                    options["classpath"].Add(argv[++i]);
+                    offset = i + 1;
+                }
+                else if ("-m" == argv[i])
+                {
+                    options["modules"].Add(argv[++i]);
+                    offset = i + 1;
                 }
                 else if ("-watch".Equals(argv[i]))
                 {
