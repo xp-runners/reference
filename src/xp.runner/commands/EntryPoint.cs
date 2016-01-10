@@ -8,6 +8,7 @@ namespace Xp.Runners.Commands
         const int NAME = 2;
         const int COMMAND = 3;
 
+        private string package;
         private string type;
         private string module;
 
@@ -20,13 +21,13 @@ namespace Xp.Runners.Commands
                     throw new ArgumentException("Malformed input string `" + file + "`");
                 }
 
-                type = string.Format(
-                    "xp.{0}.{1}Runner",
-                    spec[NAME],
-                    spec.Length > COMMAND ? spec[COMMAND].UpperCaseFirst() : string.Empty
-                );
+                package = "xp." + spec[NAME];
+                type = package + "." + (spec.Length > COMMAND ? spec[COMMAND].UpperCaseFirst() : string.Empty) + "Runner";
                 module = spec[VENDOR] + "/" + spec[NAME];
         }
+
+        /// <summary>The entry point's package name, e.g. xp.unittest</summary>
+        public string Package { get { return package; } }
 
         /// <summary>The entry point type name, e.g. xp.unittest.TestRunner</summary>
         public string Type { get { return type; } }
