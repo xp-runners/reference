@@ -15,7 +15,7 @@ namespace Xp.Runners.Exec
 
         private IStdStreamReader Redirect(StreamReader input, TextWriter output)
         {
-            var reader = new StdStreamReader(output.Encoding);
+            var reader = new StdStreamReader(output.Encoding, this);
             reader.DataReceivedEvent += (sender, e) => output.Write(e.Data);
             reader.Start(input);
             return reader;
