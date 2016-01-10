@@ -76,7 +76,7 @@ namespace Xp.Runners
 
             Encoding encoding;
             Func<string, string> args;
-            var main = Paths.TryLocate(configuration.GetUse(), new string[] { Paths.Compose("tools", MainFor(cmd) + ".php") }).FirstOrDefault();
+            var main = Paths.TryLocate(use, new string[] { Paths.Compose("tools", MainFor(cmd) + ".php") }).FirstOrDefault();
             if (null == main)
             {
                 main = Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { MainFor(cmd) + "-main.php" }).First();
