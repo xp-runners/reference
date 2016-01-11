@@ -50,7 +50,6 @@ namespace Xp.Runners.Exec
             finally
             {
                 // Console.OutputEncoding = original;
-                proc.Close();
             }
         }
     }
