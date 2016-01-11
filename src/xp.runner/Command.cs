@@ -53,7 +53,10 @@ namespace Xp.Runners
         /// <summary>Format ini settings for use in command line</summary>
         private IEnumerable<string> IniSettings(IEnumerable<KeyValuePair<string, IEnumerable<string>>> arguments)
         {
-            return arguments.SelectMany(pair => pair.Value.Select(setting => string.Format("-d {0}={1}", pair.Key, setting)));
+            return arguments
+                .Where(pair => null != pair.Value)
+                .SelectMany(pair => pair.Value.Select(setting => string.Format("-d {0}={1}", pair.Key, setting)))
+            ;
         }
 
         /// <summary>Use composer to find xp-framework/core</summary>
