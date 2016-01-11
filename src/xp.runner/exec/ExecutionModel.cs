@@ -45,7 +45,7 @@ namespace Xp.Runners.Exec
             }
             catch (SystemException e)
             {
-                throw new EntryPointNotFoundException(proc.StartInfo.FileName + ": " + e.Message, e);
+                throw new FileNotFoundException(proc.StartInfo.FileName + ": " + e.Message, e);
             }
             finally
             {

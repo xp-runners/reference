@@ -29,7 +29,7 @@ namespace Xp.Runners
             {
                 return cmd.Command.Execute(cmd, TheConfiguration());
             }
-            catch (EntryPointNotFoundException e) 
+            catch (FileNotFoundException e) 
             {
                 Console.Error.WriteLine("Executing command {0} raised {1}", cmd.Command, e.Message);
                 return 2;
