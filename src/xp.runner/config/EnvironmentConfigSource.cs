@@ -19,7 +19,7 @@ namespace Xp.Runners.Config
         {
             var env = Environment.GetEnvironmentVariable("USE_XP");
             return env == null ? null : Paths.Translate(
-                Environment.CurrentDirectory, 
+                Directory.GetCurrentDirectory(),
                 env.Split(new char[] { Path.PathSeparator })
             );
         }
