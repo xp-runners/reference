@@ -15,7 +15,8 @@
         "System.Runtime.Serialization.Json": "4.0.1-beta-*",
         "System.Runtime.Serialization.Primitives": "4.0.10-beta-*",
         "System.Linq": "4.0.1-beta-*",
-        "xunit.core": "2.1.0-beta4-*"
+        "xunit.core": "2.1.0-beta4-*",
+        "xunit.assert": "2.2.0-beta1-*"
     },
 
     "frameworks": {

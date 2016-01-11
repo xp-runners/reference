@@ -7,7 +7,7 @@ namespace Xp.Runners.IO
     static class Shortcuts
     {
         #region Native DLL imports
-        [DllImport("shfolder.dll", CharSet = CharSet.Auto)] 
+        [DllImport("shfolder.dll", CharSet = CharSet.Unicode)] 
         internal static extern int SHGetFolderPath(IntPtr hwndOwner, int nFolder, IntPtr hToken, int dwFlags, StringBuilder lpszPath); 
 
         [Flags()] 
@@ -21,7 +21,7 @@ namespace Xp.Runners.IO
             SLGP_RAWPATH = 0x4 
         } 
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)] 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)] 
         struct WIN32_FIND_DATAW 
         { 
             public uint dwFileAttributes; 
