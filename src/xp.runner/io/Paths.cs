@@ -74,8 +74,8 @@ namespace Xp.Runners.IO
         /// <summary>Translate a list of paths</summary>
         public static IEnumerable<string> Translate(string root, string[] paths)
         {
-            var HOME = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-
+            var homePath = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var directorySeparator = new string(new char[] { Path.DirectorySeparatorChar });
             foreach (var path in paths)
             {
                 // Normalize path
@@ -84,9 +84,9 @@ namespace Xp.Runners.IO
                 if (normalized.StartsWith("~"))
                 {
                     // Path in home directory
-                    yield return Resolve(Compose(HOME, normalized.Substring(1)));
+                    yield return Resolve(Compose(homePath, normalized.Substring(1)));
                 } 
-                else if (normalized.Substring(1).StartsWith(":\\") || normalized.StartsWith("\\\\")) 
+                else if (normalized.Substring(1).StartsWith(":\\") || normalized.StartsWith(directorySeparator))
                 {
                     // Fully qualified path
                     yield return Resolve(normalized);
