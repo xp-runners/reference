@@ -104,24 +104,10 @@ namespace Xp.Runners.Test
         [Fact]
         public void translate_path_inside_home()
         {
-            var home = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var home = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetEnvironmentVariable("USERPROFILE");
             Assert.Equal(
                 new string[] { Paths.Compose(home, "devel") },
                 Paths.Translate(".", new string[] { "~/devel" }).ToArray()
-            );
-        }
-
-        [Fact]
-        public void locate_dotnet_framework()
-        {
-            var framework = Paths.Compose(Environment.SpecialFolder.Windows, "Microsoft.NET", "Framework");
-            if (!Directory.Exists(framework)) return;   // Skip
-
-            var search = Directory.GetDirectories(framework, "v*.*");
-
-            Assert.NotEqual(
-                new string[] { },
-                Paths.Locate(search, new string[] { "csc.exe" }).ToArray()
             );
         }
 
