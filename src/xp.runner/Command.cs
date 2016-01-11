@@ -80,8 +80,10 @@ namespace Xp.Runners
             if (null == main)
             {
                 main = Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { MainFor(cmd) + "-main.php" }).First();
-                args = Arguments.Encode;
                 encoding = Encoding.UTF8;
+
+                // Arguments are encoded in utf-7, which is binary-safe
+                args = Arguments.Encode;
                 ini["encoding"] = new string[] { "utf-7" };
             }
             else
