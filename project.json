@@ -1,8 +1,7 @@
 ﻿{
     "version": "1.0.0-*",
     "compilationOptions": {
-        "emitEntryPoint": true,
-        "define": "DOTNET"
+        "emitEntryPoint": true
     },
 
     "dependencies": {

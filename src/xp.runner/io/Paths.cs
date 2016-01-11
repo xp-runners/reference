@@ -74,8 +74,7 @@ namespace Xp.Runners.IO
         /// <summary>Translate a list of paths</summary>
         public static IEnumerable<string> Translate(string root, string[] paths)
         {
-            var HOME = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-
+            var HOME = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetEnvironmentVariable("USERPROFILE");
             foreach (var path in paths)
             {
                 // Normalize path
