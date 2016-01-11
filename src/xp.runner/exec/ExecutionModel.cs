@@ -43,7 +43,7 @@ namespace Xp.Runners.Exec
                 stderr.WaitForEnd();
                 return proc.ExitCode;
             }
-            catch (SystemException e)
+            catch (Exception e)
             {
                 throw new FileNotFoundException(proc.StartInfo.FileName + ": " + e.Message, e);
             }
