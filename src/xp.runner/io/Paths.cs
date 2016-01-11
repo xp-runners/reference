@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace Xp.Runners.IO
@@ -123,16 +124,7 @@ namespace Xp.Runners.IO
         /// <summary>Return binary file of currently executing process</summary>
         public static string Binary()
         {
-            // Codebase is a URI. file:///F:/cygwin/home/Timm Friebe/bin/xp.exe
-            var uri = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-            if (uri.IsFile)
-            {
-                return Uri.UnescapeDataString(uri.AbsolutePath.Replace('/', Path.DirectorySeparatorChar));
-            }
-            else
-            {
-                throw new IOException("Don't know how to handle " + uri.AbsoluteUri);
-            }
+            return Process.GetCurrentProcess().MainModule.FileName;
         }
     }
 }
