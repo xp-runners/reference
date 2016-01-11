@@ -12,6 +12,7 @@
         "System.Console": "4.0.0-beta-*",
         "System.Runtime": "4.0.21-beta-*",
         "System.Diagnostics.Process": "4.1.0-beta-*",
+        "System.Runtime.InteropServices": "4.0.21-beta-*",
         "System.Runtime.Serialization.Json": "4.0.1-beta-*",
         "System.Runtime.Serialization.Primitives": "4.0.10-beta-*",
         "System.Linq": "4.0.1-beta-*",
