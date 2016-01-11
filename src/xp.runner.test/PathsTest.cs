@@ -60,24 +60,6 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
-        public void compose_specialfolder()
-        {
-            Assert.Equal(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                Paths.Compose(Environment.SpecialFolder.ApplicationData)
-            );
-        }
-
-        [Fact]
-        public void compose_specialfolder_with_component()
-        {
-            Assert.Equal(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "Composer",
-                Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer")
-            );
-        }
-
-        [Fact]
         public void binary()
         {
             Assert.NotEqual("", Paths.Binary());
