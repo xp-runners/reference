@@ -56,6 +56,12 @@ namespace Xp.Runners
             return arguments.SelectMany(pair => pair.Value.Select(setting => string.Format("-d {0}={1}", pair.Key, setting)));
         }
 
+        /// <summary>Use composer to find xp-framework/core</summary>
+        private IEnumerable<string> UseComposer()
+        {
+            return ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists);
+        }
+
         /// <summary>Entry point</summary>
         public int Execute(CommandLine cmd, ConfigSource configuration)
         {
@@ -69,10 +75,7 @@ namespace Xp.Runners
                 { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? "UTC" } },
                 { "extension", configuration.GetExtensions(runtime) }
             };
-            var use = configuration.GetUse() ?? new string[]
-            {
-                ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists).First()
-            };
+            var use = configuration.GetUse() ?? UseComposer();
 
             Encoding encoding;
             Func<string, string> args;
