@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
 
