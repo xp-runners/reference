@@ -114,7 +114,7 @@ namespace Xp.Runners.IO
         /// <summary>Return binary file of currently executing process</summary>
         public static string Binary()
         {
-            return Process.GetCurrentProcess().ProcessName;
+            return Process.GetCurrentProcess().MainModule.FileName;
         }
     }
 }
