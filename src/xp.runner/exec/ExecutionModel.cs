@@ -24,19 +24,19 @@ namespace Xp.Runners.Exec
         /// <summary>Run the process and return its exitcode</summary>
         protected int Run(Process proc, Encoding encoding)
         {
-            var original = Console.OutputEncoding;
+            // var original = Console.OutputEncoding;
 
-            proc.StartInfo.RedirectStandardOutput = !Console.IsOutputRedirected;
-            proc.StartInfo.RedirectStandardError = !Console.IsErrorRedirected;
+            // proc.StartInfo.RedirectStandardOutput = !Console.IsOutputRedirected;
+            // proc.StartInfo.RedirectStandardError = !Console.IsErrorRedirected;
 
-            Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
-            Console.OutputEncoding = encoding;
+            // Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
+            // Console.OutputEncoding = encoding;
 
             try
             {
                 proc.Start();
-                var stdout = Console.IsOutputRedirected ? passThrough : Redirect(proc.StandardOutput, new ANSISupport(Console.Out));
-                var stderr = Console.IsErrorRedirected ? passThrough : Redirect(proc.StandardError, new ANSISupport(Console.Error));
+                var stdout = passThrough; // Console.IsOutputRedirected ? passThrough : Redirect(proc.StandardOutput, new ANSISupport(Console.Out));
+                var stderr = passThrough; // Console.IsErrorRedirected ? passThrough : Redirect(proc.StandardError, new ANSISupport(Console.Error));
 
                 proc.WaitForExit();
                 stdout.WaitForEnd();
@@ -49,7 +49,7 @@ namespace Xp.Runners.Exec
             }
             finally
             {
-                Console.OutputEncoding = original;
+                // Console.OutputEncoding = original;
                 proc.Close();
             }
         }
