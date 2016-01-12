@@ -13,11 +13,20 @@ namespace Xp.Runners
     {
         const string VENDOR = "vendor";
 
-        /// <summary>Returns well-known locations of Composer directories. Local installations have precedence!</summary>
+        /// <summary>Returns well-known locations of Composer directories. Local installations have 
+        /// precedence! See https://getcomposer.org/doc/03-cli.md#composer-home</summary>
         protected IEnumerable<string> ComposerLocations()
         {
             yield return Paths.Compose(".", VENDOR);
-            yield return Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", VENDOR);
+
+            if (Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX)
+            {
+                yield return Paths.Compose(Environment.GetEnvironmentVariable("HOME"), ".composer", VENDOR);
+            }
+            else
+            {
+                yield return Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", VENDOR);
+            }
         }
 
         /// <summary>Initialize this command</summary>
