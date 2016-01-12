@@ -24,16 +24,21 @@ namespace Xp.Runners
         /// <summary>Entry point</summary>
         public static int Main(string[] args)
         {
-            var cmd = new CommandLine(args);
             try
             {
-                return cmd.Command.Execute(cmd, TheConfiguration());
+                var cmd = new CommandLine(args);
+                return cmd.Execute(TheConfiguration());
             }
-            catch (EntryPointNotFoundException e) 
+            catch (NotImplementedException e)
             {
-                Console.Error.WriteLine("Executing command {0} raised {1}", cmd.Command, e.Message);
+                Console.Error.WriteLine("Command not implemented: {0}", e.Message);
                 return 2;
-            } 
+            }
+            catch (EntryPointNotFoundException e)
+            {
+                Console.Error.WriteLine("Problem executing runtime: {0}", e.Message);
+                return 2;
+            }
         }
     }
 }

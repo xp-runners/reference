@@ -8,8 +8,6 @@ namespace Xp.Runners.Commands
     [DataContract]
     public class Composer
     {
-        public const string FILENAME = "composer.json";
-
         [DataMember(Name = "name")]
         public string Name { get; set; }
 

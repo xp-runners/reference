@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Xp.Runners.Exec;
+using Xp.Runners.Config;
 
 namespace Xp.Runners
 {
@@ -126,6 +127,12 @@ namespace Xp.Runners
             } 
 
             arguments = new ArraySegment<string>(argv, offset, argv.Length - offset);
+        }
+
+        /// <summary>Entry point</summary>
+        public int Execute(ConfigSource configuration)
+        {
+            return Command.Execute(this, configuration);
         }
 
         public override string ToString()
