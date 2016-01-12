@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
 
@@ -16,7 +17,7 @@ namespace Xp.Runners
                 new EnvironmentConfigSource(),
                 new IniConfigSource(new Ini(Paths.Compose(".", ini))),
                 null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
-                new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
+                // TBI new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
                 new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
             );
         }
@@ -29,7 +30,7 @@ namespace Xp.Runners
             {
                 return cmd.Command.Execute(cmd, TheConfiguration());
             }
-            catch (EntryPointNotFoundException e) 
+            catch (FileNotFoundException e) 
             {
                 Console.Error.WriteLine("Executing command {0} raised {1}", cmd.Command, e.Message);
                 return 2;

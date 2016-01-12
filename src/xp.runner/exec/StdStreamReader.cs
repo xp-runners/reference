@@ -35,24 +35,19 @@ namespace Xp.Runners.Exec
         }
 
         /// <summary>Starts reading</summary>
-        public void Start(StreamReader reader)
+        public async void Start(StreamReader reader)
         {
-            reader.BaseStream.BeginRead(buffer, 0, bufferSize, ReaderCallback, reader.BaseStream);
+            var count = await reader.BaseStream.ReadAsync(buffer, 0, bufferSize);
+            ReaderCallback(reader.BaseStream, count);
         }
 
         /// <summary>Wait until we've read until the end</summary>
         public bool WaitForEnd() { return done.WaitOne(); }
 
-        public void ReaderCallback(IAsyncResult result)
+        public async void ReaderCallback(Stream stream, int count)
         {
             lock (synchronization)
             {
-                if (result == null) return;
-                var stream = (Stream)result.AsyncState;
-                var count = 0;
-
-                try { count = stream.EndRead(result); } catch { count = 0; }
-
                 if (count > 0)
                 {
                     var bytes = encoding.GetString(buffer, 0, count);
@@ -66,14 +61,16 @@ namespace Xp.Runners.Exec
                             queue.Clear();
                         }
                     }
-
-                    stream.BeginRead(buffer, 0, bufferSize, ReaderCallback, stream);
                 }
                 else
                 {
                     done.Set();
+                    return;
                 }
             }
+
+            count = await stream.ReadAsync(buffer, 0, bufferSize);
+            ReaderCallback(stream, count);
         }
     }
 }

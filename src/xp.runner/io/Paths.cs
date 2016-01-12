@@ -75,7 +75,7 @@ namespace Xp.Runners.IO
         /// <summary>Translate a list of paths</summary>
         public static IEnumerable<string> Translate(string root, string[] paths)
         {
-            var homePath = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var homePath = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetEnvironmentVariable("USERPROFILE");
             var directorySeparator = new string(new char[] { Path.DirectorySeparatorChar });
             foreach (var path in paths)
             {
@@ -112,15 +112,6 @@ namespace Xp.Runners.IO
             return s.ToString();
         }
         
-        /// <summary>Composes a path name of a special folder and a string component</summary>
-        public static string Compose(Environment.SpecialFolder special, params string[] components) 
-        {
-            var args = new string[1 + components.Length];
-            args[0] = Environment.GetFolderPath(special);
-            Array.Copy(components, 0, args, 1, components.Length);
-            return Compose(args);
-        }
-
         /// <summary>Return binary file of currently executing process</summary>
         public static string Binary()
         {

@@ -17,7 +17,7 @@ namespace Xp.Runners
         protected IEnumerable<string> ComposerLocations()
         {
             yield return Paths.Compose(".", VENDOR);
-            yield return Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", VENDOR);
+            // TBI yield return Paths.Compose(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Composer", VENDOR);
         }
 
         /// <summary>Initialize this command</summary>

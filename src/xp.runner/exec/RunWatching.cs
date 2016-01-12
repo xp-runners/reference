@@ -30,7 +30,7 @@ namespace Xp.Runners.Exec
                 do
                 {
                     Run(proc, encoding);
-                } while (!watcher.WaitForChanged(WatcherChangeTypes.Changed).TimedOut);
+                } while (watcher.EnableRaisingEvents);
             }
 
             return 0;
