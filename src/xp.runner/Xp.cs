@@ -27,7 +27,7 @@ namespace Xp.Runners
             try
             {
                 var cmd = new CommandLine(args);
-                return cmd.Command.Execute(cmd, TheConfiguration());
+                return cmd.Execute(TheConfiguration());
             }
             catch (NotImplementedException e)
             {
