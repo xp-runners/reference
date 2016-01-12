@@ -21,13 +21,26 @@ namespace Xp.Runners.Exec
             return reader;
         }
 
+        /// <summary>Check whether it's necessary to rewrite ANSI color</summary>
+        private bool RewriteANSI(bool redirected)
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                return !redirected;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>Run the process and return its exitcode</summary>
         protected int Run(Process proc, Encoding encoding)
         {
             var original = Console.OutputEncoding;
 
-            proc.StartInfo.RedirectStandardOutput = !Console.IsOutputRedirected;
-            proc.StartInfo.RedirectStandardError = !Console.IsErrorRedirected;
+            proc.StartInfo.RedirectStandardOutput = RewriteANSI(Console.IsOutputRedirected);
+            proc.StartInfo.RedirectStandardError = RewriteANSI(Console.IsErrorRedirected);
 
             Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
             Console.OutputEncoding = encoding;
@@ -35,8 +48,8 @@ namespace Xp.Runners.Exec
             try
             {
                 proc.Start();
-                var stdout = Console.IsOutputRedirected ? passThrough : Redirect(proc.StandardOutput, new ANSISupport(Console.Out));
-                var stderr = Console.IsErrorRedirected ? passThrough : Redirect(proc.StandardError, new ANSISupport(Console.Error));
+                var stdout = proc.StartInfo.RedirectStandardOutput ? Redirect(proc.StandardOutput, new ANSISupport(Console.Out)) : passThrough;
+                var stderr = proc.StartInfo.RedirectStandardError ? Redirect(proc.StandardError, new ANSISupport(Console.Error)) : passThrough;
 
                 proc.WaitForExit();
                 stdout.WaitForEnd();
