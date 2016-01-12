@@ -1,7 +1,9 @@
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System;
+using System.Linq;
 using System.IO;
+using System.Xml;
+using System.Runtime.Serialization.Json;
+using System.Collections.Generic;
 using Xp.Runners;
 
 namespace Xp.Runners.Commands
@@ -11,22 +13,48 @@ namespace Xp.Runners.Commands
     {
         public const string NAME = "composer.json";
 
-        private static DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(Composer), new DataContractJsonSerializerSettings {
-            UseSimpleDictionaryFormat = true
-        });
-
         private Composer definitions;
-        private Stream input;
+        private XmlDictionaryReader input;
 
         /// <summary>Creates an instance from a given stream</summary>
         public ComposerFile(Stream input)
         {
-            this.input = input;
+            this.input = JsonReaderWriterFactory.CreateJsonReader(input, new XmlDictionaryReaderQuotas());
         }
 
         /// <summary>Creates an instance from a given file name</summary>
         public ComposerFile(string file) : this(new FileStream(file, FileMode.Open))
         {
+        }
+
+        /// <summary>Structure of a JSON document as a structure useable for lookups</summary>
+        private IEnumerable<KeyValuePair<string, string>> StructureOf(XmlDictionaryReader input)
+        {
+            var path = new List<string>();
+            do
+            {
+                if (XmlNodeType.Text == input.NodeType)
+                {
+                    yield return new KeyValuePair<string, string>(string.Join("\\", path), input.Value);
+                }
+                else if (XmlNodeType.Element == input.NodeType)
+                {
+                    var name = input.LocalName;
+
+                    input.MoveToFirstAttribute();
+                    do
+                    {
+                        if ("item" == input.LocalName) name = input.Value;
+                    } while (input.MoveToNextAttribute());
+
+                    input.MoveToElement();
+                    path.Add(name);
+                }
+                else if (XmlNodeType.EndElement == input.NodeType)
+                {
+                        path.RemoveAt(path.Count - 1);
+                }
+            } while (input.Read());
         }
 
         /// <summary>Reads definitions lazily</summary>
@@ -38,7 +66,14 @@ namespace Xp.Runners.Commands
                 {
                     if (null == definitions)
                     {
-                        definitions = json.ReadObject(input) as Composer;
+                        var lookup = StructureOf(input).ToLookup(item => item.Key, item => item.Value);
+
+                        definitions = new Composer();
+                        definitions.Name = lookup[@"root\name"].FirstOrDefault();
+                        definitions.Require = lookup
+                            .Where(pair => pair.Key.StartsWith(@"root\require\"))
+                            .ToDictionary(value => value.Key.Substring(@"root\require\".Length), value => value.First())
+                        ;
                     }
                 }
                 return definitions;
@@ -48,7 +83,7 @@ namespace Xp.Runners.Commands
         /// <summary>For use in `using`</summary>
         public void Dispose()
         {
-            input.Dispose();
+            input.Close();
         }
     }
 }
