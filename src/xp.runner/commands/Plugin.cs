@@ -13,9 +13,7 @@ namespace Xp.Runners.Commands
     {
         private EntryPoint entry;
         private IEnumerable<string> modules;
-        private static DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(Composer), new DataContractJsonSerializerSettings {
-            UseSimpleDictionaryFormat = true
-        });
+        private static DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(Composer), "root");
 
         public Plugin(string name)
         {
