@@ -52,7 +52,7 @@ namespace Xp.Runners.Commands
                 }
                 else if (XmlNodeType.EndElement == input.NodeType)
                 {
-                        path.RemoveAt(path.Count - 1);
+                    path.RemoveAt(path.Count - 1);
                 }
             } while (input.Read());
         }
