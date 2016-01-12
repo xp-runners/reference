@@ -13,9 +13,6 @@ namespace Xp.Runners.Commands
     {
         private EntryPoint entry;
         private IEnumerable<string> modules;
-        private static DataContractJsonSerializer json = new DataContractJsonSerializer(typeof(Composer), new DataContractJsonSerializerSettings {
-            UseSimpleDictionaryFormat = true
-        });
 
         public Plugin(string name)
         {
@@ -61,10 +58,9 @@ namespace Xp.Runners.Commands
             yield return path;
             loaded.Add(module);
 
-            using (var stream = new FileStream(Paths.Compose(path, Composer.FILENAME), FileMode.Open))
+            using (var composer = new ComposerFile(Paths.Compose(path, ComposerFile.NAME)))
             {
-                var definitions = json.ReadObject(stream) as Composer;
-                foreach (var require in definitions.Require.Where(pair => pair.Key.Contains('/')))
+                foreach (var require in composer.Definitions.Require.Where(pair => pair.Key.Contains('/')))
                 {
                     if (loaded.Contains(require.Key)) continue;
 
