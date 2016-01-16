@@ -1,4 +1,5 @@
 using Xunit;
+using Xunit.Extensions;
 using System;
 using Xp.Runners.Commands;
 
