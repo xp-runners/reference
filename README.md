@@ -1,5 +1,8 @@
 XP Runners
 ==========
+[![Build Status on TravisCI](https://secure.travis-ci.org/xp-runners/reference.svg)](http://travis-ci.org/xp-runners/reference)
+
+
 This is the reference implementation of [XP RFC #0303: Subcommands](https://github.com/xp-framework/rfc/issues/303).
 
 Getting started
