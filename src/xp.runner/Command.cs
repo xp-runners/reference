@@ -21,7 +21,7 @@ namespace Xp.Runners
 
             if (Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX)
             {
-                yield return Paths.Compose(Environment.GetEnvironmentVariable("HOME"), ".composer", VENDOR);
+                yield return Paths.Compose(Paths.Home(), ".composer", VENDOR);
             }
             else
             {
