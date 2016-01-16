@@ -112,7 +112,7 @@ namespace Xp.Runners.Test
         [Fact]
         public void translate_home_path()
         {
-            var home = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var home = Paths.Home();
             Assert.Equal(
                 new string[] { home },
                 Paths.Translate(".", new string[] { "~" }).ToArray()
@@ -122,7 +122,7 @@ namespace Xp.Runners.Test
         [Fact]
         public void translate_path_inside_home()
         {
-            var home = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var home = Paths.Home();
             Assert.Equal(
                 new string[] { Paths.Compose(home, "devel") },
                 Paths.Translate(".", new string[] { "~/devel" }).ToArray()

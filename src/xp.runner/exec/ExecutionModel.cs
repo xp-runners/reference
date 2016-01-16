@@ -37,13 +37,17 @@ namespace Xp.Runners.Exec
         /// <summary>Run the process and return its exitcode</summary>
         protected int Run(Process proc, Encoding encoding)
         {
-            var original = Console.OutputEncoding;
+            Encoding original = null;
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                original = Console.OutputEncoding;
+                Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
+                Console.OutputEncoding = encoding;
+            }
 
             proc.StartInfo.RedirectStandardOutput = RewriteANSI(Console.IsOutputRedirected);
             proc.StartInfo.RedirectStandardError = RewriteANSI(Console.IsErrorRedirected);
-
-            Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
-            Console.OutputEncoding = encoding;
 
             try
             {
@@ -62,7 +66,7 @@ namespace Xp.Runners.Exec
             }
             finally
             {
-                Console.OutputEncoding = original;
+                if (original != null) Console.OutputEncoding = original;
                 proc.Close();
             }
         }

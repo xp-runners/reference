@@ -56,6 +56,12 @@ namespace Xp.Runners.IO
             }
         }
 
+        /// <summary>Returns home path</summary>
+        public static string Home()
+        {
+            return Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        }
+
         /// <summary>Resolve a path. If the path is actually a shell link (.lnk file), this link's target path is used</summary>
         public static string Resolve(string path)
         {
@@ -75,7 +81,7 @@ namespace Xp.Runners.IO
         /// <summary>Translate a list of paths</summary>
         public static IEnumerable<string> Translate(string root, string[] paths)
         {
-            var homePath = Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var homePath = Home();
             var directorySeparator = new string(new char[] { Path.DirectorySeparatorChar });
             foreach (var path in paths)
             {
