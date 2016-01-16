@@ -1,0 +1,4 @@
+language: csharp
+
+script:
+  - mcs -r:System.Runtime.Serialization src/xp.runner/*.cs src/xp.runner/*/*.cs -target:exe -out:xp
