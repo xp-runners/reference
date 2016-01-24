@@ -66,6 +66,13 @@ namespace Xp.Runners.Test
             Assert.IsType<Dump>(new CommandLine(new string[] { arg }).Command);
         }
 
+        [Theory]
+        [InlineData("ar")]
+        public void ar(string arg)
+        {
+            Assert.IsType<Ar>(new CommandLine(new string[] { arg }).Command);
+        }
+
         [Fact]
         public void classpath_initially_empty()
         {

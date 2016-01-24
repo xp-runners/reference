@@ -41,6 +41,11 @@ namespace Xp.Runners.Commands
                 arguments = new string[] { HELP, Topic(plugin.EntryPoint.Package.Replace('.', '/'), topic[1]) };
                 modules = plugin.Modules;
             }
+            else if (null != Type.GetType("Xp.Runners.Commands." + arg.UpperCaseFirst()))
+            {
+                arguments = new string[] { HELP, Topic("xp/runtime", arg) };
+                modules = new string[] { };
+            }
             else
             {
                 var plugin = new Plugin(arg);
