@@ -28,4 +28,5 @@ XP Runners change log
   * **dump [code]** - Evaluates code, var_dump()s result - *also `-d [code]`*
   * **help** - Displays help - *also `-?`*
   * **run** - Runs a class
+  * **ar** - Works with XAR archives. See xp-runners/reference#22
   (@thekid)
