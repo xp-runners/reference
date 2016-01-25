@@ -151,6 +151,12 @@ namespace Xp.Runners.Test
             Assert.IsType<RunWatching>(new CommandLine(new string[] { "-watch", "." }).ExecutionModel);
         }
 
+        [Fact]
+        public void supervise_execution_model()
+        {
+            Assert.IsType<Supervise>(new CommandLine(new string[] { "-supervise", "." }).ExecutionModel);
+        }
+
         [Theory]
         [InlineData(".")]
         [InlineData("src")]

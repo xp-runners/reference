@@ -58,6 +58,7 @@ namespace Xp.Runners.Exec
                 proc.WaitForExit();
                 stdout.WaitForEnd();
                 stderr.WaitForEnd();
+
                 return proc.ExitCode;
             }
             catch (SystemException e)
