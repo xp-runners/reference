@@ -41,7 +41,10 @@ namespace Xp.Runners.Exec
         }
 
         /// <summary>Wait until we've read until the end</summary>
-        public bool WaitForEnd() { return done.WaitOne(); }
+        public bool WaitForEnd()
+        {
+            return done.WaitOne();
+        }
 
         public void ReaderCallback(IAsyncResult result)
         {
