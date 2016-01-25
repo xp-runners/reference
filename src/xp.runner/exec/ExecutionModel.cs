@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Xp.Runners.Exec
 {
@@ -35,7 +36,7 @@ namespace Xp.Runners.Exec
         }
 
         /// <summary>Run the process and return its exitcode</summary>
-        protected int Run(Process proc, Encoding encoding)
+        protected int Run(Process proc, Encoding encoding, Action started = null)
         {
             Encoding original = null;
 
@@ -54,6 +55,11 @@ namespace Xp.Runners.Exec
                 proc.Start();
                 var stdout = proc.StartInfo.RedirectStandardOutput ? Redirect(proc.StandardOutput, new ANSISupport(Console.Out)) : passThrough;
                 var stderr = proc.StartInfo.RedirectStandardError ? Redirect(proc.StandardError, new ANSISupport(Console.Error)) : passThrough;
+
+                if (null != started)
+                {
+                    Task.Factory.StartNew(started);
+                }
 
                 proc.WaitForExit();
                 stdout.WaitForEnd();
