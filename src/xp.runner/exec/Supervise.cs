@@ -25,11 +25,13 @@ namespace Xp.Runners.Exec
                 {
                     if (elapsed.Seconds < WAIT_FOR_STARTUP)
                     {
-                        Console.WriteLine("*** Process exited too quickly, aborting", code);
+                        Console.WriteLine();
+                        Console.WriteLine("*** Process exited too quickly, aborting");
                         return code;
                     }
                     else
                     {
+                        Console.WriteLine();
                         Console.WriteLine("*** Process exited with exitcode {0}, respawning...", code);
                         Thread.Sleep(WAIT_BEFORE_RESPAWN * 1000);
                     }
