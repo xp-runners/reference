@@ -38,6 +38,7 @@ namespace Xp.Runners.Commands
             {
                 var topic = arg.Split(new char[] { '/' }, 2);
                 var plugin = new Plugin(topic[0]);
+                plugin.Initialize(cmd, configuration);
                 arguments = new string[] { HELP, Topic(plugin.EntryPoint.Package.Replace('.', '/'), topic[1]) };
                 modules = plugin.Modules;
             }
