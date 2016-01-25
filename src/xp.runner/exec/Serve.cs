@@ -5,9 +5,9 @@ using System.Diagnostics;
 
 namespace Xp.Runners.Exec
 {
-
     public class Serve : ExecutionModel
     {
+        const int WAIT_FOR_STARTUP = 1;
 
         /// <summary>Execute the process and return its exitcode</summary>
         public override int Execute(Process proc, Encoding encoding)
@@ -16,7 +16,7 @@ namespace Xp.Runners.Exec
             {
                 Console.Out.WriteLine("[xp::serve#{0}] - Press <Enter> to exit", proc.Id);
 
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(WAIT_FOR_STARTUP * 1000);
                 if (proc.HasExited) return;
 
                 Console.Read();
