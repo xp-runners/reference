@@ -30,7 +30,7 @@ namespace Xp.Runners
         }
 
         /// <summary>Initialize this command</summary>
-        protected virtual void Initialize(CommandLine cmd, ConfigSource configuration)
+        public virtual void Initialize(CommandLine cmd, ConfigSource configuration)
         {
             // NOOP
         }

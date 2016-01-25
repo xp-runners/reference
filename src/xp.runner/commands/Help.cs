@@ -21,7 +21,7 @@ namespace Xp.Runners.Commands
         }
 
         /// <summary>Initialize this command</summary>
-        protected override void Initialize(CommandLine cmd, ConfigSource configuration)
+        public override void Initialize(CommandLine cmd, ConfigSource configuration)
         {
             var arg = cmd.Arguments.FirstOrDefault();
             if (null == arg) 
@@ -49,6 +49,7 @@ namespace Xp.Runners.Commands
             else
             {
                 var plugin = new Plugin(arg);
+                plugin.Initialize(cmd, configuration);
                 arguments = new string[] { HELP, plugin.EntryPoint.Type };
                 modules = plugin.Modules;
             }
