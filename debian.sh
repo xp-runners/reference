@@ -13,16 +13,10 @@ VERSION=${TRAVIS_TAG#v*}
 BUILD=$(mktemp -d)
 EXE=$(pwd)/xp.exe
 DEB=$(pwd)/xp-runners_${VERSION}-1_all.deb
-ZIP=$(pwd)/xp-runners_${VERSION}.zip
-BINTRAY=$(pwd)/bintray.config
+BINTRAY=$(pwd)/debian.config
 MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
 
-rm -f $ZIP $DEB $BINTRAY
-
-# Zipfile for Windows
-zip -j $ZIP $EXE $MAIN
-
-# Debian package
+rm -f $DEB $BINTRAY
 fakeroot=$(which fakeroot)
 cd $BUILD
 
@@ -60,8 +54,8 @@ cat <<-EOF > $BINTRAY
 	{
 	  "package": {
 	    "name"     : "xp-runners",
-	    "repo"     : "xp-runners",
-	    "subject"  : "xp-framework"
+      "repo"     : "debian",
+      "subject"  : "xp-runners"
 	  },
 	  "version": {
 	    "name"     : "${VERSION}",
@@ -87,4 +81,4 @@ EOF
 
 # Done
 rm -rf $BUILD
-ls -al $ZIP $DEB $BINTRAY
+ls -al $DEB $BINTRAY
