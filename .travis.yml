@@ -13,6 +13,7 @@ script:
   - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe tests.dll
 
 before_deploy:
+  - sh bundle.sh
   - sh package.sh
 deploy:
   provider: bintray
