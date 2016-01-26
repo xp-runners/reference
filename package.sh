@@ -14,15 +14,15 @@ BUILD=$(mktemp -d)
 EXE=$(pwd)/xp.exe
 DEB=$(pwd)/xp-runners_${VERSION}-1_all.deb
 ZIP=$(pwd)/xp-runners_${VERSION}.zip
+BINTRAY=$(pwd)/bintray.config
 
-fakeroot=$(which fakeroot)
-
-rm -f $ZIP $DEB
+rm -f $ZIP $DEB $BINTRAY
 
 # Zipfile for Windows
 zip $ZIP $EXE
 
 # Debian package
+fakeroot=$(which fakeroot)
 cd $BUILD
 
 echo '2.0' > debian-binary
@@ -52,6 +52,37 @@ cat control
 
 ar -q $DEB debian-binary control.tar.gz data.tar.xz
 
+# Bintray configuration
+date=$(date +%Y-%m-%d)
+cat <<-EOF > $BINTRAY
+	{
+	  "package": {
+	    "name"     : "xp-runners",
+	    "repo"     : "xp-runners",
+	    "subject"  : "xp-framework"
+	  },
+	  "version": {
+	    "name"     : "${VERSION}",
+	    "desc"     : "XP Runners release ${VERSION}",
+	    "released" : "${date}",
+	    "vcs_tag"  : "${TRAVIS_TAG}",
+	    "gpgSign"  : true
+	  },
+	  "files": [
+	    {
+	      "includePattern" : "(.*\\\\.deb)",
+	      "uploadPattern"  : "\$1",
+	      "matrixParams"   : {
+	        "deb_distribution" : "jessie",
+	        "deb_component"    : "main",
+	        "deb_architecture" : "i386,amd64"
+	      }
+	    }
+	  ],
+	  "publish": true
+	}
+EOF
+
 # Done
 rm -rf $BUILD
-ls -al $ZIP $DEB
+ls -al $ZIP $DEB $BINTRAY
