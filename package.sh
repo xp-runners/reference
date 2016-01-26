@@ -15,11 +15,12 @@ EXE=$(pwd)/xp.exe
 DEB=$(pwd)/xp-runners_${VERSION}-1_all.deb
 ZIP=$(pwd)/xp-runners_${VERSION}.zip
 BINTRAY=$(pwd)/bintray.config
+MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
 
 rm -f $ZIP $DEB $BINTRAY
 
 # Zipfile for Windows
-zip $ZIP $EXE
+zip -j $ZIP $EXE $MAIN
 
 # Debian package
 fakeroot=$(which fakeroot)
@@ -29,8 +30,9 @@ echo '2.0' > debian-binary
 
 # data.tar.xz
 mkdir -p usr/bin
+cp $MAIN usr/bin
 mkbundle -o $BUILD/usr/bin/xp $EXE --deps -z
-$fakeroot tar cfJ data.tar.xz usr/bin/xp
+$fakeroot tar cfJ data.tar.xz usr/bin/*
 
 # control.tar.gz
 size=$(stat -c '%s' $BUILD/usr/bin/xp)
