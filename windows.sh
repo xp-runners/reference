@@ -11,10 +11,12 @@ fi
 
 VERSION=${TRAVIS_TAG#v*}
 EXE=$(pwd)/xp.exe
-ZIP=$(pwd)/xp-runners_${VERSION}.zip
-BINTRAY=$(pwd)/windows.config
+TARGET=$(pwd)/target
 MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
+ZIP=$TARGET/xp-runners_${VERSION}.zip
+BINTRAY=$TARGET/windows.config
 
+mkdir -p target
 rm -f $ZIP $BINTRAY
 
 # Zipfile for Windows
@@ -38,7 +40,7 @@ cat <<-EOF > $BINTRAY
     },
     "files": [
       {
-        "includePattern" : "(.*zip)",
+        "includePattern" : "target/(.*zip)",
         "uploadPattern"  : "\$1"
       }
     ],

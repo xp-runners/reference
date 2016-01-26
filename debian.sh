@@ -12,10 +12,12 @@ fi
 VERSION=${TRAVIS_TAG#v*}
 BUILD=$(mktemp -d)
 EXE=$(pwd)/xp.exe
-DEB=$(pwd)/xp-runners_${VERSION}-1_all.deb
-BINTRAY=$(pwd)/debian.config
+TARGET=$(pwd)/target
 MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
+DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
+BINTRAY=$TARGET/debian.config
 
+mkdir -p target
 rm -f $DEB $BINTRAY
 fakeroot=$(which fakeroot)
 cd $BUILD
