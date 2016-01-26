@@ -35,9 +35,10 @@ namespace Xp.Runners.Exec
         }
 
         /// <summary>Run the process and return its exitcode</summary>
-        protected int Run(Process proc, Encoding encoding)
+        protected int Run(Process proc, Encoding encoding, Func<int> wait = null)
         {
             Encoding original = null;
+            int result;
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -55,10 +56,20 @@ namespace Xp.Runners.Exec
                 var stdout = proc.StartInfo.RedirectStandardOutput ? Redirect(proc.StandardOutput, new ANSISupport(Console.Out)) : passThrough;
                 var stderr = proc.StartInfo.RedirectStandardError ? Redirect(proc.StandardError, new ANSISupport(Console.Error)) : passThrough;
 
-                proc.WaitForExit();
+                if (null == wait)
+                {
+                    proc.WaitForExit();
+                    result = proc.ExitCode;
+                }
+                else
+                {
+                    result = wait();
+                }
+
                 stdout.WaitForEnd();
                 stderr.WaitForEnd();
-                return proc.ExitCode;
+
+                return result;
             }
             catch (SystemException e)
             {

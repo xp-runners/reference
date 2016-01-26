@@ -108,6 +108,11 @@ namespace Xp.Runners
                     executionModel = new RunWatching(argv[++i]);
                     offset = i + 1;
                 }
+                else if ("-supervise".Equals(argv[i]))
+                {
+                    executionModel = new Supervise();
+                    offset = i + 1;
+                }
                 else if (IsOption(argv[i]))
                 {
                     throw new ArgumentException("Unknown option `" + argv[i] + "`");
