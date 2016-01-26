@@ -68,7 +68,7 @@ cat <<-EOF > $BINTRAY
 	  },
 	  "files": [
 	    {
-	      "includePattern" : "(.*deb)",
+	      "includePattern" : "target/(.*deb)",
 	      "uploadPattern"  : "\$1",
 	      "matrixParams"   : {
 	        "deb_distribution" : "jessie",
