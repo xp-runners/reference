@@ -130,7 +130,7 @@ namespace Xp.Runners.IO
         /// <summary>Return binary file of currently executing process</summary>
         public static string Binary()
         {
-            return Process.GetCurrentProcess().MainModule.FileName;
+            return Environment.GetCommandLineArgs()[0];
         }
     }
 }
