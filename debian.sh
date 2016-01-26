@@ -31,7 +31,7 @@ mkbundle -o $BUILD/usr/bin/xp $EXE $ASSEMBLIES -z
 $fakeroot tar cfJ data.tar.xz usr/bin/*
 
 # control.tar.gz
-size=$(stat -c '%s' $BUILD/usr/bin/xp)
+size=$(du -k $BUILD/usr/bin | cut -f 1)
 echo -n '' > conffiles
 cat <<-EOF > control
 	Package: xp-runners
