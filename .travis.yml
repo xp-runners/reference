@@ -11,3 +11,6 @@ script:
   - mcs -r:System.Runtime.Serialization src/xp.runner/*.cs src/xp.runner/*/*.cs -target:exe -out:xp
   - mcs -r:System.Runtime.Serialization -r:xunit.dll -r:xunit.extensions.dll src/xp.runner/*.cs src/xp.runner/*/*.cs src/xp.runner.test/*.cs -target:library -out:tests.dll
   - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe tests.dll
+
+after_script:
+  - sh package.sh
