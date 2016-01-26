@@ -12,14 +12,19 @@ fi
 VERSION=${TRAVIS_TAG#v*}
 BUILD=$(mktemp -d)
 EXE=$(pwd)/xp.exe
-TARGET=$(pwd)/xp-runners_${VERSION}-1_all.deb
+DEB=$(pwd)/xp-runners_${VERSION}-1_all.deb
+ZIP=$(pwd)/xp-runners_${VERSION}.zip
 
 fakeroot=$(which fakeroot)
 
-rm -f $TARGET
+rm -f $ZIP $DEB
+
+# Zipfile for Windows
+zip $ZIP $EXE
+
+# Debian package
 cd $BUILD
 
-# debian-binary
 echo '2.0' > debian-binary
 
 # data.tar.xz
@@ -45,9 +50,8 @@ EOF
 $fakeroot tar cfz control.tar.gz conffiles control
 cat control
 
-# .deb package
-ar -q $TARGET debian-binary control.tar.gz data.tar.xz
+ar -q $DEB debian-binary control.tar.gz data.tar.xz
 
 # Done
 rm -rf $BUILD
-ls -al $TARGET
+ls -al $ZIP $DEB
