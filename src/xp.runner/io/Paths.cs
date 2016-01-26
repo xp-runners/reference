@@ -130,9 +130,9 @@ namespace Xp.Runners.IO
         /// <summary>Return binary file of currently executing process</summary>
         public static string Binary()
         {
-            Console.WriteLine("BIN.1 = {0}", Process.GetCurrentProcess().ProcessName);
-            Console.WriteLine("BIN.2 = {0}", Process.GetCurrentProcess().MainModule.FileName);
-            Console.WriteLine("BIN.3 = {0}", System.Reflection.Assembly.GetEntryAssembly().GetName().CodeBase);
+            Console.WriteLine("- BIN.1 = {0}", Process.GetCurrentProcess().ProcessName);
+            Console.WriteLine("> BIN.2 = {0}", Process.GetCurrentProcess().MainModule.FileName);
+            Console.WriteLine("> BIN.3 = {0}", System.Reflection.Assembly.GetEntryAssembly().GetName().CodeBase);
             return Process.GetCurrentProcess().MainModule.FileName;
         }
     }
