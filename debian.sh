@@ -16,7 +16,7 @@ TARGET=$(pwd)/target
 MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
 DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
 BINTRAY=$TARGET/debian.config
-ASSEMBLIES='System.Core System.Runtime.Serialization System.Xml System Mono.Security System.Core Mono.Posix' 
+ASSEMBLIES='System.Core System.Runtime.Serialization Mono.Posix'
 
 mkdir -p target
 rm -f $DEB $BINTRAY
@@ -28,7 +28,7 @@ echo '2.0' > debian-binary
 # data.tar.xz
 mkdir -p usr/bin
 cp $MAIN usr/bin
-mkbundle -o $BUILD/usr/bin/xp $EXE -z $ASSEMBLIES
+mkbundle -o $BUILD/usr/bin/xp $EXE $ASSEMBLIES -z
 $fakeroot tar cfJ data.tar.xz usr/bin/*
 
 # control.tar.gz
