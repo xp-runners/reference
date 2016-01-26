@@ -30,3 +30,5 @@ deploy:
     user: thekid
     key:
       secure: "OL9VQzrGeNhcuPA2nvp2sPvvf0ioj66pSjq4JMklyZTZsZ3ZJGg8PvC6A5VzHaXcLrb3UNyFxairwiRCPlD57iACNxpeTsePTO5UP/ZJpE70Ctkle8H3qafDFhY3hUwJSYMjI0bij088+V+mAC1cF4pOiJzwVpNd1caZHFPVNPD1WR8SJgt6DLPjYXHwaNTCp0PGQ8V8XZf/Hs6a3Bt8+ae+mo1SsH948x0W6ic4rCJ6yeQdhJKDEofxmdec9eGdCVuxSyXCyNCUh7l3PvDwPhR4+y7bU1kQ7pa/FjlbJI2WopVMVYngEOcH72c0KmvlFMdw0PanIS48v2qxpB6qFpWm+EcRdKqtbPRA1MlioQ6qXminxwkAGc9dvJG/dpZI5mwaRpkYDcKajcoxzgbAIZuvEyUlAGAYUARxOEFxMVMp0KhW9/OsJAOy+Ew4kWT+RIDOKJo2JjR1a7Rd3lhwtRORgxqZKfIZfBcueKMX3KIth0APy3LDR/2UAYCBuraXXirN8q9bLPtE9yT669Zm94/tMRumkEPhu+fwfkpvEh/iyW52qSPD8GOB8FH3ecI+/zhcZg+UvHIovWrahHwjvf2QkrtW2z8LHK9UjoY+Od+fz4xsfdqKeTSWMadKkO1PevNlW0N5jxqcitvFTR7zwq73utMAhUTWid7aCwQXpMg="
+    on:
+      tags: true
