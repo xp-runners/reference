@@ -39,7 +39,7 @@ cat <<-EOF > $BINTRAY
     "files": [
       {
         "includePattern" : "(.*\\\\.zip)",
-        "uploadPattern"  : "\$1",
+        "uploadPattern"  : "\$1"
       }
     ],
     "publish": true
