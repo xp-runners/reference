@@ -9,8 +9,8 @@ script:
   - cp testrunner/xunit.1.9.2/lib/net20/xunit.dll .
   - cp testrunner/xunit.extensions.1.9.2/lib/net20/xunit.extensions.dll .
   - mcs -r:System.Runtime.Serialization src/xp.runner/*.cs src/xp.runner/*/*.cs -target:exe -out:xp.exe
-  - mcs -r:System.Runtime.Serialization -r:xunit.dll -r:xunit.extensions.dll src/xp.runner/*.cs src/xp.runner/*/*.cs src/xp.runner.test/*.cs -target:library -out:tests.dll
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe tests.dll
+# - mcs -r:System.Runtime.Serialization -r:xunit.dll -r:xunit.extensions.dll src/xp.runner/*.cs src/xp.runner/*/*.cs src/xp.runner.test/*.cs -target:library -out:tests.dll
+# - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe tests.dll
 # - mkbundle -o xp xp.exe System.Core System.Runtime.Serialization Mono.Posix
 # - ./xp -v
 
