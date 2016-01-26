@@ -15,6 +15,7 @@ TARGET=$(pwd)/target
 MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
 DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
 BINTRAY=$TARGET/debian.config
+ASSEMBLIES='System.Core System.Runtime.Serialization System.Xml System Mono.Security System.Core Mono.Posix' 
 
 mkdir -p target
 rm -f $DEB $BINTRAY
@@ -26,7 +27,7 @@ echo '2.0' > debian-binary
 # data.tar.xz
 mkdir -p usr/bin
 cp $MAIN usr/bin
-mkbundle -o $BUILD/usr/bin/xp $EXE --deps -z
+mkbundle -o $BUILD/usr/bin/xp $EXE -z $ASSEMBLIES
 $fakeroot tar cfJ data.tar.xz usr/bin/*
 
 # control.tar.gz
@@ -40,7 +41,7 @@ cat <<-EOF > control
 	Maintainer: XP Team <xp-runners@xp-framework.net>
 	Architecture: all
 	Version: ${VERSION}-1
-	Depends: php5-cli, mono-runtime | libmono-2.0-1
+	Depends: php5-cli, libmono-corlib4.5-cil, libmono-2.0-1
 	Provides: xp-runners
 	Description: XP Runners
 EOF
