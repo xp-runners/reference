@@ -37,6 +37,7 @@ run() {
     read -p 'Should we do this now (y/N)? ' answer
     if [ y == "$answer" ] ; then
       eval $fix
+      run "$message" "$command"
       return $?
     fi
 
@@ -46,12 +47,14 @@ run() {
 }
 
 cygenv() {
+  backup=$IFS
   IFS=';'
   for path in $(cat /proc/registry/HKEY_CURRENT_USER/Environment/Path) ; do
     if [ -z $path ] ; then continue ; fi
     path=$(cygpath $path)
     grep -q "$path" <<< $PATH || PATH=$PATH:$path
   done
+  IFS=$backup
 }
 
 echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
@@ -65,7 +68,7 @@ case $OS in
     cygenv
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
-    run 'PHP runtime available' "php.exe -v" "cygstart --action=runas choco install php"
+    run 'PHP runtime available' "php.exe -v" "cygstart --action=runas --wait choco install php ; cygenv"
     run 'Tar' "type tar"
     run 'Curl' "type curl || type wget"
     EXE=xp.exe
