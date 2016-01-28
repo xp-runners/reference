@@ -45,18 +45,27 @@ run() {
   }
 }
 
+cygenv() {
+  IFS=';'
+  for path in $(cat /proc/registry/HKEY_CURRENT_USER/Environment/Path) ; do
+    if [ -z $path ] ; then continue ; fi
+    path=$(cygpath $path)
+    grep -q "$path" <<< $PATH || PATH=$PATH:$path
+  done
+}
+
 echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
 echo "(c) 2016 https://github.com/xp-runners/reference/"
 echo
 
 OS=$(uname)
 if [ 'Linux' == "$OS" ] ; then OS=$(lsb_release -si) ; fi
-
 case $OS in
   CYGWIN*)
+    cygenv
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
-    run 'PHP runtime available' "php.exe -v"
+    run 'PHP runtime available' "php.exe -v" "cygstart --action=runas choco install php"
     run 'Tar' "type tar"
     run 'Curl' "type curl || type wget"
     EXE=xp.exe
