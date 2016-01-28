@@ -25,7 +25,7 @@ run() {
   eval $command > $TEMPFILE 2>&1 && { echo "✓ $(display)$SPACE"; return 0; } || {
     echo "✕ Error #$?: $(display)$SPACE"
     echo
-    echo "Cannot verify $message executing $command"
+    echo "Cannot verify $message executing \`$command'"
     echo "Installation cannot continue."
     return 1
   }
@@ -38,13 +38,15 @@ echo
 case $(uname) in
   CYGWIN*)
     run 'Cygwin' "uname -a"
-    run '.NET Framework installed' "ls $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/*/csc.exe"
+    run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
+    run 'PHP runtime available' "php.exe -v"
     EXE=xp.exe
     ;;
 
   *)
     run 'Un*x' "uname -a"
     run '.NET Framework installed' "mono --version"
+    run 'PHP runtime available' "php -v"
     EXE=xp
     ;;
 esac
