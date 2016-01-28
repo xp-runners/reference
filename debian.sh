@@ -11,6 +11,7 @@ fi
 VERSION=${TRAVIS_TAG#v*}
 BUILD=$(mktemp -d)
 EXE=$(pwd)/xp.exe
+BIN=$(pwd)/xp
 TARGET=$(pwd)/target
 MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
 DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
@@ -26,8 +27,8 @@ echo '2.0' > debian-binary
 
 # data.tar.xz
 mkdir -p usr/bin
-cp $MAIN usr/bin
-mkbundle -o $BUILD/usr/bin/xp $EXE $ASSEMBLIES -z
+mkbundle -o $BIN $EXE $ASSEMBLIES -z
+cp $MAIN $BIN usr/bin
 $fakeroot tar cfJ data.tar.xz usr/bin/*
 
 # control.tar.gz
