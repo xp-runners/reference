@@ -9,18 +9,17 @@ if [ -z ${TRAVIS_TAG-} ]; then
 fi
 
 VERSION=${TRAVIS_TAG#v*}
-EXE=xp.exe
-BIN=xp
-MAIN="class-main.php web-main.php"
 TARGET=$(pwd)/target
-SETUP=$TARGET/setup.sh
+ARCHIVE=$TARGET/xp-runners_${VERSION}.tar.gz
+SETUP=$TARGET/setup-$VERSION.sh
 BINTRAY=$TARGET/generic.config
 
-mkdir -p target
+rm -rf $TARGET
+mkdir -p $TARGET
 rm -f $SETUP $BINTRAY
 
-# SFX for HTTPS-Verified install, inspired by http://stackoverflow.com/a/20760267/3074163
-(cat setup.sh.in ; tar cvz $EXE $BIN $MAIN) > $SETUP
+cat setup.sh.in | sed -e "s/@VERSION@/$VERSION/g" > $SETUP
+tar cvfz $ARCHIVE xp.exe xp class-main.php web-main.php
 
 # Bintray configuration
 date=$(date +%Y-%m-%d)
@@ -40,7 +39,7 @@ cat <<-EOF > $BINTRAY
     },
     "files": [
       {
-        "includePattern" : "target/(.*sh)",
+        "includePattern" : "target/(.*)",
         "uploadPattern"  : "\$1"
       }
     ],
@@ -49,4 +48,4 @@ cat <<-EOF > $BINTRAY
 EOF
 
 # Done
-ls -al $SETUP $BINTRAY
+ls -al $SETUP $ARCHIVE $BINTRAY

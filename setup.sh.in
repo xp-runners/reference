@@ -48,15 +48,17 @@ case $(uname) in
     ;;
 esac
 
-if [ -t 0 ] ; then FROM=$0 ; else FROM=- ; fi
-run 'Tar' 'type tar'
-run 'Extracting' "sed '0,/^#__ARCHIVE__#$/d' $FROM | tar xvz $EXE class-main.php web-main.php"
+run 'Tar' "type tar"
+run 'Curl' "type curl | type wget"
+
+if type curl ; then
+  run 'Download' "curl -L https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz | tar xvz"
+elif type wget ; then
+  run 'Download' "wget https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz -O - | tar xvz"
+fi
 
 run 'Test' "ls -al $(pwd)/$EXE"
 
 echo
 echo "Done, runners installed to $(pwd)"
 rm "$TEMPFILE"
-
-exit 0
-#__ARCHIVE__#
