@@ -48,8 +48,10 @@ case $(uname) in
     ;;
 esac
 
+if [ -t 0 ] ; then FROM=$0 ; else FROM=- ; fi
 run 'Tar' 'type tar'
-run 'Extracting' "sed '0,/^#__ARCHIVE__#$/d' $0 | tar xvz $EXE class-main.php web-main.php"
+run 'Extracting' "sed '0,/^#__ARCHIVE__#$/d' $FROM | tar xvz $EXE class-main.php web-main.php"
+
 run 'Test' "ls -al $(pwd)/$EXE"
 
 echo
