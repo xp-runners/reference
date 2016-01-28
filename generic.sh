@@ -11,7 +11,7 @@ fi
 VERSION=${TRAVIS_TAG#v*}
 TARGET=$(pwd)/target
 ARCHIVE=$TARGET/xp-runners_${VERSION}.tar.gz
-SETUP=$TARGET/setup-$VERSION.sh
+SETUP=$TARGET/setup-${VERSION}.sh
 BINTRAY=$TARGET/generic.config
 
 rm -rf $TARGET
@@ -39,7 +39,7 @@ cat <<-EOF > $BINTRAY
     },
     "files": [
       {
-        "includePattern" : "target/(.*)",
+        "includePattern" : "target/(.*${VERSION}.*)",
         "uploadPattern"  : "\$1"
       }
     ],
