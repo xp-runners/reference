@@ -18,15 +18,29 @@ display() {
 
 run() {
   message=$1
-  shift
-  command="$*"
+  command=$2
+  fix=${3-no}
 
   echo -ne "> $message...\r"
   eval $command > $TEMPFILE 2>&1 && { echo "✓ $(display)$SPACE"; return 0; } || {
     echo "✕ Error #$?: $(display)$SPACE"
     echo
     echo "Cannot verify $message executing \`$command'"
-    echo "Installation cannot continue."
+
+    if [ no == "$fix" ] ; then
+      echo "Installation cannot continue."
+      return 1
+    fi
+
+    echo "This can be fixed by running \`$fix'"
+    echo
+    read -p 'Should we do this now (y/N)? ' answer
+    if [ y == "$answer" ] ; then
+      eval $fix
+      return $?
+    fi
+
+    echo "Please fix this yourself, then."
     return 1
   }
 }
@@ -35,12 +49,22 @@ echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
 echo "(c) 2016 https://github.com/xp-runners/reference/"
 echo
 
-case $(uname) in
+OS=$(uname)
+if [ 'Linux' == "$OS" ] ; then OS=$(lsb_release -si) ; fi
+
+case $OS in
   CYGWIN*)
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
     run 'PHP runtime available' "php.exe -v"
     EXE=xp.exe
+    ;;
+
+  Ubuntu*|Debian*)
+    run 'Linux' "uname -a"
+    run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1"
+    run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli"
+    EXE=xp
     ;;
 
   *)
