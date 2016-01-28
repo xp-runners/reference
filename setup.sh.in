@@ -40,8 +40,8 @@ run() {
       return $?
     fi
 
-    echo "Please fix this yourself, then."
-    return 1
+    echo "OK, you need to fix this yourself, then."
+    return 2
   }
 }
 
@@ -57,6 +57,8 @@ case $OS in
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
     run 'PHP runtime available' "php.exe -v"
+    run 'Tar' "type tar"
+    run 'Curl' "type curl || type wget"
     EXE=xp.exe
     ;;
 
@@ -64,6 +66,8 @@ case $OS in
     run 'Linux' "uname -a"
     run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1"
     run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli"
+    run 'Tar' "type tar" "sudo apt-get install tar"
+    run 'Curl' "type curl || type wget" "sudo apt-get install curl"
     EXE=xp
     ;;
 
@@ -71,12 +75,11 @@ case $OS in
     run 'Un*x' "uname -a"
     run '.NET Framework installed' "mono --version"
     run 'PHP runtime available' "php -v"
+    run 'Tar' "type tar"
+    run 'Curl' "type curl || type wget"
     EXE=xp
     ;;
 esac
-
-run 'Tar' "type tar"
-run 'Curl' "type curl || type wget"
 
 TARFILE=$(mktemp -u)
 if type curl >/dev/null 2>&1; then
