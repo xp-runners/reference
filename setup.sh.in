@@ -69,8 +69,8 @@ case $OS in
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
     run 'PHP runtime available' "php.exe -v" "cygstart --action=runas --wait choco install php ; cygenv"
-    run 'Tar' "type tar"
-    run 'Curl' "type curl || type wget"
+    run 'Tar' "type tar" "/cygwinsetup.exe -P tar -q -n -W"
+    run 'Curl' "type curl || type wget" "/cygwinsetup.exe -P curl -q -n -W"
     EXE=xp.exe
     ;;
 
