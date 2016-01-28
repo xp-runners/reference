@@ -44,7 +44,7 @@ case $(uname) in
 
   *)
     run 'Un*x' "uname -a"
-    run '.NET Framework installed' "type mono"
+    run '.NET Framework installed' "mono --version"
     EXE=xp
     ;;
 esac
