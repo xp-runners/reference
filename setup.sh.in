@@ -25,12 +25,13 @@ run() {
   eval $command > $TEMPFILE 2>&1 && { echo "✓ $(display)$SPACE"; return 0; } || {
     echo "✕ Error #$?: $(display)$SPACE"
     echo
-    echo "Cannot verify $message. Installation cannot continue."
+    echo "Cannot verify $message executing $command"
+    echo "Installation cannot continue."
     return 1
   }
 }
 
-echo -e "\e[32;1mXP Runners setup\e[0m"
+echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
 echo "(c) 2016 https://github.com/xp-runners/reference/"
 echo
 
@@ -49,16 +50,20 @@ case $(uname) in
 esac
 
 run 'Tar' "type tar"
-run 'Curl' "type curl | type wget"
+run 'Curl' "type curl || type wget"
 
-if type curl ; then
-  run 'Download' "curl -L https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz | tar xvz"
-elif type wget ; then
-  run 'Download' "wget https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz -O - | tar xvz"
+TARFILE=$(mktemp -u)
+if type curl >/dev/null 2>&1; then
+  echo -n '> Download'
+  curl '-#' -L https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz > $TARFILE
+elif type wget >/dev/null 2>&1; then
+  echo -n '> Download'
+  wget -nv https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz -O $TARFILE
 fi
 
+run 'Extract' "tar xvfz $TARFILE $EXE class-main.php web-main.php"
 run 'Test' "ls -al $(pwd)/$EXE"
 
 echo
 echo "Done, runners installed to $(pwd)"
-rm "$TEMPFILE"
+rm "$TEMPFILE" "$TARFILE"
