@@ -3,10 +3,6 @@
 set -e
 set -u
 
-URL=
-TEMPFILE=$(mktemp -u)
-SPACE='                  '
-
 display() {
   lines=$(wc -l "$TEMPFILE" | cut -d ' ' -f 1)
   case $lines in
@@ -19,15 +15,21 @@ display() {
 run() {
   message=$1
   command=$2
-  fix=${3-no}
+  fix=${3-No}
+  type=${4-Error}
 
   echo -ne "> $message...\r"
   eval $command > $TEMPFILE 2>&1 && { echo "✓ $(display)$SPACE"; return 0; } || {
-    echo "✕ Error #$?: $(display)$SPACE"
+    echo "✕ $type #$?: $(display)$SPACE"
     echo
-    echo "Cannot verify $message executing \`$command'"
+    echo "  Cannot verify $message executing \`$command'"
 
-    if [ no == "$fix" ] || [ unattended == $MODE ] ; then
+    if [ Warning == $type ] ; then
+      echo "  Ignoring for the moment"
+      return 0
+    fi
+
+    if [ No == "$fix" ] || [ Unattended == $MODE ] ; then
       echo "Installation cannot continue."
       return 1
     fi
@@ -62,23 +64,27 @@ download() {
 }
 
 echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
-echo "(c) 2016 https://github.com/xp-runners/reference/"
+echo '(c) 2016 https://github.com/xp-runners/reference/'
+echo
 
-MODE=normal
-while getopts :u flag ; do
+TEMPFILE=$(mktemp -u)
+SPACE='                  '
+CHECKS=Error
+FORCE=
+while getopts :uf flag ; do
   case $flag in
-    u) MODE=unattended ; echo "Unattended mode" ;;
+    u) MODE=Unattended ; echo '> Unattended mode' ;;
+    f) CHECKS=Warning ; echo '> Ignoring errors from prerequisites checks' ;;
   esac
 done
-echo
 
 OS=$(uname)
 if [ 'Linux' == "$OS" ] ; then OS=$(lsb_release -si) ; fi
 case $OS in
   CYGWIN*)
     run 'Cygwin' "uname -a"
-    run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
-    run 'PHP runtime available' "php.exe -v" ""
+    run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*" No $CHECKS
+    run 'PHP runtime available' "php.exe -v" No $CHECKS
     run 'Tar' "type tar" "/cygwinsetup.exe -P tar -q -n -W"
     run 'Curl' "type curl || type wget" "/cygwinsetup.exe -P curl -q -n -W"
     EXE=xp.exe
@@ -86,8 +92,8 @@ case $OS in
 
   Ubuntu*|Debian*)
     run 'Linux' "uname -a"
-    run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1"
-    run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli"
+    run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1" $CHECKS
+    run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli" $CHECKS
     run 'Tar' "type tar" "sudo apt-get install tar"
     run 'Curl' "type curl || type wget" "sudo apt-get install curl"
     EXE=xp
@@ -95,8 +101,8 @@ case $OS in
 
   *)
     run 'Un*x' "uname -a"
-    run '.NET Framework installed' "mono --version"
-    run 'PHP runtime available' "php -v"
+    run '.NET Framework installed' "mono --version" No $CHECKS
+    run 'PHP runtime available' "php -v" No $CHECKS
     run 'Tar' "type tar"
     run 'Curl' "type curl || type wget"
     EXE=xp
