@@ -20,9 +20,9 @@ run() {
 
   printf "> $message...\r"
   eval $command > $TEMPFILE 2>&1 && { echo "✓ $(display)$SPACE"; return 0; } || {
-    echo "✕ $type #$?: $(display)$SPACE"
+    echo "\033[31;1m✕ $type #$?: $(display)$SPACE"
     echo
-    echo "  Cannot verify $message executing \`$command'"
+    echo "  Cannot verify $message executing \`$command'\033[0m"
 
     if [ Warning = $type ] ; then
       echo "  Ignoring for the moment"
@@ -117,7 +117,7 @@ configure() {
   cat xp.ini | sed -e 's/^/  /g'
 }
 
-printf "\e[32;1mXP Runners setup (@VERSION@)\e[0m\n"
+printf "\033[32;1mXP Runners setup (@VERSION@)\033[0m\n"
 echo '(c) 2016 https://github.com/xp-runners/reference/'
 echo
 
