@@ -46,17 +46,6 @@ run() {
   }
 }
 
-cygenv() {
-  backup=$IFS
-  IFS=';'
-  for path in $(cat /proc/registry/HKEY_CURRENT_USER/Environment/Path) ; do
-    if [ -z $path ] ; then continue ; fi
-    path=$(cygpath $path)
-    grep -q "$path" <<< $PATH || PATH=$PATH:$path
-  done
-  IFS=$backup
-}
-
 download() {
   url=$1
   target=$2
@@ -83,7 +72,7 @@ case $OS in
     cygenv
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
-    run 'PHP runtime available' "php.exe -v" "cygstart --action=runas --wait choco install php ; cygenv"
+    run 'PHP runtime available' "php.exe -v"
     run 'Tar' "type tar" "/cygwinsetup.exe -P tar -q -n -W"
     run 'Curl' "type curl || type wget" "/cygwinsetup.exe -P curl -q -n -W"
     EXE=xp.exe
