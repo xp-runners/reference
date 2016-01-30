@@ -34,9 +34,9 @@ run() {
       return 1
     fi
 
-    echo "This can be fixed by running \`$fix'"
+    echo "  This can be fixed by running \`$fix'"
     echo
-    printf 'Should we do this now (y/N)? '
+    printf '  Should we do this now (y/N)? '
     read answer
     if [ y = "$answer" ] ; then
       eval $fix
@@ -76,8 +76,11 @@ bundle_php() {
   download $releases - | grep -Eo 'php-[0-9.]+-nts-Win32-[VCx0-9-]+.zip' | sort -rn | uniq > $TEMPFILE
 
   echo "> Select which PHP version you want to use"
-  PS3="Select: "
-  select release in $(cat $TEMPFILE); do
+  nl -b a $TEMPFILE
+  printf '  Select: '
+  read choice
+  if [ $choice -ge 1 ] ; then
+    release=$(head -$choice $TEMPFILE | tail -1)
     test -f $release || download $releases/$release $release
 
     pwd=$(cygpath -w $(pwd) | sed -e 's#\\#\\\\#g')
@@ -93,11 +96,11 @@ bundle_php() {
     echo "> Extracting into $target"
     cscript //NoLogo //e:JScript $(cygpath -w $TEMPFILE)
     rm $release
-    break
-  done
-
-  PATH=$PATH:$target
-  return 0
+    PATH=$PATH:$target
+    return 0
+  else
+    return 1
+  fi
 }
 
 configure() {
