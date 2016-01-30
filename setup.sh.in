@@ -20,9 +20,8 @@ run() {
 
   printf "> $message...\r"
   eval $command > $TEMPFILE 2>&1 && { echo "✓ $(display)$SPACE"; return 0; } || {
-    echo "\033[31;1m✕ $type #$?: $(display)$SPACE"
-    echo
-    echo "  Cannot verify $message executing \`$command'\033[0m"
+    printf "\033[31;1m✕ $type #$?: $(display)$SPACE\n"
+    printf "  Cannot verify $message executing \`$command'\033[0m\n"
 
     if [ Warning = $type ] ; then
       echo "  Ignoring for the moment"
@@ -77,30 +76,30 @@ bundle_php() {
 
   echo "> Select which PHP version you want to use"
   nl -b a $TEMPFILE
-  printf '  Select: '
-  read choice
-  if [ $choice -ge 1 ] ; then
-    release=$(head -$choice $TEMPFILE | tail -1)
-    test -f $release || download $releases/$release $release
+  while : ; do
+    printf '  Select: '
+    read choice
+    test $choice -ge 1 2>/dev/null && break
+  done
 
-    pwd=$(cygpath -w $(pwd) | sed -e 's#\\#\\\\#g')
-    target=$(basename $release .zip)
-    mkdir -p $target
-    echo "var shell = WSH.createObject('Shell.Application');" > $TEMPFILE
-    echo "var origin = shell.nameSpace('$pwd\\\\$release').items();" >> $TEMPFILE
-    echo "var target = shell.nameSpace('$pwd\\\\$target');" >> $TEMPFILE
-    echo "for (var i = 0; i < origin.count; i++) {" >> $TEMPFILE
-    echo "  WScript.Echo('  ' + origin.item(i));" >> $TEMPFILE
-    echo "  target.copyHere(origin.item(i), 20);" >> $TEMPFILE
-    echo "}"  >> $TEMPFILE
-    echo "> Extracting into $target"
-    cscript //NoLogo //e:JScript $(cygpath -w $TEMPFILE)
-    rm $release
-    PATH=$PATH:$target
-    return 0
-  else
-    return 1
-  fi
+  release=$(head -$choice $TEMPFILE | tail -1)
+  test -f $release || download $releases/$release $release
+
+  pwd=$(cygpath -w $(pwd) | sed -e 's#\\#\\\\#g')
+  target=$(basename $release .zip)
+  mkdir -p $target
+  echo "var shell = WSH.createObject('Shell.Application');" > $TEMPFILE
+  echo "var origin = shell.nameSpace('$pwd\\\\$release').items();" >> $TEMPFILE
+  echo "var target = shell.nameSpace('$pwd\\\\$target');" >> $TEMPFILE
+  echo "for (var i = 0; i < origin.count; i++) {" >> $TEMPFILE
+  echo "  WScript.Echo('  ' + origin.item(i));" >> $TEMPFILE
+  echo "  target.copyHere(origin.item(i), 20);" >> $TEMPFILE
+  echo "}"  >> $TEMPFILE
+  echo "> Extracting into $target"
+  cscript //NoLogo //e:JScript $(cygpath -w $TEMPFILE)
+  rm $release
+  PATH=$PATH:$target
+  return 0
 }
 
 configure() {
