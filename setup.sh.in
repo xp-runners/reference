@@ -54,12 +54,20 @@ download() {
   target=$2
 
   printf '> Download'
-  if type curl >/dev/null 2>&1; then
+  if which curl >/dev/null 2>&1; then
     curl '-#' -L "$url" -o $target
-  elif type wget >/dev/null 2>&1; then
+  elif which wget >/dev/null 2>&1; then
     wget -nv "$url" -O $target
   fi
   return $?
+}
+
+commands() {
+  for command in "$@"; do
+    which $command 2>/dev/null && return 0
+  done
+  echo "Cannot find $* in path"
+  return 127
 }
 
 bundle_php() {
@@ -131,8 +139,8 @@ case $OS in
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*" No $CHECKS
     run 'PHP runtime available' "php.exe -v" "bundle_php" $CHECKS
-    run 'Tar' "type tar" "/cygwinsetup.exe -P tar -q -n -W"
-    run 'Curl' "type curl || type wget" "/cygwinsetup.exe -P curl -q -n -W"
+    run 'Tar' "commands tar" "/cygwinsetup.exe -P tar -q -n -W"
+    run 'Curl' "commands curl wget" "/cygwinsetup.exe -P curl -q -n -W"
 
     php=$(which php.exe)
     ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
@@ -150,8 +158,8 @@ case $OS in
     run 'Linux' "uname -a"
     run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1" $CHECKS
     run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli" $CHECKS
-    run 'Tar' "type tar" "sudo apt-get install tar"
-    run 'Curl' "type curl || type wget" "sudo apt-get install curl"
+    run 'Tar' "commands tar" "sudo apt-get install tar"
+    run 'Curl' "commands curl wget" "sudo apt-get install curl"
 
     php=$(which php)
     ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
@@ -164,8 +172,8 @@ case $OS in
     run 'Un*x' "uname -a"
     run '.NET Framework installed' "mono --version" No $CHECKS
     run 'PHP runtime available' "php -v" No $CHECKS
-    run 'Tar' "type tar"
-    run 'Curl' "type curl || type wget"
+    run 'Tar' "commands tar"
+    run 'Curl' "commands curl wget"
 
     php=$(which php)
     ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
