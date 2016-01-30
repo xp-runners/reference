@@ -3,6 +3,9 @@ XP Runners change log
 
 ## 7.0.0 / ????-??-??
 
+* Made installable via `apt-get` on Ubuntu and Debian, and provided a one-
+  liner "https-verified" installer (see xp-runners/reference#29)
+  (@thekid)
 * Made path files and `-cp` behave consistently, see xp-runners/reference#11:
   * New `-cp?` argument, which declares an optional class path
   * New `-cp!` argument, which declares an overlay class path
