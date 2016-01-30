@@ -140,47 +140,59 @@ case $OS in
     EXE=xp.exe
 
     run 'Cygwin' "uname -a"
-    run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*" No $CHECKS
-    run 'PHP runtime available' "php.exe -v" "bundle_php" $CHECKS
     run 'Tar' "commands tar" "/cygwinsetup.exe -P tar -q -n -W"
     run 'Curl' "commands curl wget" "/cygwinsetup.exe -P curl -q -n -W"
+    run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*" No $CHECKS
+    run 'PHP runtime available' "php.exe -v" "bundle_php" $CHECKS
 
-    php=$(which php.exe)
-    ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
-    configure \
-      "rt=$ver" "" \
-      "[runtime@$ver]" \
-      "default=$(cygpath -w $php)" \
-      "extension_dir=$(cygpath -w $(dirname $php))\\ext" \
-      "extension=php_com_dotnet.dll"
+    php=$(which php.exe 2>/dev/null || echo No)
+    if [ No = $php ] ; then
+      echo "! No PHP runtime, cannot create xp.ini"
+    else
+      ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
+      configure \
+        "rt=$ver" "" \
+        "[runtime@$ver]" \
+        "default=$(cygpath -w $php)" \
+        "extension_dir=$(cygpath -w $(dirname $php))\\ext" \
+        "extension=php_com_dotnet.dll"
+    fi
     ;;
 
   Ubuntu*|Debian*)
     EXE=xp
 
     run 'Linux' "uname -a"
-    run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1" $CHECKS
-    run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli" $CHECKS
     run 'Tar' "commands tar" "sudo apt-get install tar"
     run 'Curl' "commands curl wget" "sudo apt-get install curl"
+    run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1" $CHECKS
+    run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli" $CHECKS
 
-    php=$(which php)
-    ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
-    configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
+    php=$(which php 2>/dev/null || echo No)
+    if [ No = "$php" ] ; then
+      echo "! No PHP runtime, cannot create xp.ini"
+    else
+      ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
+      configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
+    fi
     ;;
 
   *)
     EXE=xp
 
     run 'Un*x' "uname -a"
-    run '.NET Framework installed' "mono --version" No $CHECKS
-    run 'PHP runtime available' "php -v" No $CHECKS
     run 'Tar' "commands tar"
     run 'Curl' "commands curl wget"
+    run '.NET Framework installed' "mono --version" No $CHECKS
+    run 'PHP runtime available' "php -v" No $CHECKS
 
-    php=$(which php)
-    ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
-    configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
+    php=$(which php 2>/dev/null || echo No)
+    if [ No = $php ] ; then
+      echo "! No PHP runtime, cannot create xp.ini"
+    else
+      ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
+      configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
+    fi
     ;;
 esac
 
