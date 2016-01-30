@@ -81,8 +81,8 @@ bundle_php() {
   while : ; do
     printf '  Select: '
     read choice
-    test $choice -ge 1 && test $choice -le $lines 2>/dev/null && break
-    printf "\033[31;1m✕ No a valid choice.\033[0m\n"
+    test $choice -ge 1 2>/dev/null && test $choice -le $lines 2>/dev/null && break
+    printf "\033[31;1m✕ Obviously not a valid choice.\033[0m Use Ctrl+C to exit.\n"
   done
 
   release=$(head -$choice $TEMPFILE | tail -1)
