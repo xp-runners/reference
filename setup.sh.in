@@ -36,7 +36,8 @@ run() {
 
     echo "This can be fixed by running \`$fix'"
     echo
-    read -p 'Should we do this now (y/N)? ' answer
+    echo -n 'Should we do this now (y/N)? '
+    read answer
     if [ y = "$answer" ] ; then
       eval $fix
       run "$message" "$command"
