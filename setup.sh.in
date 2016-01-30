@@ -52,15 +52,13 @@ download() {
   url=$1
   target=$2
 
+  echo -n '> Download'
   if type curl >/dev/null 2>&1; then
-    echo -n '> Download'
     curl '-#' -L "$url" > $target
-    return $?
   elif type wget >/dev/null 2>&1; then
-    echo -n '> Download'
     wget -nv "$url" -O $target
-    return $?
   fi
+  return $?
 }
 
 echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
