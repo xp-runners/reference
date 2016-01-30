@@ -76,10 +76,13 @@ bundle_php() {
 
   echo "> Select which PHP version you want to use"
   nl -b a $TEMPFILE
+
+  lines=$(wc -l "$TEMPFILE" | cut -d ' ' -f 1)
   while : ; do
     printf '  Select: '
     read choice
-    test $choice -ge 1 2>/dev/null && break
+    test $choice -ge 1 && test $choice -le $lines 2>/dev/null && break
+    printf "\033[31;1m✕ No a valid choice.\033[0m\n"
   done
 
   release=$(head -$choice $TEMPFILE | tail -1)
