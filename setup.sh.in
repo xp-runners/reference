@@ -36,7 +36,7 @@ run() {
 
     echo "This can be fixed by running \`$fix'"
     echo
-    echo -n 'Should we do this now (y/N)? '
+    printf 'Should we do this now (y/N)? '
     read answer
     if [ y = "$answer" ] ; then
       eval $fix
@@ -53,7 +53,7 @@ download() {
   url=$1
   target=$2
 
-  echo -n '> Download'
+  printf '> Download'
   if type curl >/dev/null 2>&1; then
     curl '-#' -L "$url" -o $target
   elif type wget >/dev/null 2>&1; then
