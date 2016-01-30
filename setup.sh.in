@@ -24,12 +24,12 @@ run() {
     echo
     echo "  Cannot verify $message executing \`$command'"
 
-    if [ Warning == $type ] ; then
+    if [ Warning = $type ] ; then
       echo "  Ignoring for the moment"
       return 0
     fi
 
-    if [ No == "$fix" ] || [ Unattended == $MODE ] ; then
+    if [ No = "$fix" ] || [ Unattended = $MODE ] ; then
       echo "Installation cannot continue."
       return 1
     fi
@@ -37,7 +37,7 @@ run() {
     echo "This can be fixed by running \`$fix'"
     echo
     read -p 'Should we do this now (y/N)? ' answer
-    if [ y == "$answer" ] ; then
+    if [ y = "$answer" ] ; then
       eval $fix
       run "$message" "$command"
       return $?
@@ -122,7 +122,7 @@ while getopts :uf flag ; do
 done
 
 OS=$(uname)
-if [ 'Linux' == "$OS" ] ; then OS=$(lsb_release -si) ; fi
+if [ 'Linux' = "$OS" ] ; then OS=$(lsb_release -si) ; fi
 case $OS in
   CYGWIN*)
     EXE=xp.exe
