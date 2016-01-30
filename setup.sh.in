@@ -54,11 +54,41 @@ download() {
 
   echo -n '> Download'
   if type curl >/dev/null 2>&1; then
-    curl '-#' -L "$url" > $target
+    curl '-#' -L "$url" -o $target
   elif type wget >/dev/null 2>&1; then
     wget -nv "$url" -O $target
   fi
   return $?
+}
+
+bundle_php() {
+  releases=http://windows.php.net/downloads/releases/
+
+  download $releases - | grep -Eo 'php-[0-9.]+-nts-Win32-[VCx0-9-]+.zip' | sort -rn | uniq > $TEMPFILE
+
+  echo "> Select which PHP version you want to use"
+  PS3="Select: "
+  select release in $(cat $TEMPFILE); do
+    test -f $release || download $releases/$release $release
+
+    pwd=$(cygpath -w $(pwd) | sed -e 's#\\#\\\\#g')
+    target=$(basename $release .zip)
+    mkdir -p $target
+    echo "var shell = WSH.createObject('Shell.Application');" > $TEMPFILE
+    echo "var origin = shell.nameSpace('$pwd\\\\$release').items();" >> $TEMPFILE
+    echo "var target = shell.nameSpace('$pwd\\\\$target');" >> $TEMPFILE
+    echo "for (var i = 0; i < origin.count; i++) {" >> $TEMPFILE
+    echo "  WScript.Echo('  ' + origin.item(i));" >> $TEMPFILE
+    echo "  target.copyHere(origin.item(i), 20);" >> $TEMPFILE
+    echo "}"  >> $TEMPFILE
+    echo "> Extracting into $target"
+    cscript //NoLogo //e:JScript $(cygpath -w $TEMPFILE)
+    rm $release
+    break
+  done
+
+  PATH=$PATH:$target
+  return 0
 }
 
 echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
@@ -67,6 +97,7 @@ echo
 
 TEMPFILE=$(mktemp -u)
 SPACE='                  '
+MODE=Default
 CHECKS=Error
 FORCE=
 while getopts :uf flag ; do
@@ -82,10 +113,11 @@ case $OS in
   CYGWIN*)
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*" No $CHECKS
-    run 'PHP runtime available' "php.exe -v" No $CHECKS
+    run 'PHP runtime available' "php.exe -v" "bundle_php" $CHECKS
     run 'Tar' "type tar" "/cygwinsetup.exe -P tar -q -n -W"
     run 'Curl' "type curl || type wget" "/cygwinsetup.exe -P curl -q -n -W"
     EXE=xp.exe
+    PHP=php.exe
     ;;
 
   Ubuntu*|Debian*)
@@ -95,6 +127,7 @@ case $OS in
     run 'Tar' "type tar" "sudo apt-get install tar"
     run 'Curl' "type curl || type wget" "sudo apt-get install curl"
     EXE=xp
+    PHP=php
     ;;
 
   *)
@@ -104,6 +137,7 @@ case $OS in
     run 'Tar' "type tar"
     run 'Curl' "type curl || type wget"
     EXE=xp
+    PHP=php
     ;;
 esac
 
