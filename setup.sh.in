@@ -27,7 +27,7 @@ run() {
     echo
     echo "Cannot verify $message executing \`$command'"
 
-    if [ no == "$fix" ] ; then
+    if [ no == "$fix" ] || [ unattended == $MODE ] ; then
       echo "Installation cannot continue."
       return 1
     fi
@@ -63,16 +63,22 @@ download() {
 
 echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
 echo "(c) 2016 https://github.com/xp-runners/reference/"
+
+MODE=normal
+while getopts :u flag ; do
+  case $flag in
+    u) MODE=unattended ; echo "Unattended mode" ;;
+  esac
+done
 echo
 
 OS=$(uname)
 if [ 'Linux' == "$OS" ] ; then OS=$(lsb_release -si) ; fi
 case $OS in
   CYGWIN*)
-    cygenv
     run 'Cygwin' "uname -a"
     run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*"
-    run 'PHP runtime available' "php.exe -v"
+    run 'PHP runtime available' "php.exe -v" ""
     run 'Tar' "type tar" "/cygwinsetup.exe -P tar -q -n -W"
     run 'Curl' "type curl || type wget" "/cygwinsetup.exe -P curl -q -n -W"
     EXE=xp.exe
