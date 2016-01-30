@@ -1,7 +1,9 @@
 XP Runners change log
 =====================
 
-## 7.0.0 / ????-??-??
+## ?.?.? / ????-??-??
+
+## 7.0.0 / 2016-01-31
 
 * Made installable via `apt-get` on Ubuntu and Debian, and provided a one-
   liner "https-verified" installer (see xp-runners/reference#29)
