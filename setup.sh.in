@@ -93,11 +93,15 @@ bundle_php() {
 
 configure() {
   echo -ne "> Configuration\r"
-  truncate -s 0 xp.ini
-  for option in "$@"; do
-    echo $option >> xp.ini
-  done
-  echo "✓ $(ls -al xp.ini)"
+  if [ -f xp.ini ] ; then
+    echo "! Not overwriting existing $(ls -al xp.ini)"
+  else
+    truncate -s 0 xp.ini
+    for option in "$@"; do
+      echo $option >> xp.ini
+    done
+    echo "✓ Created $(ls -al xp.ini)"
+  fi
   cat xp.ini | sed -e 's/^/  /g'
 }
 
