@@ -18,7 +18,7 @@ run() {
   fix=${3-No}
   type=${4-Error}
 
-  echo -ne "> $message...\r"
+  printf "> $message...\r"
   eval $command > $TEMPFILE 2>&1 && { echo "✓ $(display)$SPACE"; return 0; } || {
     echo "✕ $type #$?: $(display)$SPACE"
     echo
@@ -93,7 +93,7 @@ bundle_php() {
 }
 
 configure() {
-  echo -ne "> Configuration\r"
+  printf "> Configuration\r"
   if [ -f xp.ini ] ; then
     echo "! Not overwriting existing $(ls -al xp.ini)"
   else
@@ -106,7 +106,7 @@ configure() {
   cat xp.ini | sed -e 's/^/  /g'
 }
 
-echo -e "\e[32;1mXP Runners setup (@VERSION@)\e[0m"
+printf "\e[32;1mXP Runners setup (@VERSION@)\e[0m\n"
 echo '(c) 2016 https://github.com/xp-runners/reference/'
 echo
 
