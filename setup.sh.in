@@ -110,7 +110,6 @@ configure() {
   if [ -f xp.ini ] ; then
     echo "! Not overwriting existing $(ls -al xp.ini)"
   else
-    truncate -s 0 xp.ini
     for option in "$@"; do
       echo $option >> xp.ini
     done
