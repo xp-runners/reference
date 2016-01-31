@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.1.0 / 2016-01-31
+
+* Added support for Mac OS X, see xp-runners/reference#30 - @thekid
+
 ## 7.0.0 / 2016-01-31
 
 * Made installable via `apt-get` on Ubuntu and Debian, and provided a one-
