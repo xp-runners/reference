@@ -42,11 +42,11 @@ If no command line arguments are given, the help command is run. If command line
 
 Plugin architecture
 -------------------
-Libraries may provide commands by adding a vendor binary to their composer.json named xp.{vendor}.{name}[.{command}] - for the [unittest](https://github.com/xp-framework/unittest/blob/master/bin/xp.xp-framework.unittest) command, the entry is:
+Libraries may provide commands by adding a vendor binary to their composer.json named xp.{vendor}.{name}[.{command}] - for the [test](https://github.com/xp-framework/unittest/blob/master/bin/xp.xp-framework.unittest.test) command, the entry is:
 
 ```json
 {
-    "bin": ["bin/xp.xp-framework.unittest"]
+    "bin": ["bin/xp.xp-framework.unittest.test"]
 }
 ```
 
