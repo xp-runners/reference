@@ -178,6 +178,27 @@ case $OS in
     fi
     ;;
 
+  Darwin*)
+    EXE=xp.exe
+    run 'OS X' "uname -a"
+    run 'Tar' "commands tar"
+    run 'Curl' "commands curl wget"
+    run '.NET Framework installed' "mono --version" No $CHECKS
+    run 'PHP runtime available' "php -v" No $CHECKS
+
+    php=$(which php 2>/dev/null || echo No)
+    if [ No = "$php" ] ; then
+      echo "! No PHP runtime, cannot create xp.ini"
+    else
+      ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
+      configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
+    fi
+
+    echo '#!/bin/sh' > xp
+    echo $(which mono)' $(dirname "$0")/xp.exe "$@"' >> xp
+    chmod 755 xp
+    ;;
+
   *)
     EXE=xp
 
