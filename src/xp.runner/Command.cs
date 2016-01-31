@@ -99,7 +99,6 @@ namespace Xp.Runners
 
                 // Arguments are encoded in utf-7, which is binary-safe
                 args = Arguments.Encode;
-                ini["encoding"] = new string[] { "utf-7" };
             }
             else
             {
