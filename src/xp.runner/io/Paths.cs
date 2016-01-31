@@ -130,7 +130,17 @@ namespace Xp.Runners.IO
         /// <summary>Return binary file of currently executing process</summary>
         public static string Binary()
         {
-            return Process.GetCurrentProcess().MainModule.FileName;
+            // Codebase is a URI. file:///F:/path/to/xp.exe
+            var uri = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            if (uri.IsFile)
+            {
+                Console.WriteLine(uri);
+                return Uri.UnescapeDataString(uri.AbsolutePath.Replace('/', Path.DirectorySeparatorChar));
+            }
+            else
+            {
+                throw new IOException("Don't know how to handle " + uri.AbsoluteUri);
+            }
         }
     }
 }
