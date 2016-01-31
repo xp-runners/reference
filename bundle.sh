@@ -15,7 +15,7 @@ TARGETS="class-main.php web-main.php"
 # Fetch
 for src in $SOURCES ; do
   echo $src
-  curl -sSL https://raw.githubusercontent.com/xp-framework/xp-runners/master/shared/src/$src > $BUILD/$src
+  curl -sSL https://raw.githubusercontent.com/xp-runners/main/master/src/$src > $BUILD/$src
 done
 
 # Replace
