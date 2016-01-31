@@ -140,7 +140,7 @@ namespace Xp.Runners.IO
             }
 
             // We arrive here when run by Mono, with MainModule.FileName = "/path/to/mono". If so, use
-            // codebase, which is a file://-URI. Caution: Inside applications created with mkbundle, we
+            // codebase, which is a file://-URI. Caution: Inside applications created with mkbundle, the
             // codebase is worthless, as it always contains the current directory. This is why we compare
             // the filenames above, and short-circuit!
             var uri = new Uri(assembly.CodeBase);
