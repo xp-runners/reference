@@ -10,7 +10,7 @@ Getting started
 ---------------
 
 ```sh
-$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.1.0.sh | sh
+$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.1.1.sh | sh
 # ...
 
 $ composer global require xp-framework/core
