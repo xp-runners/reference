@@ -8,34 +8,22 @@ This is the reference implementation of [XP RFC #0303: Subcommands](https://gith
 
 Getting started
 ---------------
-Setup:
 
 ```sh
-$ cp ~/bin/class-main.php . # From current XP runners
-```
+$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.0.0.sh | sh
+# ...
 
-Compile:
+$ composer global require xp-framework/core
+# ...
 
-```sh
-$ csc /target:exe /out:xp.exe \
- src\\xp.runner\\*.cs \
- src\\xp.runner\\io\\*.cs \
- src\\xp.runner\\commands\\*.cs \
- src\\xp.runner\\config\\*.cs \
- src\\xp.runner\\exec\\*.cs
-```
-
-Test:
-
-```sh
-$ ./xp.exe version
-XP 7.0.0-dev { PHP 7.0.0 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
+$ xp version
+XP 6.10.2 { PHP 7.0.0 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
 Copyright (c) 2001-2016 the XP group
-FileSystemCL<...\xp\core\src\main\php\>
-FileSystemCL<...\xp\core\src\test\php\>
-FileSystemCL<...\xp\core\src\main\resources\>
-FileSystemCL<...\xp\core\src\test\resources\>
-FileSystemCL<...\cygwin\home\Timm\devel\runners\>
+FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/php>
+FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/php>
+FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/resources>
+FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/resources>
+FileSystemCL<.>
 ```
 
 Commands
