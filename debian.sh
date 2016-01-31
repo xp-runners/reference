@@ -69,7 +69,7 @@ cat <<-EOF > $BINTRAY
 	  },
 	  "files": [
 	    {
-	      "includePattern" : "target/(.*deb)",
+	      "includePattern" : "target/(xp-runners.*deb)",
 	      "uploadPattern"  : "\$1",
 	      "matrixParams"   : {
 	        "deb_distribution" : "jessie",
