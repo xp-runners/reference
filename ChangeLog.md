@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.1.1 / 2016-01-31
+
 * Fixed `Paths.Binary()` to return the correct results when run with
   mono, standalone on Windows, mkbundle'd binaries and verify this
   works on Windows, Linux and Mac OS X.
