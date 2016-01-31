@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace Xp.Runners.IO
@@ -130,8 +131,19 @@ namespace Xp.Runners.IO
         /// <summary>Return binary file of currently executing process</summary>
         public static string Binary()
         {
-            // Codebase is a URI. file:///F:/path/to/xp.exe
-            var uri = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
+            var assembly = Assembly.GetExecutingAssembly();
+            var main = Process.GetCurrentProcess().MainModule.FileName;
+
+            if (Path.GetFileNameWithoutExtension(assembly.Location) == Path.GetFileNameWithoutExtension(main))
+            {
+                return main;
+            }
+
+            // We arrive here when run by Mono, with MainModule.FileName = "/path/to/mono". If so, use
+            // codebase, which is a file://-URI. Caution: Inside applications created with mkbundle, we
+            // codebase is worthless, as it always contains the current directory. This is why we compare
+            // the filenames above, and short-circuit!
+            var uri = new Uri(assembly.CodeBase);
             if (uri.IsFile)
             {
                 return Uri.UnescapeDataString(uri.AbsolutePath.Replace('/', Path.DirectorySeparatorChar));
