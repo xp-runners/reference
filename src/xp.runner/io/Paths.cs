@@ -134,7 +134,6 @@ namespace Xp.Runners.IO
             var uri = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
             if (uri.IsFile)
             {
-                Console.WriteLine(uri);
                 return Uri.UnescapeDataString(uri.AbsolutePath.Replace('/', Path.DirectorySeparatorChar));
             }
             else
