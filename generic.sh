@@ -14,7 +14,6 @@ ARCHIVE=$TARGET/xp-runners_${VERSION}.tar.gz
 SETUP=$TARGET/setup-${VERSION}.sh
 BINTRAY=$TARGET/generic.config
 
-rm -rf $TARGET
 mkdir -p $TARGET
 rm -f $SETUP $BINTRAY
 
@@ -39,7 +38,7 @@ cat <<-EOF > $BINTRAY
     },
     "files": [
       {
-        "includePattern" : "target/(.*${VERSION}.*)",
+        "includePattern" : "target/(setup.*sh|xp-runners.*tar.gz)",
         "uploadPattern"  : "\$1"
       }
     ],
