@@ -44,7 +44,7 @@ namespace Xp.Runners.Commands
                     var plugin = new Plugin(topic[0]);
                     plugin.Initialize(cmd, configuration);
 
-                    arguments = new string[] { HELP, topic.Length > 1 ? Topic(plugin.EntryPoint.Package.Replace('.', '/'), topic[1]) : plugin.EntryPoint.Type };
+                    arguments = new string[] { HELP, topic.Length > 1 ? Topic(plugin.EntryPoint.Package.Replace('.', '/'), topic[0] + '/' + topic[1]) : plugin.EntryPoint.Type };
                     modules = plugin.Modules;
                 }
                 else
