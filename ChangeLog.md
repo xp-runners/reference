@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.1.2 / 2016-02-01
+
 * Fixed issue #32: xp help ambiguity - @thekid
 * Fixed issue #31: xp help topics for builtins - @thekid
 
