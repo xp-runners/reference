@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed issue #31: Help topics for builtins - @thekid
+
 ## 7.1.1 / 2016-01-31
 
 * Fixed `Paths.Binary()` to return the correct results when run with

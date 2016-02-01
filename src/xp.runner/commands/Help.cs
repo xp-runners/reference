@@ -28,31 +28,30 @@ namespace Xp.Runners.Commands
             {
                 arguments = new string[] { HELP, Topic("xp/runtime", "xp") };
                 modules = new string[] { };
+                return;
             }
             else if (arg.StartsWith("/"))
             {
                 arguments = new string[] { HELP, Topic("xp/runtime", arg.Substring(1)) };
                 modules = new string[] { };
-            }
-            else if (arg.Contains("/"))
-            {
-                var topic = arg.Split(new char[] { '/' }, 2);
-                var plugin = new Plugin(topic[0]);
-                plugin.Initialize(cmd, configuration);
-                arguments = new string[] { HELP, Topic(plugin.EntryPoint.Package.Replace('.', '/'), topic[1]) };
-                modules = plugin.Modules;
-            }
-            else if (null != Type.GetType("Xp.Runners.Commands." + arg.UpperCaseFirst()))
-            {
-                arguments = new string[] { HELP, Topic("xp/runtime", arg) };
-                modules = new string[] { };
+                return;
             }
             else
             {
-                var plugin = new Plugin(arg);
-                plugin.Initialize(cmd, configuration);
-                arguments = new string[] { HELP, plugin.EntryPoint.Type };
-                modules = plugin.Modules;
+                var topic = arg.Split(new char[] { '/' }, 2);
+                if (null == Type.GetType("Xp.Runners.Commands." + topic[0].UpperCaseFirst()))
+                {
+                    var plugin = new Plugin(topic[0]);
+                    plugin.Initialize(cmd, configuration);
+
+                    arguments = new string[] { HELP, topic.Length > 1 ? Topic(plugin.EntryPoint.Package.Replace('.', '/'), topic[1]) : plugin.EntryPoint.Type };
+                    modules = plugin.Modules;
+                }
+                else
+                {
+                    arguments = new string[] { HELP, Topic("xp/runtime", topic.Length > 1 ? topic[0] + '/' + topic[1] : topic[0]) };
+                    modules = new string[] { };
+                }
             }
         }
 
