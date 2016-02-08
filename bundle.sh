@@ -9,7 +9,7 @@ if [ -z ${TRAVIS_TAG-} ]; then
 fi
 
 BUILD=$(mktemp -d)
-SOURCES="bootstrap.php class-main.php class-path.php scan-path.php web-main.php xar-support.php"
+SOURCES="bootstrap.php class-main.php class-path.php scan-path.php web-main.php xar-support.php entry.php"
 TARGETS="class-main.php web-main.php"
 
 # Fetch
