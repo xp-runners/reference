@@ -5,6 +5,7 @@ XP Runners change log
 
 ## 7.2.0 / ????-??-??
 
+* Optimized entry point scripts by inlining code - @thekid
 * Merged xp-runners/main#1: Run scripts without "-e" - @thekid
 
 ## 7.1.2 / 2016-02-01
