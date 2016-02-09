@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Merged xp-runners/main#1: Run scripts without "-e" - @thekid
+
 ## 7.1.2 / 2016-02-01
 
 * Fixed issue #32: xp help ambiguity - @thekid
