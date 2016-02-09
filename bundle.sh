@@ -19,8 +19,9 @@ for src in $SOURCES ; do
 done
 
 # Replace
+curl -sSL https://raw.githubusercontent.com/xp-runners/main/master/inline.pl > $BUILD/inline.pl
 for target in $TARGETS ; do
-  cat $BUILD/$target | perl -pe 's^require .(.+).;^open F, "'$BUILD'/$1" or die("$1: $!"); <F> for 1..2; join "", <F>;^ge' > $target
+  cat $BUILD/$target | perl $BUILD/inline.pl $BUILD
 done
 
 # Done
