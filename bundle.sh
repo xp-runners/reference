@@ -8,7 +8,13 @@ if [ -z ${TRAVIS_TAG-} ]; then
   exit 1
 fi
 
-BUILD=$(mktemp -d)
+if [ -z $TMPDIR ]; then
+    TEMPDIR=$TMPDIR
+else
+    TEMPDIR="/tmp"
+fi
+
+BUILD=$(mktemp -d "$TEMPDIR/tmp.XXXXXXXXXX")
 SOURCES="bootstrap.php class-main.php class-path.php scan-path.php web-main.php xar-support.php entry.php"
 TARGETS="class-main.php web-main.php"
 
@@ -21,7 +27,7 @@ done
 # Replace
 curl -sSL https://raw.githubusercontent.com/xp-runners/main/master/inline.pl > $BUILD/inline.pl
 for target in $TARGETS ; do
-  cat $BUILD/$target | perl $BUILD/inline.pl $BUILD
+  cat $BUILD/$target | perl $BUILD/inline.pl $BUILD > $target
 done
 
 # Done
