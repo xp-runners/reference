@@ -8,8 +8,8 @@ if [ -z ${TRAVIS_TAG-} ]; then
   exit 1
 fi
 
-if [ -z $TMPDIR ]; then
-    TEMPDIR=$TMPDIR
+if [ -z "$TMPDIR" ]; then
+    TEMPDIR="$TMPDIR"
 else
     TEMPDIR="/tmp"
 fi
