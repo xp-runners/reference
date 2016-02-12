@@ -122,13 +122,8 @@ printf "\033[32;1mXP Runners setup (@VERSION@)\033[0m\n"
 echo '(c) 2016 https://github.com/xp-runners/reference/'
 echo
 
-if [ -z "$TMPDIR" ]; then
-    TEMPDIR="$TMPDIR"
-else
-    TEMPDIR="/tmp"
-fi
-
-TEMPFILE=$(mktemp -u "$TEMPDIR/tmp.XXXXXXXXXX")
+temp=${TMPDIR-${TEMP-${TMP-/tmp}}}
+TEMPFILE=$(mktemp -u "$temp/tmp.XXXXXXXXXX")
 SPACE='                  '
 MODE=Default
 CHECKS=Error
