@@ -3,8 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
-## 7.2.0 / ????-??-??
+## 7.2.0 / 2016-02-12
 
+* Merged PR #33: Fix call of mktemp, requires a template on OS X
+  (@mikey179, @thekid)
 * Optimized entry point scripts by inlining code - @thekid
 * Merged xp-runners/main#1: Run scripts without "-e" - @thekid
 
