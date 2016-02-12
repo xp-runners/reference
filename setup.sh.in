@@ -118,113 +118,117 @@ configure() {
   cat xp.ini | sed -e 's/^/  /g'
 }
 
-printf "\033[32;1mXP Runners setup (@VERSION@)\033[0m\n"
-echo '(c) 2016 https://github.com/xp-runners/reference/'
-echo
+main() {
+  printf "\033[32;1mXP Runners setup (@VERSION@)\033[0m\n"
+  echo '(c) 2016 https://github.com/xp-runners/reference/'
+  echo
 
-temp=${TMPDIR-${TEMP-${TMP-/tmp}}}
-TEMPFILE=$(mktemp -u "$temp/tmp.XXXXXXXXXX")
-SPACE='                  '
-MODE=Default
-CHECKS=Error
-FORCE=
-while getopts :uf flag ; do
-  case $flag in
-    u) MODE=Unattended ; echo '> Unattended mode' ;;
-    f) CHECKS=Warning ; echo '> Ignoring errors from prerequisites checks' ;;
+  temp=${TMPDIR-${TEMP-${TMP-/tmp}}}
+  TEMPFILE=$(mktemp -u "$temp/tmp.XXXXXXXXXX")
+  SPACE='                  '
+  MODE=Default
+  CHECKS=Error
+  FORCE=
+  while getopts :uf flag ; do
+    case $flag in
+      u) MODE=Unattended ; echo '> Unattended mode' ;;
+      f) CHECKS=Warning ; echo '> Ignoring errors from prerequisites checks' ;;
+    esac
+  done
+
+  OS=$(uname)
+  if [ 'Linux' = "$OS" ] ; then OS=$(lsb_release -si) ; fi
+  case $OS in
+    CYGWIN*)
+      EXE=xp.exe
+
+      run 'Cygwin' "uname -a"
+      run 'Tar' "commands tar" "/cygwinsetup.exe -P tar -q -n -W"
+      run 'Curl' "commands curl wget" "/cygwinsetup.exe -P curl -q -n -W"
+      run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*" No $CHECKS
+      run 'PHP runtime available' "php.exe -v" "bundle_php" $CHECKS
+
+      php=$(which php.exe 2>/dev/null || echo No)
+      if [ No = $php ] ; then
+        echo "! No PHP runtime, cannot create xp.ini"
+      else
+        ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
+        configure \
+          "rt=$ver" "" \
+          "[runtime@$ver]" \
+          "default=$(cygpath -w $php)" \
+          "extension_dir=$(cygpath -w $(dirname $php))\\ext" \
+          "extension=php_com_dotnet.dll"
+      fi
+      ;;
+
+    Ubuntu*|Debian*)
+      EXE=xp
+
+      run 'Linux' "uname -a"
+      run 'Tar' "commands tar" "sudo apt-get install tar"
+      run 'Curl' "commands curl wget" "sudo apt-get install curl"
+      run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1" $CHECKS
+      run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli" $CHECKS
+
+      php=$(which php 2>/dev/null || echo No)
+      if [ No = "$php" ] ; then
+        echo "! No PHP runtime, cannot create xp.ini"
+      else
+        ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
+        configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
+      fi
+      ;;
+
+    Darwin*)
+      EXE=xp.exe
+      run 'OS X' "uname -a"
+      run 'Tar' "commands tar"
+      run 'Curl' "commands curl wget"
+      run '.NET Framework installed' "mono --version" No $CHECKS
+      run 'PHP runtime available' "php -v" No $CHECKS
+
+      php=$(which php 2>/dev/null || echo No)
+      if [ No = "$php" ] ; then
+        echo "! No PHP runtime, cannot create xp.ini"
+      else
+        ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
+        configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
+      fi
+
+      echo '#!/bin/sh' > xp
+      echo $(which mono)' $(dirname "$0")/xp.exe "$@"' >> xp
+      chmod 755 xp
+      ;;
+
+    *)
+      EXE=xp
+
+      run 'Un*x' "uname -a"
+      run 'Tar' "commands tar"
+      run 'Curl' "commands curl wget"
+      run '.NET Framework installed' "mono --version" No $CHECKS
+      run 'PHP runtime available' "php -v" No $CHECKS
+
+      php=$(which php 2>/dev/null || echo No)
+      if [ No = $php ] ; then
+        echo "! No PHP runtime, cannot create xp.ini"
+      else
+        ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
+        configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
+      fi
+      ;;
   esac
-done
 
-OS=$(uname)
-if [ 'Linux' = "$OS" ] ; then OS=$(lsb_release -si) ; fi
-case $OS in
-  CYGWIN*)
-    EXE=xp.exe
+  TARFILE=$(mktemp -u "$TEMPDIR/tmp.XXXXXXXXXX")
+  download https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz $TARFILE
 
-    run 'Cygwin' "uname -a"
-    run 'Tar' "commands tar" "/cygwinsetup.exe -P tar -q -n -W"
-    run 'Curl' "commands curl wget" "/cygwinsetup.exe -P curl -q -n -W"
-    run '.NET Framework installed' "ls -d $(cygpath -m $WINDIR)/Microsoft.NET/Framework*/v*" No $CHECKS
-    run 'PHP runtime available' "php.exe -v" "bundle_php" $CHECKS
+  run 'Extract' "tar xvfz $TARFILE $EXE class-main.php web-main.php"
+  run 'Test' "ls -al $(pwd)/$EXE"
 
-    php=$(which php.exe 2>/dev/null || echo No)
-    if [ No = $php ] ; then
-      echo "! No PHP runtime, cannot create xp.ini"
-    else
-      ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
-      configure \
-        "rt=$ver" "" \
-        "[runtime@$ver]" \
-        "default=$(cygpath -w $php)" \
-        "extension_dir=$(cygpath -w $(dirname $php))\\ext" \
-        "extension=php_com_dotnet.dll"
-    fi
-    ;;
+  echo
+  echo "Done, runners installed to $(pwd)"
+  rm "$TEMPFILE" "$TARFILE"
+}
 
-  Ubuntu*|Debian*)
-    EXE=xp
-
-    run 'Linux' "uname -a"
-    run 'Tar' "commands tar" "sudo apt-get install tar"
-    run 'Curl' "commands curl wget" "sudo apt-get install curl"
-    run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1" $CHECKS
-    run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli" $CHECKS
-
-    php=$(which php 2>/dev/null || echo No)
-    if [ No = "$php" ] ; then
-      echo "! No PHP runtime, cannot create xp.ini"
-    else
-      ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
-      configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
-    fi
-    ;;
-
-  Darwin*)
-    EXE=xp.exe
-    run 'OS X' "uname -a"
-    run 'Tar' "commands tar"
-    run 'Curl' "commands curl wget"
-    run '.NET Framework installed' "mono --version" No $CHECKS
-    run 'PHP runtime available' "php -v" No $CHECKS
-
-    php=$(which php 2>/dev/null || echo No)
-    if [ No = "$php" ] ; then
-      echo "! No PHP runtime, cannot create xp.ini"
-    else
-      ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
-      configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
-    fi
-
-    echo '#!/bin/sh' > xp
-    echo $(which mono)' $(dirname "$0")/xp.exe "$@"' >> xp
-    chmod 755 xp
-    ;;
-
-  *)
-    EXE=xp
-
-    run 'Un*x' "uname -a"
-    run 'Tar' "commands tar"
-    run 'Curl' "commands curl wget"
-    run '.NET Framework installed' "mono --version" No $CHECKS
-    run 'PHP runtime available' "php -v" No $CHECKS
-
-    php=$(which php 2>/dev/null || echo No)
-    if [ No = $php ] ; then
-      echo "! No PHP runtime, cannot create xp.ini"
-    else
-      ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
-      configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
-    fi
-    ;;
-esac
-
-TARFILE=$(mktemp -u "$TEMPDIR/tmp.XXXXXXXXXX")
-download https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz $TARFILE
-
-run 'Extract' "tar xvfz $TARFILE $EXE class-main.php web-main.php"
-run 'Test' "ls -al $(pwd)/$EXE"
-
-echo
-echo "Done, runners installed to $(pwd)"
-rm "$TEMPFILE" "$TARFILE"
+main "$@"
