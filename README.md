@@ -10,14 +10,14 @@ Getting started
 ---------------
 
 ```sh
-$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.1.2.sh | sh
+$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.2.0.sh | sh
 # ...
 
 $ composer global require xp-framework/core
 # ...
 
 $ xp version
-XP 7.0.2 { PHP 7.0.3 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
+XP 7.0.1 { PHP 7.0.3 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
 Copyright (c) 2001-2016 the XP group
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/php>
