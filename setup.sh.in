@@ -35,7 +35,11 @@ run() {
 
     echo "  This can be fixed by running \`$fix'"
     echo
-    printf '  Should we do this now ([y]es/[n]o/[f]orce)? '
+    if [ No = ${4-No} ] ; then
+      printf '  Should we do this now ([y]es/[n]o)? '
+    else
+      printf '  Should we do this now ([y]es/[n]o/[f]orce)? '
+    fi
     read answer </dev/fd/3
 
     case $answer in
