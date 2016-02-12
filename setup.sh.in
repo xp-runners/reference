@@ -136,6 +136,10 @@ main() {
     esac
   done
 
+  if [ ! -t 1 ] ; then
+    echo '> Not running inside terminal, disabling user-interactive mode'
+  fi
+
   OS=$(uname)
   if [ 'Linux' = "$OS" ] ; then OS=$(lsb_release -si) ; fi
   case $OS in
@@ -220,7 +224,7 @@ main() {
       ;;
   esac
 
-  TARFILE=$(mktemp -u "$TEMPDIR/tmp.XXXXXXXXXX")
+  TARFILE=$(mktemp -u "$temp/tmp.XXXXXXXXXX")
   download https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz $TARFILE
 
   run 'Extract' "tar xvfz $TARFILE $EXE class-main.php web-main.php"
