@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace Xp.Runners.Exec
 {
@@ -21,17 +22,20 @@ namespace Xp.Runners.Exec
             return reader;
         }
 
+        private enum FileType { Unknown, Disk, Char, Pipe };
+
+        private enum StdHandle { StdIn = -10, StdOut = -11, StdErr = -12 };
+
+        [DllImport("kernel32.dll")]
+        private static extern FileType GetFileType(IntPtr hdl);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetStdHandle(StdHandle std);
+
         /// <summary>Check whether it's necessary to rewrite ANSI color</summary>
-        private bool RewriteANSI(bool redirected)
+        private bool RewriteANSI(StdHandle handle)
         {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                return !redirected;
-            }
-            else
-            {
-                return false;
-            }
+            return FileType.Char == GetFileType(GetStdHandle(handle));
         }
 
         /// <summary>Run the process and return its exitcode</summary>
@@ -45,10 +49,15 @@ namespace Xp.Runners.Exec
                 original = Console.OutputEncoding;
                 Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
                 Console.OutputEncoding = encoding;
-            }
 
-            proc.StartInfo.RedirectStandardOutput = RewriteANSI(Console.IsOutputRedirected);
-            proc.StartInfo.RedirectStandardError = RewriteANSI(Console.IsErrorRedirected);
+                proc.StartInfo.RedirectStandardOutput = RewriteANSI(StdHandle.StdOut);
+                proc.StartInfo.RedirectStandardError = RewriteANSI(StdHandle.StdErr);
+            }
+            else
+            {
+                proc.StartInfo.RedirectStandardOutput = false;
+                proc.StartInfo.RedirectStandardError = false;
+            }
 
             try
             {
