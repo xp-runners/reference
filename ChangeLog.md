@@ -3,6 +3,13 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Added "force" choice in user-interactive mode of https-verified setup
+  routine; just like having passed `-f` command line option on startup
+  (@thekid)
+* Fixed #35: User-interactive mode doesn't work with pipes - @thekid
+* Fixed #34: Potential problem when connection terminates mid-stream
+  (@thekid)
+
 ## 7.2.0 / 2016-02-12
 
 * Merged PR #33: Fix call of mktemp, requires a template on OS X
