@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.2.1 / 2016-02-13
+
 * Added "force" choice in user-interactive mode of https-verified setup
   routine; just like having passed `-f` command line option on startup
   (@thekid)
