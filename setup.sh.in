@@ -36,7 +36,7 @@ run() {
     echo "  This can be fixed by running \`$fix'"
     echo
     printf '  Should we do this now (y/N)? '
-    read answer
+    read answer </dev/fd/3
     if [ y = "$answer" ] ; then
       eval $fix
       run "$message" "$command"
@@ -80,7 +80,7 @@ bundle_php() {
   lines=$(wc -l "$TEMPFILE" | cut -d ' ' -f 1)
   while : ; do
     printf '  Select: '
-    read choice
+    read choice </dev/fd/3
     test $choice -ge 1 2>/dev/null && test $choice -le $lines 2>/dev/null && break
     printf "\033[31;1m✕ Obviously not a valid choice.\033[0m Use Ctrl+C to exit.\n"
   done
@@ -138,6 +138,10 @@ main() {
 
   if [ ! -t 1 ] ; then
     echo '> Not running inside terminal, disabling user-interactive mode'
+  else
+    # Create FD3 to read user-interactive input from. As we're already being
+    # piped to, so reading from STDIN is going to result in the wrong outcome.
+    exec 3<&1
   fi
 
   OS=$(uname)
@@ -170,10 +174,10 @@ main() {
       EXE=xp
 
       run 'Linux' "uname -a"
-      run 'Tar' "commands tar" "sudo apt-get install tar"
-      run 'Curl' "commands curl wget" "sudo apt-get install curl"
-      run '.NET Framework installed' "mono --version" "sudo apt-get install libmono-corlib4.5-cil libmono-2.0-1" $CHECKS
-      run 'PHP runtime available' "php -v" "sudo apt-get install php5-cli" $CHECKS
+      run 'Tar' "commands tar" "sudo apt-get -y install tar"
+      run 'Curl' "commands curl wget" "sudo apt-get -y install curl"
+      run '.NET Framework installed' "mono --version" "sudo apt-get -y install libmono-corlib4.5-cil libmono-2.0-1" $CHECKS
+      run 'PHP runtime available' "php -v" "sudo apt-get -y install php5-cli" $CHECKS
 
       php=$(which php 2>/dev/null || echo No)
       if [ No = "$php" ] ; then
