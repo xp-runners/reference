@@ -129,9 +129,9 @@ namespace Xp.Runners
                     offset = i;
                     break;
                 }
-            } 
+            }
 
-            arguments = new ArraySegment<string>(argv, offset, argv.Length - offset);
+            arguments = argv.Skip(offset);
         }
 
         /// <summary>Entry point</summary>
