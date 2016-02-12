@@ -24,27 +24,35 @@ run() {
     printf "  Cannot verify $message executing \`$command'\033[0m\n"
 
     if [ Warning = $type ] ; then
-      echo "  Ignoring for the moment"
+      echo '  Ignoring for the moment'
       return 0
     fi
 
     if [ No = "$fix" ] || [ Unattended = $MODE ] ; then
-      echo "Installation cannot continue."
+      echo 'Installation cannot continue.'
       return 1
     fi
 
     echo "  This can be fixed by running \`$fix'"
     echo
-    printf '  Should we do this now (y/N)? '
+    printf '  Should we do this now ([y]es/[n]o/[f]orce)? '
     read answer </dev/fd/3
-    if [ y = "$answer" ] ; then
-      eval $fix
-      run "$message" "$command"
-      return $?
-    fi
 
-    echo "OK, you need to fix this yourself, then."
-    return 2
+    case $answer in
+      y|Y|yes)
+        eval $fix
+        run "$message" "$command"
+        return $?
+        ;;
+      f|F|force)
+        echo '  Ignoring for the moment'
+        return 0
+        ;;
+      *)
+        echo 'OK, you need to fix this yourself, then.'
+        return 2
+        ;;
+    esac
   }
 }
 
