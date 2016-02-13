@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Improved message when xp-framework/core cannot be found. See xp-runners/main#2
+  (@thekid)
 * Merged xp-runners/main#3: Invoke main() method directly instead of using 
   reflection: https://github.com/xp-framework/rfc/issues/298#issuecomment-174314209
   (@thekid)
