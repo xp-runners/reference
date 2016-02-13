@@ -28,7 +28,7 @@ FileSystemCL<.>
 
 Commands
 --------
-The following commands are builtin:
+The following commands are built in:
 
 * **version** - Displays version and exits - *also `-v`*
 * **eval {code}** - Evaluates code - *also `-e {code}`*
@@ -82,7 +82,7 @@ More features
 -------------
 Less configuration:
 
-* The timezone is automatically mapped from Windows and need no longer be set via `date.timezone`
+* The timezone is automatically mapped from the OS and need no longer be set via `date.timezone`
 * If no `use` setting is defined, a globally or locally composer-installed framework will be used
 
 Better Windows integration:
