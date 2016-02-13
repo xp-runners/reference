@@ -70,6 +70,11 @@ namespace Xp.Runners.Commands
             }
             con.WriteLine();
 
+            foreach (var dir in cmd.Options["modules"])
+            {
+                if (DisplayCommandsIn(con, "\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) con.WriteLine();
+            }
+
             if (DisplayCommandsIn(con, "\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
             {
                 con.WriteLine();
