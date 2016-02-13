@@ -129,7 +129,7 @@ namespace Xp.Runners
                     offset = i;
                     break;
                 }
-            } 
+            }
 
             arguments = argv.Skip(offset);
         }
