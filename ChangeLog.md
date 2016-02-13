@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Merged xp-runners/main#3: Invoke main() method directly instead of using 
+  reflection: https://github.com/xp-framework/rfc/issues/298#issuecomment-174314209
+  (@thekid)
 * Changed build system to publish master builds for generic installer. This
   can be used to run tests, e.g. the specification, without having to first
   tag a release. It also allows installing unstable builds for previewing:
