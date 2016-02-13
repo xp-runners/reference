@@ -75,7 +75,7 @@ namespace Xp.Runners
         }
 
         /// <summary>Entry point</summary>
-        public int Execute(CommandLine cmd, ConfigSource configuration)
+        public virtual int Execute(CommandLine cmd, ConfigSource configuration)
         {
             Initialize(cmd, configuration);
 
