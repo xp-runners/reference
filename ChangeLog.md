@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.2.3 / 2016-02-13
+
+* Merged #39: No longer create *mkbundle'd* executables - @thekid
+
 ## 7.2.2 / 2016-02-13
 
 * Improved message when xp-framework/core cannot be found. See xp-runners/main#2
