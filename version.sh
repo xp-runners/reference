@@ -3,12 +3,11 @@
 set -e
 set -u 
 
+BUILD=${TRAVIS_BUILD_NUMBER}
 if [ -z ${TRAVIS_TAG-} ]; then
   RELEASE=$(grep '##' ChangeLog.md | grep -v ???? | head -1 | cut -d ' ' -f 2)
-  BUILD=${TRAVIS_BUILD_NUMBER}
 else
   RELEASE=${TRAVIS_TAG#v*}
-  BUILD=${TRAVIS_BUILD_NUMBER}
 fi
 
 echo "Version $RELEASE.$BUILD"
