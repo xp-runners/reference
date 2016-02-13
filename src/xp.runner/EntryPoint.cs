@@ -1,6 +1,6 @@
 using System;
 
-namespace Xp.Runners.Commands
+namespace Xp.Runners
 {
     public class EntryPoint
     {

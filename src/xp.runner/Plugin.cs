@@ -6,8 +6,9 @@ using System.Runtime.Serialization.Json;
 using Xp.Runners;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
+using Xp.Runners.Commands;
 
-namespace Xp.Runners.Commands
+namespace Xp.Runners
 {
     /// <summary>The plugin command searches for XP commands in Composer's vendor/bin directory</summary>
     public class Plugin : Command

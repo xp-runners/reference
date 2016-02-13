@@ -16,6 +16,7 @@ namespace Xp.Runners.Commands
             return Assembly
                 .GetExecutingAssembly()
                 .GetTypes()
+                .Where(t => t.Namespace == "Xp.Runners.Commands")
                 .Where(t => t.IsSubclassOf(typeof(Command)))
             ;
         }

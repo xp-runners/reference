@@ -68,7 +68,7 @@ namespace Xp.Runners
             var type = Type.GetType("Xp.Runners.Commands." + arg.UpperCaseFirst());
             if (null == type)
             {
-                return new Commands.Plugin(arg);
+                return new Plugin(arg);
             }
             else
             {
