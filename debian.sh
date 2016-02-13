@@ -71,7 +71,8 @@ cat <<-EOF > $BINTRAY
 	      "matrixParams"   : {
 	        "deb_distribution" : "jessie",
 	        "deb_component"    : "main",
-	        "deb_architecture" : "i386,amd64"
+	        "deb_architecture" : "i386,amd64",
+	        "override"         : 1
 	      }
 	    }
 	  ],
