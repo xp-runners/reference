@@ -42,7 +42,7 @@ namespace Xp.Runners.Commands
                         Console.WriteLine("{0} @ {1}:", kind, dir);
                         empty = false;
                     }
-                    Console.WriteLine("> xp {0} (from {1})", entry.Command, entry.Module);
+                    Console.WriteLine("  $ xp {0} (from {1})", entry.Command, entry.Module);
                 }
             }
 
@@ -54,21 +54,26 @@ namespace Xp.Runners.Commands
         {
             var self = Assembly.GetExecutingAssembly();
 
-            Console.WriteLine("Builtin({0}) @ {1}", self.GetName().Version, Paths.Binary());
+            Console.WriteLine("@{0}", Paths.Binary());
+            Console.WriteLine("XP Subcommands");
+            Console.WriteLine("════════════════════════════════════════════════════════════════════════");
+            Console.WriteLine();
+
+            Console.WriteLine("> Builtin({0})", self.GetName().Version);
             foreach (var type in BuiltinsIn(self))
             {
-                Console.WriteLine("> xp {0}", type.Name.ToLower());
+                Console.WriteLine("  $ xp {0}", type.Name.ToLower());
             }
             Console.WriteLine();
 
-            if (DisplayCommandsIn("Local", Directory.GetCurrentDirectory()))
+            if (DisplayCommandsIn("> Local", Directory.GetCurrentDirectory()))
             {
                 Console.WriteLine();
             }
 
             foreach (var dir in ComposerLocations())
             {
-                if (DisplayCommandsIn("Installed", dir)) Console.WriteLine();
+                if (DisplayCommandsIn("> Installed", dir)) Console.WriteLine();
             }
 
             return 0;
