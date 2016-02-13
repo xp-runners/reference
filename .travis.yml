@@ -6,6 +6,7 @@ install:
   - nuget install xunit.extensions -Version 1.9.2 -OutputDirectory testrunner
 
 script:
+  - sh version.sh
   - cp testrunner/xunit.1.9.2/lib/net20/xunit.dll .
   - cp testrunner/xunit.extensions.1.9.2/lib/net20/xunit.extensions.dll .
   - mcs -r:System.Runtime.Serialization src/xp.runner/*.cs src/xp.runner/*/*.cs -target:exe -out:xp.exe
