@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
+using Xp.Runners.Exec;
 
 namespace Xp.Runners.Commands
 {
@@ -29,7 +30,7 @@ namespace Xp.Runners.Commands
             ;
         }
 
-        private bool DisplayCommandsIn(string kind, string dir)
+        private bool DisplayCommandsIn(TextWriter con, string kind, string dir)
         {
             var empty = true;
             var bin = Paths.Compose(dir, "bin");
@@ -39,10 +40,11 @@ namespace Xp.Runners.Commands
                 {
                     if (empty)
                     {
-                        Console.WriteLine("{0} @ {1}:", kind, dir);
+                        con.WriteLine("{0} @ {1}", kind, dir);
+                        con.WriteLine();
                         empty = false;
                     }
-                    Console.WriteLine("  $ xp {0} (from {1})", entry.Command, entry.Module);
+                    con.WriteLine("  $ xp {0} (from {1})", entry.Command, entry.Module);
                 }
             }
 
@@ -53,27 +55,29 @@ namespace Xp.Runners.Commands
         public override int Execute(CommandLine cmd, ConfigSource configuration)
         {
             var self = Assembly.GetExecutingAssembly();
+            var con = new ANSISupport(Console.Out);
 
-            Console.WriteLine("@{0}", Paths.Binary());
-            Console.WriteLine("XP Subcommands");
-            Console.WriteLine("════════════════════════════════════════════════════════════════════════");
-            Console.WriteLine();
+            con.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
+            con.WriteLine("\x1b[1mXP Subcommands");
+            con.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
+            con.WriteLine();
 
-            Console.WriteLine("> Builtin({0})", self.GetName().Version);
+            con.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
+            con.WriteLine();
             foreach (var type in BuiltinsIn(self))
             {
-                Console.WriteLine("  $ xp {0}", type.Name.ToLower());
+                con.WriteLine("  $ xp {0}", type.Name.ToLower());
             }
-            Console.WriteLine();
+            con.WriteLine();
 
-            if (DisplayCommandsIn("> Local", Directory.GetCurrentDirectory()))
+            if (DisplayCommandsIn(con, "\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
             {
-                Console.WriteLine();
+                con.WriteLine();
             }
 
             foreach (var dir in ComposerLocations())
             {
-                if (DisplayCommandsIn("> Installed", dir)) Console.WriteLine();
+                if (DisplayCommandsIn(con, "\x1b[33;1m>\x1b[0m Installed", dir)) con.WriteLine();
             }
 
             return 0;
