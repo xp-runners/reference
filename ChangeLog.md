@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.2.4 / 2016-02-13
+
 * Fixed generic setup routine failing on first install - @thekid
 
 ## 7.2.3 / 2016-02-13
