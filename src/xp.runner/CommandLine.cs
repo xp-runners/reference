@@ -131,7 +131,7 @@ namespace Xp.Runners
                 }
             } 
 
-            arguments = new ArraySegment<string>(argv, offset, argv.Length - offset);
+            arguments = argv.Skip(offset);
         }
 
         /// <summary>Entry point</summary>
