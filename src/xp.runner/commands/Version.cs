@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using Xp.Runners;
+using Xp.Runners.IO;
 
 namespace Xp.Runners.Commands
 {
@@ -13,7 +14,7 @@ namespace Xp.Runners.Commands
         protected override IEnumerable<string> ArgumentsFor(CommandLine cmd)
         {
             var self = Assembly.GetExecutingAssembly();
-            Console.WriteLine("Runners {0} {{ .NET {1} }} @ {2}", self.GetName().Version, self.ImageRuntimeVersion, self.CodeBase);
+            Console.WriteLine("Runners {0} {{ .NET {1} }} @ {2}", self.GetName().Version, self.ImageRuntimeVersion, Paths.Binary());
             return new string[] { "xp.runtime.Version" };
         }
     }
