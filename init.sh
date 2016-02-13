@@ -7,5 +7,5 @@ if [ -z ${TRAVIS_TAG-} ]; then
 else
   VERSION=${TRAVIS_TAG#v*}
   VCS_TAG=$TRAVIS_TAG
-  echo "Publish $VERSION"
+  echo "Publishing $VERSION"
 fi
