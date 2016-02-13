@@ -11,8 +11,8 @@ if [ master = $VERSION ]; then
 fi
 
 BUILD=$(mktemp -d)
-TARGET=$(pwd)/target
-MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
+ORIGIN=$(pwd)
+TARGET=$ORIGIN/target
 DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
 BINTRAY=$TARGET/debian.config
 
@@ -25,7 +25,7 @@ echo '2.0' > debian-binary
 
 # data.tar.xz
 mkdir -p usr/bin
-cp xp xp.exe usr/bin
+cp $ORIGIN/xp $ORIGIN/xp.exe $ORIGIN/class-main.php $ORIGIN/web-main.php usr/bin
 $fakeroot tar cfJ data.tar.xz usr/bin/*
 
 # control.tar.gz
