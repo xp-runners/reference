@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.2.2 / 2016-02-13
+
 * Improved message when xp-framework/core cannot be found. See xp-runners/main#2
   (@thekid)
 * Merged xp-runners/main#3: Invoke main() method directly instead of using 
