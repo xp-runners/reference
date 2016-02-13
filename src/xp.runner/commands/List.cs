@@ -11,10 +11,9 @@ namespace Xp.Runners.Commands
     /// <summary>The list command lists available subcommands</summary>
     public class List : Command
     {
-        private IEnumerable<Type> Builtins()
+        private IEnumerable<Type> BuiltinsIn(Assembly assembly)
         {
-            return Assembly
-                .GetExecutingAssembly()
+            return assembly
                 .GetTypes()
                 .Where(t => t.Namespace == "Xp.Runners.Commands")
                 .Where(t => t.IsSubclassOf(typeof(Command)))
@@ -30,7 +29,7 @@ namespace Xp.Runners.Commands
             ;
         }
 
-        private bool DisplayCommandsIn(string dir)
+        private bool DisplayCommandsIn(string kind, string dir)
         {
             var empty = true;
             var bin = Paths.Compose(dir, "bin");
@@ -40,7 +39,7 @@ namespace Xp.Runners.Commands
                 {
                     if (empty)
                     {
-                        Console.WriteLine("{0}:", dir);
+                        Console.WriteLine("{0} @ {1}:", kind, dir);
                         empty = false;
                     }
                     Console.WriteLine("> xp {0} (from {1})", entry.Command, entry.Module);
@@ -53,21 +52,23 @@ namespace Xp.Runners.Commands
         /// <summary>Entry point</summary>
         public override int Execute(CommandLine cmd, ConfigSource configuration)
         {
-            Console.WriteLine("Builtin:");
-            foreach (var type in Builtins())
+            var self = Assembly.GetExecutingAssembly();
+
+            Console.WriteLine("Builtin({0}) @ {1}", self.GetName().Version, Paths.Binary());
+            foreach (var type in BuiltinsIn(self))
             {
                 Console.WriteLine("> xp {0}", type.Name.ToLower());
             }
             Console.WriteLine();
 
-            if (DisplayCommandsIn(Directory.GetCurrentDirectory()))
+            if (DisplayCommandsIn("Local", Directory.GetCurrentDirectory()))
             {
                 Console.WriteLine();
             }
 
             foreach (var dir in ComposerLocations())
             {
-                if (DisplayCommandsIn(dir)) Console.WriteLine();
+                if (DisplayCommandsIn("Installed", dir)) Console.WriteLine();
             }
 
             return 0;
