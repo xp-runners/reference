@@ -8,11 +8,26 @@ This is the reference implementation of [XP RFC #0303: Subcommands](https://gith
 
 Getting started
 ---------------
+To install the XP runners, you can choose between the generic installer:
 
 ```sh
-$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.2.0.sh | sh
+$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.2.2.sh | sh
 # ...
+```
 
+...and a Ubuntu/Debian package:
+
+```sh
+$ echo 'deb https://dl.bintray.com/xp-runners/debian jessie main' | sudo tee -a /etc/apt/sources.list.d/xp.list
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D401AB61
+$ sudo apt-get update
+$ sudo apt-get install xp-runners
+# ...
+```
+
+Then, install the framework and you're all set to go:
+
+```sh
 $ composer global require xp-framework/core
 # ...
 
@@ -28,7 +43,7 @@ FileSystemCL<.>
 
 Commands
 --------
-The following commands are builtin:
+The following commands are built in:
 
 * **version** - Displays version and exits - *also `-v`*
 * **eval {code}** - Evaluates code - *also `-e {code}`*
@@ -82,7 +97,7 @@ More features
 -------------
 Less configuration:
 
-* The timezone is automatically mapped from Windows and need no longer be set via `date.timezone`
+* The timezone is automatically mapped from the OS and need no longer be set via `date.timezone`
 * If no `use` setting is defined, a globally or locally composer-installed framework will be used
 
 Better Windows integration:

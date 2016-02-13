@@ -3,20 +3,18 @@
 set -e
 set -u
 
-if [ -z ${TRAVIS_TAG-} ]; then
-  echo "This is not a build for a tag, abort." >&2
-  exit 1
+. ./init.sh
+
+if [ master = $VERSION ]; then
+  echo "Debian packages are not build for master branch, abort." >&2
+  exit 0
 fi
 
-VERSION=${TRAVIS_TAG#v*}
 BUILD=$(mktemp -d)
-EXE=$(pwd)/xp.exe
-BIN=$(pwd)/xp
-TARGET=$(pwd)/target
-MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
+ORIGIN=$(pwd)
+TARGET=$ORIGIN/target
 DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
 BINTRAY=$TARGET/debian.config
-ASSEMBLIES='System.Core System.Runtime.Serialization Mono.Posix'
 
 mkdir -p target
 rm -f $DEB $BINTRAY
@@ -27,8 +25,7 @@ echo '2.0' > debian-binary
 
 # data.tar.xz
 mkdir -p usr/bin
-mkbundle -o $BIN $EXE $ASSEMBLIES -z
-cp $MAIN $BIN usr/bin
+cp $ORIGIN/xp $ORIGIN/xp.exe $ORIGIN/class-main.php $ORIGIN/web-main.php usr/bin
 $fakeroot tar cfJ data.tar.xz usr/bin/*
 
 # control.tar.gz
@@ -57,8 +54,8 @@ cat <<-EOF > $BINTRAY
 	{
 	  "package": {
 	    "name"     : "xp-runners",
-      "repo"     : "debian",
-      "subject"  : "xp-runners"
+	    "repo"     : "debian",
+	    "subject"  : "xp-runners"
 	  },
 	  "version": {
 	    "name"     : "${VERSION}",
@@ -74,7 +71,8 @@ cat <<-EOF > $BINTRAY
 	      "matrixParams"   : {
 	        "deb_distribution" : "jessie",
 	        "deb_component"    : "main",
-	        "deb_architecture" : "i386,amd64"
+	        "deb_architecture" : "i386,amd64",
+	        "override"         : 1
 	      }
 	    }
 	  ],

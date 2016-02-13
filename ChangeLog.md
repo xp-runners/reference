@@ -3,6 +3,21 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.2.2 / 2016-02-13
+
+* Improved message when xp-framework/core cannot be found. See xp-runners/main#2
+  (@thekid)
+* Merged xp-runners/main#3: Invoke main() method directly instead of using 
+  reflection: https://github.com/xp-framework/rfc/issues/298#issuecomment-174314209
+  (@thekid)
+* Changed build system to publish master builds for generic installer. This
+  can be used to run tests, e.g. the specification, without having to first
+  tag a release. It also allows installing unstable builds for previewing:
+  https://bintray.com/artifact/download/xp-runners/generic/setup-master.sh
+  (@thekid)
+
+## 7.2.1 / 2016-02-13
+
 * Added "force" choice in user-interactive mode of https-verified setup
   routine; just like having passed `-f` command line option on startup
   (@thekid)

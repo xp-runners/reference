@@ -7,5 +7,5 @@ using System.Runtime.Versioning;
 [assembly: AssemblyProduct("XP Runners")]
 [assembly: AssemblyTitle("XP Runner")]
 [assembly: AssemblyCopyright("Copyright XP-Framework Team 2001-2016")]
-[assembly: AssemblyVersion("7.1.2.0217")]
+[assembly: AssemblyVersion("7.2.2.1614")]
 [assembly: TargetFramework(".NETFramework,Version=v4.0")]
