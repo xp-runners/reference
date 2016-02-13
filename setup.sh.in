@@ -194,7 +194,7 @@ main() {
         ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
         configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
       fi
-      ln -s xp.exe xp
+      rm xp ; ln -s xp.exe xp
       ;;
 
     *)
