@@ -11,6 +11,8 @@ else
   BUILD=${TRAVIS_BUILD_NUMBER}
 fi
 
+echo "Version $RELEASE.$BUILD"
+
 rm -f src/xp.runner/AssemblyInfo.cs.patched
 grep -v AssemblyVersion src/xp.runner/AssemblyInfo.cs >> src/xp.runner/AssemblyInfo.cs.patched
 echo '[assembly: AssemblyVersion("'$RELEASE'.'$BUILD'")]' >> src/xp.runner/AssemblyInfo.cs.patched
