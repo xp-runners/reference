@@ -3,9 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
-* Publish master builds for generic and windows installers. This can be
-  used to run tests, e.g. the specification, without having to first tag
-  a release. It also allows installing unstable builds for previewing from
+* Changed build system to publish master builds for generic installer. This
+  can be used to run tests, e.g. the specification, without having to first
+  tag a release. It also allows installing unstable builds for previewing:
   https://bintray.com/artifact/download/xp-runners/generic/setup-master.sh
   (@thekid)
 
