@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed generic setup routine failing on first install - @thekid
+
 ## 7.2.3 / 2016-02-13
 
 * Merged #39: No longer create *mkbundle'd* executables - @thekid
