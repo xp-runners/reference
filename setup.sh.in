@@ -160,8 +160,6 @@ main() {
   if [ 'Linux' = "$OS" ] ; then OS=$(lsb_release -si) ; fi
   case $OS in
     CYGWIN*)
-      EXE=xp.exe
-
       run 'Cygwin' "uname -a"
       run 'Tar' "commands tar" "/cygwinsetup.exe -P tar -q -n -W"
       run 'Curl' "commands curl wget" "/cygwinsetup.exe -P curl -q -n -W"
@@ -183,8 +181,6 @@ main() {
       ;;
 
     Ubuntu*|Debian*)
-      EXE=xp
-
       run 'Linux' "uname -a"
       run 'Tar' "commands tar" "sudo apt-get -y install tar"
       run 'Curl' "commands curl wget" "sudo apt-get -y install curl"
@@ -198,11 +194,11 @@ main() {
         ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
         configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
       fi
+      ln -s xp.exe xp
       ;;
 
-    Darwin*)
-      EXE=xp.exe
-      run 'OS X' "uname -a"
+    *)
+      run 'Un*x' "uname -a"
       run 'Tar' "commands tar"
       run 'Curl' "commands curl wget"
       run '.NET Framework installed' "mono --version" No $CHECKS
@@ -220,31 +216,13 @@ main() {
       echo $(which mono)' $(dirname "$0")/xp.exe "$@"' >> xp
       chmod 755 xp
       ;;
-
-    *)
-      EXE=xp
-
-      run 'Un*x' "uname -a"
-      run 'Tar' "commands tar"
-      run 'Curl' "commands curl wget"
-      run '.NET Framework installed' "mono --version" No $CHECKS
-      run 'PHP runtime available' "php -v" No $CHECKS
-
-      php=$(which php 2>/dev/null || echo No)
-      if [ No = $php ] ; then
-        echo "! No PHP runtime, cannot create xp.ini"
-      else
-        ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
-        configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
-      fi
-      ;;
   esac
 
   TARFILE=$(mktemp -u "$temp/tmp.XXXXXXXXXX")
   download https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz $TARFILE
 
-  run 'Extract' "tar xvfz $TARFILE $EXE class-main.php web-main.php"
-  run 'Test' "ls -al $(pwd)/$EXE"
+  run 'Extract' "tar xvfz $TARFILE xp.exe class-main.php web-main.php"
+  run 'Test' "ls -al $(pwd)/xp.exe"
 
   echo
   echo "Done, runners installed to $(pwd)"
