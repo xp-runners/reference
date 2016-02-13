@@ -8,11 +8,26 @@ This is the reference implementation of [XP RFC #0303: Subcommands](https://gith
 
 Getting started
 ---------------
+To install the XP runners, you can choose between the generic installer:
 
 ```sh
 $ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.2.2.sh | sh
 # ...
+```
 
+...and a Ubuntu/Debian package:
+
+```sh
+$ echo 'deb https://dl.bintray.com/xp-runners/debian jessie main' | sudo tee -a /etc/apt/sources.list.d/xp-runners.list
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D401AB61
+$ sudo apt-get update
+$ sudo apt-get install xp-runners
+# ...
+```
+
+Then, install the framework and you're all set to go:
+
+```sh
 $ composer global require xp-framework/core
 # ...
 
