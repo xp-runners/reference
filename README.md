@@ -18,7 +18,7 @@ $ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.2.2
 ...and a Ubuntu/Debian package:
 
 ```sh
-$ echo 'deb https://dl.bintray.com/xp-runners/debian jessie main' | sudo tee -a /etc/apt/sources.list.d/xp-runners.list
+$ echo 'deb https://dl.bintray.com/xp-runners/debian jessie main' | sudo tee -a /etc/apt/sources.list.d/xp.list
 $ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D401AB61
 $ sudo apt-get update
 $ sudo apt-get install xp-runners
