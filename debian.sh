@@ -54,8 +54,8 @@ cat <<-EOF > $BINTRAY
 	{
 	  "package": {
 	    "name"     : "xp-runners",
-      "repo"     : "debian",
-      "subject"  : "xp-runners"
+	    "repo"     : "debian",
+	    "subject"  : "xp-runners"
 	  },
 	  "version": {
 	    "name"     : "${VERSION}",
