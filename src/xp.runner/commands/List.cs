@@ -60,12 +60,16 @@ namespace Xp.Runners.Commands
             }
             Console.WriteLine();
 
+            if (DisplayCommandsIn(Directory.GetCurrentDirectory()))
+            {
+                Console.WriteLine();
+            }
+
             foreach (var dir in ComposerLocations())
             {
                 if (DisplayCommandsIn(dir)) Console.WriteLine();
             }
 
-            DisplayCommandsIn(".");
             return 0;
         }
     }
