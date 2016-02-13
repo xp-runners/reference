@@ -44,7 +44,7 @@ namespace Xp.Runners.Commands
                         con.WriteLine();
                         empty = false;
                     }
-                    con.WriteLine("  $ xp {0} (from {1})", entry.Command, entry.Module);
+                    con.WriteLine("  $ xp {0} (» \x1b[35;4mfrom {1}\x1b[0m)", entry.Command, entry.Module);
                 }
             }
 
