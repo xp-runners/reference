@@ -11,13 +11,10 @@ if [ master = $VERSION ]; then
 fi
 
 BUILD=$(mktemp -d)
-EXE=$(pwd)/xp.exe
-BIN=$(pwd)/xp
 TARGET=$(pwd)/target
 MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
 DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
 BINTRAY=$TARGET/debian.config
-ASSEMBLIES='System.Core System.Runtime.Serialization Mono.Posix'
 
 mkdir -p target
 rm -f $DEB $BINTRAY
@@ -28,8 +25,7 @@ echo '2.0' > debian-binary
 
 # data.tar.xz
 mkdir -p usr/bin
-mkbundle -o $BIN $EXE $ASSEMBLIES -z
-cp $MAIN $BIN usr/bin
+cp xp xp.exe usr/bin
 $fakeroot tar cfJ data.tar.xz usr/bin/*
 
 # control.tar.gz
