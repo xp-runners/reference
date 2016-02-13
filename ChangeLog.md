@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Public master builds for generic and windows installers. This can be
+  used to run tests, e.g. the specification, without having to first
+  tag a release. It also allows installing unstable builds by using
+  https://bintray.com/artifact/download/xp-runners/generic/setup-master.sh
+  (@thekid)
+
 ## 7.2.1 / 2016-02-13
 
 * Added "force" choice in user-interactive mode of https-verified setup
