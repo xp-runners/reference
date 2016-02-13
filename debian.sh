@@ -5,6 +5,11 @@ set -u
 
 . ./init.sh
 
+if [ master = $VERSION ]; then
+  echo "Debian packages are not build for master branch, abort." >&2
+  exit 0
+fi
+
 BUILD=$(mktemp -d)
 EXE=$(pwd)/xp.exe
 BIN=$(pwd)/xp
