@@ -3,12 +3,8 @@
 set -e
 set -u
 
-if [ -z ${TRAVIS_TAG-} ]; then
-  echo "This is not a build for a tag, abort." >&2
-  exit 1
-fi
+. ./init.sh
 
-VERSION=${TRAVIS_TAG#v*}
 EXE=$(pwd)/xp.exe
 TARGET=$(pwd)/target
 MAIN="$(pwd)/class-main.php $(pwd)/web-main.php"
@@ -34,13 +30,14 @@ cat <<-EOF > $BINTRAY
       "name"     : "${VERSION}",
       "desc"     : "XP Runners release ${VERSION}",
       "released" : "${date}",
-      "vcs_tag"  : "${TRAVIS_TAG}",
+      "vcs_tag"  : "${VCS_TAG}",
       "gpgSign"  : true
     },
     "files": [
       {
         "includePattern" : "target/(.*zip)",
-        "uploadPattern"  : "\$1"
+        "uploadPattern"  : "\$1",
+        "matrixParams"   : { "override": 1 }
       }
     ],
     "publish": true

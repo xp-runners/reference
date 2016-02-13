@@ -3,12 +3,8 @@
 set -e
 set -u
 
-if [ -z ${TRAVIS_TAG-} ]; then
-  echo "This is not a build for a tag, abort." >&2
-  exit 1
-fi
+. ./init.sh
 
-VERSION=${TRAVIS_TAG#v*}
 BUILD=$(mktemp -d)
 EXE=$(pwd)/xp.exe
 BIN=$(pwd)/xp
