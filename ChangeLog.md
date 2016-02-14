@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.3.0 / 2016-02-14
+
+* Merged #40: Implement "xp list", which shows a list of available subcommands
+  (@thekid)
+
 ## 7.2.4 / 2016-02-13
 
 * Fixed generic setup routine failing on first install - @thekid
