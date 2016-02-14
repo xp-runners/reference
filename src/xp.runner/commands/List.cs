@@ -55,7 +55,7 @@ namespace Xp.Runners.Commands
         public override int Execute(CommandLine cmd, ConfigSource configuration)
         {
             var self = Assembly.GetExecutingAssembly();
-            var con = new ANSISupport(Console.Out);
+            var con = PlatformID.Win32NT == Environment.OSVersion.Platform ? new ANSISupport(Console.Out) : Console.Out;
 
             con.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
             con.WriteLine("\x1b[1mXP Subcommands");
