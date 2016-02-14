@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed #41: Composer dir on XDG Base Directory Specifications - @thekid
+
 ## 7.3.1 / 2016-02-14
 
 * Fixed *help* subcommand not passing on rest of command line arguments
