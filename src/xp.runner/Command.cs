@@ -11,22 +11,10 @@ namespace Xp.Runners
 {
     public abstract class Command
     {
-        const string VENDOR = "vendor";
-
-        /// <summary>Returns well-known locations of Composer directories. Local installations have 
-        /// precedence! See https://getcomposer.org/doc/03-cli.md#composer-home</summary>
+        /// <summary>Returns composer locations for current platform</summary>
         protected IEnumerable<string> ComposerLocations()
         {
-            yield return Paths.Compose(".", VENDOR);
-
-            if (Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX)
-            {
-                yield return Paths.Compose(Paths.Home(), ".composer", VENDOR);
-            }
-            else
-            {
-                yield return Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", VENDOR);
-            }
+            return IO.ComposerLocations.For(Environment.OSVersion.Platform);
         }
 
         /// <summary>Initialize this command</summary>
