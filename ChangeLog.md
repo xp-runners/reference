@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.3.3 / 2016-02-14
+
 * Fixed module name display in list subcommand on \*nix systems - @thekid
 * Removed superfluous ANSI support indirection for non-Windows - @thekid
 
