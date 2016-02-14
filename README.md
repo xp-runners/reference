@@ -52,6 +52,7 @@ The following commands are built in:
 * **help [{command}]** - Displays help - *also `-?`*
 * **run {class}** - Runs a class, class file or xar
 * **ar {operation} [{sources}]** - Works with XAR archives
+* **list** - Lists available subcommands - built-in, globally installed and locally available
 
 If no command line arguments are given, the help command is run. If command line arguments are given, but no command is passed, the command defaults to *run*.
 
