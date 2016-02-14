@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.3.2 / 2016-02-14
+
 * Fixed #41: Composer dir on XDG Base Directory Specifications - @thekid
 
 ## 7.3.1 / 2016-02-14
