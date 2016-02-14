@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed module name display in list subcommand on \*nix systems - @thekid
+* Removed superfluous ANSI support indirection for non-Windows - @thekid
+
 ## 7.3.2 / 2016-02-14
 
 * Fixed #41: Composer dir on XDG Base Directory Specifications - @thekid

@@ -26,7 +26,7 @@ namespace Xp.Runners.Commands
             return Directory
                 .GetFiles(dir, "xp.*")
                 .Where(f => !f.EndsWith(".bat"))
-                .Select(f => new EntryPoint(f))
+                .Select(f => new EntryPoint(Path.GetFileName(f)))
             ;
         }
 
@@ -44,7 +44,7 @@ namespace Xp.Runners.Commands
                         con.WriteLine();
                         empty = false;
                     }
-                    con.WriteLine("  $ xp {0} (» \x1b[35;4mfrom {1}\x1b[0m)", entry.Command, entry.Module);
+                    con.WriteLine("  $ xp {0} (» \x1b[35;1;4mfrom {1}\x1b[0m)", entry.Command, entry.Module);
                 }
             }
 
