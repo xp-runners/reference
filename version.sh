@@ -3,7 +3,12 @@
 set -e
 set -u 
 
-BUILD=${TRAVIS_BUILD_NUMBER}
+if [ $TRAVIS_BUILD_NUMBER -gt 65535 ] ; then
+  BUILD=${TRAVIS_BUILD_NUMBER:(-5)}
+else
+  BUILD=$TRAVIS_BUILD_NUMBER
+fi
+
 if [ -z ${TRAVIS_TAG-} ]; then
   RELEASE=$(grep '##' ChangeLog.md | grep -v ???? | head -1 | cut -d ' ' -f 2)
 else
