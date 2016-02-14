@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.3.1 / 2016-02-14
+
+* Fixed *help* subcommand not passing on rest of command line arguments
+  (@thekid)
+
 ## 7.3.0 / 2016-02-14
 
 * Merged #40: Implement "xp list", which shows a list of available subcommands

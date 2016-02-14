@@ -10,7 +10,7 @@ namespace Xp.Runners.Commands
         /// <summary>Command line arguments.</summary>
         protected override IEnumerable<string> ArgumentsFor(CommandLine cmd)
         {
-            return new string[] { "xp.runtime.Version" };
+            return (new string[] { "xp.runtime.Version" }).Concat(cmd.Arguments);
         }
     }
 }
