@@ -142,6 +142,11 @@ namespace Xp.Runners
                     config = new EnvironmentConfigSource();
                     offset = i + 1;
                 }
+                else if ("-c".Equals(argv[i]))
+                {
+                    config = new IniConfigSource(new Ini(argv[++i]));
+                    offset = i + 1;
+                }
                 else if (IsOption(argv[i]))
                 {
                     throw new ArgumentException("Unknown option `" + argv[i] + "`");

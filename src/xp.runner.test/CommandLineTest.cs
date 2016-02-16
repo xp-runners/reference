@@ -201,5 +201,11 @@ namespace Xp.Runners.Test
         {
             Assert.IsType<EnvironmentConfigSource>(new CommandLine(new string[] { "-n" }).Configuration);
         }
+
+        [Fact]
+        public void explicit_configuration()
+        {
+            Assert.IsType<IniConfigSource>(new CommandLine(new string[] { "-c", "../xp.ini"}).Configuration);
+        }
     }
 }
