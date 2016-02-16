@@ -3,6 +3,7 @@ using Xunit.Extensions;
 using Xp.Runners;
 using Xp.Runners.Commands;
 using Xp.Runners.Exec;
+using Xp.Runners.Config;
 
 namespace Xp.Runners.Test
 {
@@ -187,6 +188,18 @@ namespace Xp.Runners.Test
                 new string[] { "Test", "1", "2", "3" },
                 new CommandLine(new string[] { "run", "Test", "1", "2", "3" }).Arguments
             );
+        }
+
+        [Fact]
+        public void default_configuration()
+        {
+            Assert.IsType<CompositeConfigSource>(new CommandLine(new string[] { }).Configuration);
+        }
+
+        [Fact]
+        public void no_configuration()
+        {
+            Assert.IsType<EnvironmentConfigSource>(new CommandLine(new string[] { "-n" }).Configuration);
         }
     }
 }

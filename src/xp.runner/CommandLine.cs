@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Xp.Runners.IO;
 using Xp.Runners.Exec;
 using Xp.Runners.Config;
 
@@ -8,6 +9,8 @@ namespace Xp.Runners
 {
     public class CommandLine
     {
+        const string ini = "xp.ini";
+
         private static Dictionary<string, Type> aliases = new Dictionary<string, Type>()
         {
             { "-v", typeof(Commands.Version) },
@@ -22,9 +25,11 @@ namespace Xp.Runners
             { "classpath", new List<string>() },
             { "modules", new List<string>() }
         };
+
         private Command command;
         private IEnumerable<string> arguments;
         private ExecutionModel executionModel;
+        private string config = ini;
 
         /// <summary>Global options</summary>
         public Dictionary<string, List<string>> Options
@@ -48,6 +53,28 @@ namespace Xp.Runners
         public ExecutionModel ExecutionModel
         {
             get { return executionModel ?? new RunOnce(); }
+        }
+
+        /// <summary>Configuration source</summary>
+        public ConfigSource Configuration
+        {
+            get {
+                if (null == config)
+                {
+                    return new EnvironmentConfigSource();
+                }
+                else
+                {
+                    var home = Environment.GetEnvironmentVariable("HOME");
+                    return new CompositeConfigSource(
+                        new EnvironmentConfigSource(),
+                        new IniConfigSource(new Ini(Paths.Compose(".", config))),
+                        null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", config))) : null,
+                        new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", config))),
+                        new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), config)))
+                    );
+                }
+            }
         }
 
         /// <summary>Determines if a command line arg is an option</summary>
@@ -113,6 +140,11 @@ namespace Xp.Runners
                     executionModel = new Supervise();
                     offset = i + 1;
                 }
+                else if ("-n".Equals(argv[i]))
+                {
+                    config = null;
+                    offset = i + 1;
+                }
                 else if (IsOption(argv[i]))
                 {
                     throw new ArgumentException("Unknown option `" + argv[i] + "`");
@@ -135,9 +167,9 @@ namespace Xp.Runners
         }
 
         /// <summary>Entry point</summary>
-        public int Execute(ConfigSource configuration)
+        public int Execute()
         {
-            return Command.Execute(this, configuration);
+            return Command.Execute(this, this.Configuration);
         }
 
         public override string ToString()
