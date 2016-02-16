@@ -169,7 +169,7 @@ namespace Xp.Runners
         /// <summary>Entry point</summary>
         public int Execute()
         {
-            return Command.Execute(this, this.Configuration);
+            return Command.Execute(this, Configuration);
         }
 
         public override string ToString()
