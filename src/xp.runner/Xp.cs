@@ -6,8 +6,6 @@ namespace Xp.Runners
 {
     public class Xp
     {
-        const string ini = "xp.ini";
-
         /// <summary>Entry point</summary>
         public static int Main(string[] args)
         {
