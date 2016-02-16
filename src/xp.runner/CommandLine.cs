@@ -29,7 +29,7 @@ namespace Xp.Runners
         private Command command;
         private IEnumerable<string> arguments;
         private ExecutionModel executionModel;
-        private string config = ini;
+        private ConfigSource config = null;
 
         /// <summary>Global options</summary>
         public Dictionary<string, List<string>> Options
@@ -61,19 +61,16 @@ namespace Xp.Runners
             get {
                 if (null == config)
                 {
-                    return new EnvironmentConfigSource();
-                }
-                else
-                {
                     var home = Environment.GetEnvironmentVariable("HOME");
-                    return new CompositeConfigSource(
+                    config = new CompositeConfigSource(
                         new EnvironmentConfigSource(),
-                        new IniConfigSource(new Ini(Paths.Compose(".", config))),
-                        null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", config))) : null,
-                        new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", config))),
-                        new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), config)))
+                        new IniConfigSource(new Ini(Paths.Compose(".", ini))),
+                        null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
+                        new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
+                        new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
                     );
                 }
+                return config;
             }
         }
 
@@ -142,7 +139,7 @@ namespace Xp.Runners
                 }
                 else if ("-n".Equals(argv[i]))
                 {
-                    config = null;
+                    config = new EnvironmentConfigSource();
                     offset = i + 1;
                 }
                 else if (IsOption(argv[i]))
