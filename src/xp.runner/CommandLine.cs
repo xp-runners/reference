@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using Xp.Runners.IO;
@@ -144,7 +145,15 @@ namespace Xp.Runners
                 }
                 else if ("-c".Equals(argv[i]))
                 {
-                    config = new IniConfigSource(new Ini(argv[++i]));
+                    var path = argv[++i];
+                    if (Directory.Exists(path))
+                    {
+                        config = new IniConfigSource(new Ini(Paths.Compose(path, ini)));
+                    }
+                    else
+                    {
+                        config = new IniConfigSource(new Ini(path));
+                    }
                     offset = i + 1;
                 }
                 else if (IsOption(argv[i]))
