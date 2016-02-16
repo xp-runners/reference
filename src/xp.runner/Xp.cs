@@ -6,28 +6,12 @@ namespace Xp.Runners
 {
     public class Xp
     {
-        const string ini = "xp.ini";
-
-        /// <summary>Retrieve configuration via xp.ini</summary>
-        private static ConfigSource TheConfiguration()
-        {
-            var home = Environment.GetEnvironmentVariable("HOME");
-            return new CompositeConfigSource(
-                new EnvironmentConfigSource(),
-                new IniConfigSource(new Ini(Paths.Compose(".", ini))),
-                null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
-                new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
-                new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
-            );
-        }
-
         /// <summary>Entry point</summary>
         public static int Main(string[] args)
         {
             try
             {
-                var cmd = new CommandLine(args);
-                return cmd.Execute(TheConfiguration());
+                return new CommandLine(args).Execute();
             }
             catch (NotImplementedException e)
             {

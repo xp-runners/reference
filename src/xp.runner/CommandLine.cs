@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Xp.Runners.IO;
 using Xp.Runners.Exec;
 using Xp.Runners.Config;
 
@@ -8,6 +10,8 @@ namespace Xp.Runners
 {
     public class CommandLine
     {
+        const string ini = "xp.ini";
+
         private static Dictionary<string, Type> aliases = new Dictionary<string, Type>()
         {
             { "-v", typeof(Commands.Version) },
@@ -22,9 +26,11 @@ namespace Xp.Runners
             { "classpath", new List<string>() },
             { "modules", new List<string>() }
         };
+
         private Command command;
         private IEnumerable<string> arguments;
         private ExecutionModel executionModel;
+        private ConfigSource config = null;
 
         /// <summary>Global options</summary>
         public Dictionary<string, List<string>> Options
@@ -48,6 +54,25 @@ namespace Xp.Runners
         public ExecutionModel ExecutionModel
         {
             get { return executionModel ?? new RunOnce(); }
+        }
+
+        /// <summary>Configuration source</summary>
+        public ConfigSource Configuration
+        {
+            get {
+                if (null == config)
+                {
+                    var home = Environment.GetEnvironmentVariable("HOME");
+                    config = new CompositeConfigSource(
+                        new EnvironmentConfigSource(),
+                        new IniConfigSource(new Ini(Paths.Compose(".", ini))),
+                        null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
+                        new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
+                        new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
+                    );
+                }
+                return config;
+            }
         }
 
         /// <summary>Determines if a command line arg is an option</summary>
@@ -113,6 +138,24 @@ namespace Xp.Runners
                     executionModel = new Supervise();
                     offset = i + 1;
                 }
+                else if ("-n".Equals(argv[i]))
+                {
+                    config = new EnvironmentConfigSource();
+                    offset = i + 1;
+                }
+                else if ("-c".Equals(argv[i]))
+                {
+                    var path = argv[++i];
+                    if (Directory.Exists(path))
+                    {
+                        config = new IniConfigSource(new Ini(Paths.Compose(path, ini)));
+                    }
+                    else
+                    {
+                        config = new IniConfigSource(new Ini(path));
+                    }
+                    offset = i + 1;
+                }
                 else if (IsOption(argv[i]))
                 {
                     throw new ArgumentException("Unknown option `" + argv[i] + "`");
@@ -135,9 +178,9 @@ namespace Xp.Runners
         }
 
         /// <summary>Entry point</summary>
-        public int Execute(ConfigSource configuration)
+        public int Execute()
         {
-            return Command.Execute(this, configuration);
+            return Command.Execute(this, Configuration);
         }
 
         public override string ToString()

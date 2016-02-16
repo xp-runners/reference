@@ -48,7 +48,7 @@ namespace Xp.Runners.Config
         /// based on the given runtime version, overwriting the defaults.
         public Dictionary<string, IEnumerable<string>> GetArgs(string runtime)
         {
-            return null;
+            return new Dictionary<string, IEnumerable<string>>();
         }
 
         /// Returns a string representation of this config source

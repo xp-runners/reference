@@ -95,7 +95,7 @@ namespace Xp.Runners
             }
 
             proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.FileName = configuration.GetExecutable(runtime) ?? "php";
+            proc.StartInfo.FileName = configuration.GetExecutable(runtime) ?? (runtime ?? "php");
             proc.StartInfo.Arguments = string.Format(
                 "-C -q -d include_path=\".{0}{1}{0}{0}.{0}{2}\" {3} {4} {5}",
                 Paths.Separator,
