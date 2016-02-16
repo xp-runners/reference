@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Implemented PR #42: Control configuration file usage
+  . New `-n` command line arg to prevent any xp.ini files from being loaded.
+  . New `-c` command line arg to explicitely specifiy an xp.ini file
+  (@thekid) 
+
 ## 7.3.3 / 2016-02-14
 
 * Fixed module name display in list subcommand on \*nix systems - @thekid
