@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.4.0 / 2016-02-26
+
+* Fixed xp-runners/main#4: No output for xp -v (PHP7 w/ older XP6 releases)
+  (@thekid)
 * Implemented PR #42: Control configuration file usage
   . New `-n` command line arg to prevent any xp.ini files from being loaded.
   . New `-c` command line arg to explicitely specifiy an xp.ini file
