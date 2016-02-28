@@ -1,12 +1,11 @@
 using System;
-using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
 using Xp.Runners.IO;
-using Xp.Runners.Config;
 using Xp.Runners.Exec;
+using Xp.Runners.Config;
 
 namespace Xp.Runners.Commands
 {
@@ -72,50 +71,36 @@ namespace Xp.Runners.Commands
         {
             var self = Assembly.GetExecutingAssembly();
 
-            Encoding original = null;
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            using (new Output())
             {
-                original = Console.OutputEncoding;
-                Console.OutputEncoding = System.Text.Encoding.UTF8;
-                if (!Console.IsOutputRedirected)
+                Console.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
+                Console.WriteLine("\x1b[1mXP Subcommands");
+                Console.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
+                Console.WriteLine();
+
+                Console.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
+                Console.WriteLine();
+                foreach (var type in BuiltinsIn(self))
                 {
-                    Console.SetOut(new ANSISupport(Console.Out));
+                    Console.WriteLine("  $ xp {0}", type.Name.ToLower());
+                }
+                Console.WriteLine();
+
+                foreach (var dir in cmd.Options["modules"])
+                {
+                    if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) Console.WriteLine();
+                }
+
+                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
+                {
+                    Console.WriteLine();
+                }
+
+                foreach (var dir in ComposerLocations())
+                {
+                    if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Installed", dir)) Console.WriteLine();
                 }
             }
-
-            Console.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
-            Console.WriteLine("\x1b[1mXP Subcommands");
-            Console.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
-            Console.WriteLine();
-
-            Console.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
-            Console.WriteLine();
-            foreach (var type in BuiltinsIn(self))
-            {
-                Console.WriteLine("  $ xp {0}", type.Name.ToLower());
-            }
-            Console.WriteLine();
-
-            foreach (var dir in cmd.Options["modules"])
-            {
-                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) Console.WriteLine();
-            }
-
-            if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
-            {
-                Console.WriteLine();
-            }
-
-            foreach (var dir in ComposerLocations())
-            {
-                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Installed", dir)) Console.WriteLine();
-            }
-
-            if (null != original)
-            {
-                Console.OutputEncoding = original;
-            }
-
             return 0;
         }
     }
