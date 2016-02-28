@@ -12,6 +12,8 @@ namespace Xp.Runners.Commands
     /// <summary>The list command lists available subcommands</summary>
     public class List : Command
     {
+
+        /// <summary>Returns all builtin commands</summary>
         private IEnumerable<Type> BuiltinsIn(Assembly assembly)
         {
             return assembly
@@ -21,15 +23,28 @@ namespace Xp.Runners.Commands
             ;
         }
 
+        /// <summary>Verifies a given script is indeed a composer script by checking for shebang</summary>
+        private bool isComposerScript(string name)
+        {
+            using (var file = new FileStream(name, FileMode.Open, FileAccess.Read))
+            {
+                var header = new byte[2];
+                return 2 == file.Read(header, 0, 2) && header.SequenceEqual(new byte[2] { (byte)'#', (byte)'!' });
+            }
+        }
+
+        /// <summary>Returns all scripts inside a given vendor/bin directory</summary>
         private IEnumerable<EntryPoint> ScriptsIn(string dir)
         {
             return Directory
                 .GetFiles(dir, "xp.*")
                 .Where(f => !f.EndsWith(".bat"))
+                .Where(isComposerScript)
                 .Select(f => new EntryPoint(Path.GetFileName(f)))
             ;
         }
 
+        /// <summary>Display commands of a certain kind in a given directory</summary>
         private bool DisplayCommandsIn(TextWriter con, string kind, string dir)
         {
             var empty = true;

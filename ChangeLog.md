@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed issue #44: System.ArgumentException: Malformed input string `xp.exe` 
+  (@thekid)
+
 ## 7.4.0 / 2016-02-26
 
 * Fixed xp-runners/main#4: No output for xp -v (PHP7 w/ older XP6 releases)
