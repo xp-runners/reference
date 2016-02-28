@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace Xp.Runners.Commands
         }
 
         /// <summary>Display commands of a certain kind in a given directory</summary>
-        private bool DisplayCommandsIn(TextWriter con, string kind, string dir)
+        private bool DisplayCommandsIn(string kind, string dir)
         {
             var empty = true;
             var bin = Paths.Compose(dir, "bin");
@@ -55,11 +56,11 @@ namespace Xp.Runners.Commands
                 {
                     if (empty)
                     {
-                        con.WriteLine("{0} @ {1}", kind, dir);
-                        con.WriteLine();
+                        Console.WriteLine("{0} @ {1}", kind, dir);
+                        Console.WriteLine();
                         empty = false;
                     }
-                    con.WriteLine("  $ xp {0} (» \x1b[35;1;4mfrom {1}\x1b[0m)", entry.Command, entry.Module);
+                    Console.WriteLine("  $ xp {0} (» \x1b[35;1;4mfrom {1}\x1b[0m)", entry.Command, entry.Module);
                 }
             }
 
@@ -67,37 +68,52 @@ namespace Xp.Runners.Commands
         }
 
         /// <summary>Entry point</summary>
-        public override int Execute(CommandLine cmd, ConfigSource configuration)
+        public override int Execute(CommandLine cmd, ConfigSource Consolefiguration)
         {
             var self = Assembly.GetExecutingAssembly();
-            var con = PlatformID.Win32NT == Environment.OSVersion.Platform ? new ANSISupport(Console.Out) : Console.Out;
 
-            con.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
-            con.WriteLine("\x1b[1mXP Subcommands");
-            con.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
-            con.WriteLine();
+            Encoding original = null;
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                original = Console.OutputEncoding;
+                Console.OutputEncoding = System.Text.Encoding.UTF8;
+                if (!Console.IsOutputRedirected)
+                {
+                    Console.SetOut(new ANSISupport(Console.Out));
+                }
+            }
 
-            con.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
-            con.WriteLine();
+            Console.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
+            Console.WriteLine("\x1b[1mXP Subcommands");
+            Console.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
+            Console.WriteLine();
+
+            Console.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
+            Console.WriteLine();
             foreach (var type in BuiltinsIn(self))
             {
-                con.WriteLine("  $ xp {0}", type.Name.ToLower());
+                Console.WriteLine("  $ xp {0}", type.Name.ToLower());
             }
-            con.WriteLine();
+            Console.WriteLine();
 
             foreach (var dir in cmd.Options["modules"])
             {
-                if (DisplayCommandsIn(con, "\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) con.WriteLine();
+                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) Console.WriteLine();
             }
 
-            if (DisplayCommandsIn(con, "\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
+            if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
             {
-                con.WriteLine();
+                Console.WriteLine();
             }
 
             foreach (var dir in ComposerLocations())
             {
-                if (DisplayCommandsIn(con, "\x1b[33;1m>\x1b[0m Installed", dir)) con.WriteLine();
+                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Installed", dir)) Console.WriteLine();
+            }
+
+            if (null != original)
+            {
+                Console.OutputEncoding = original;
             }
 
             return 0;
