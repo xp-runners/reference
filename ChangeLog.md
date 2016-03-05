@@ -3,6 +3,7 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #45: Refactor output handling - @thekid
 * Fixed issue #44: System.ArgumentException: Malformed input string `xp.exe` 
   (@thekid)
 
