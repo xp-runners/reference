@@ -37,48 +37,42 @@ namespace Xp.Runners.Exec
         /// <summary>Run the process and return its exitcode</summary>
         protected int Run(Process proc, Encoding encoding, Func<int> wait = null)
         {
-            Encoding original = null;
-            int result;
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            using (new Output())
             {
-                original = Console.OutputEncoding;
-                Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
-                Console.OutputEncoding = encoding;
-            }
+                proc.StartInfo.RedirectStandardOutput = RewriteANSI(Console.IsOutputRedirected);
+                proc.StartInfo.RedirectStandardError = RewriteANSI(Console.IsErrorRedirected);
 
-            proc.StartInfo.RedirectStandardOutput = RewriteANSI(Console.IsOutputRedirected);
-            proc.StartInfo.RedirectStandardError = RewriteANSI(Console.IsErrorRedirected);
-
-            try
-            {
-                proc.Start();
-                var stdout = proc.StartInfo.RedirectStandardOutput ? Redirect(proc.StandardOutput, new ANSISupport(Console.Out)) : passThrough;
-                var stderr = proc.StartInfo.RedirectStandardError ? Redirect(proc.StandardError, new ANSISupport(Console.Error)) : passThrough;
-
-                if (null == wait)
+                try
                 {
-                    proc.WaitForExit();
-                    result = proc.ExitCode;
+                    int result;
+
+                    proc.Start();
+                    var stdout = proc.StartInfo.RedirectStandardOutput ? Redirect(proc.StandardOutput, Console.Out) : passThrough;
+                    var stderr = proc.StartInfo.RedirectStandardError ? Redirect(proc.StandardError, Console.Error) : passThrough;
+
+                    if (null == wait)
+                    {
+                        proc.WaitForExit();
+                        result = proc.ExitCode;
+                    }
+                    else
+                    {
+                        result = wait();
+                    }
+
+                    stdout.WaitForEnd();
+                    stderr.WaitForEnd();
+
+                    return result;
                 }
-                else
+                catch (SystemException e)
                 {
-                    result = wait();
+                    throw new EntryPointNotFoundException(proc.StartInfo.FileName + ": " + e.Message, e);
                 }
-
-                stdout.WaitForEnd();
-                stderr.WaitForEnd();
-
-                return result;
-            }
-            catch (SystemException e)
-            {
-                throw new EntryPointNotFoundException(proc.StartInfo.FileName + ": " + e.Message, e);
-            }
-            finally
-            {
-                if (original != null) Console.OutputEncoding = original;
-                proc.Close();
+                finally
+                {
+                    proc.Close();
+                }
             }
         }
     }
