@@ -6,6 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
+using Xp.Runners.Commands;
 
 namespace Xp.Runners
 {
@@ -56,10 +57,57 @@ namespace Xp.Runners
             ;
         }
 
-        /// <summary>Use composer to find xp-framework/core</summary>
-        private IEnumerable<string> UseComposer()
+        /// <summary>Returns path and path for all dependencies inside this path</summary>
+        private IEnumerable<string> PathAndDependencies(string path, HashSet<string> loaded)
         {
-            return ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists);
+            var result = new string[] { path };
+
+            var file = Paths.Compose(path, ComposerFile.NAME);
+            if (File.Exists(file))
+            {
+                using (var composer = new ComposerFile(file))
+                {
+                    return result.Concat(composer.Definitions.Require
+                        .Where(require => require.Key.Contains('/'))
+                        .SelectMany(require => ModuleAndDependencies(require.Key, loaded))
+                    );
+                }
+            }
+            else
+            {
+                return result;
+            }
+        }
+
+        /// <summary>Returns paths to a given module and all of its unique dependencies</summary>
+        private IEnumerable<string> ModuleAndDependencies(string module, HashSet<string> loaded)
+        {
+            if (loaded.Contains(module))
+            {
+                return new string[] { };
+            }
+            else
+            {
+                loaded.Add(module);
+                return ComposerLocations()
+                    .Select(location => Paths.Compose(location, module.Replace('/', Path.DirectorySeparatorChar)))
+                    .Where(Directory.Exists)
+                    .SelectMany(path => PathAndDependencies(path, loaded))
+                ;
+            }
+        }
+
+        /// <summary>Expand module path: Entries referring to existing paths are taken as-is,
+        /// other entries are looked up in the composer locations.</summary>
+        private IEnumerable<string> ExpandModulePath(IEnumerable<string> modules)
+        {
+            var loaded = new HashSet<string>();
+            loaded.Add("xp-framework/core");
+
+            return modules.SelectMany(module => Directory.Exists(module)
+                ? PathAndDependencies(module, loaded)
+                : ModuleAndDependencies(module, loaded)
+            );
         }
 
         /// <summary>Entry point</summary>
@@ -75,7 +123,7 @@ namespace Xp.Runners
                 { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? "UTC" } },
                 { "extension", configuration.GetExtensions(runtime) }
             };
-            var use = configuration.GetUse() ?? UseComposer();
+            var use = configuration.GetUse() ?? new string[] { "xp-framework/core" };
 
             Encoding encoding;
             Func<string, string> args;
@@ -99,7 +147,7 @@ namespace Xp.Runners
             proc.StartInfo.Arguments = string.Format(
                 "-C -q -d include_path=\".{0}{1}{0}{0}.{0}{2}\" {3} {4} {5}",
                 Paths.Separator,
-                string.Join(Paths.Separator, use.Concat(cmd.Options["modules"].Concat(ModulesFor(cmd)))),
+                string.Join(Paths.Separator, ExpandModulePath(use.Concat(cmd.Options["modules"].Concat(ModulesFor(cmd))))),
                 string.Join(Paths.Separator, cmd.Options["classpath"].Concat(ClassPathFor(cmd))),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
                 main,

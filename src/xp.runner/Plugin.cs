@@ -6,7 +6,6 @@ using System.Runtime.Serialization.Json;
 using Xp.Runners;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
-using Xp.Runners.Commands;
 
 namespace Xp.Runners
 {
@@ -43,7 +42,7 @@ namespace Xp.Runners
             {
                 if (null == (entry = FindEntryPoint(dir, name))) continue;
 
-                modules = DependenciesAndSelf(dir, entry.Module, new HashSet<string>());
+                modules = new string[] { entry.Module };
                 return;
             }
 
@@ -62,27 +61,6 @@ namespace Xp.Runners
                 ;
             }
             return null;
-        }
-
-        /// <summary>Returns the given module and a unique list of dependencies of a given module</summary>
-        private IEnumerable<string> DependenciesAndSelf(string dir, string module, HashSet<string> loaded)
-        {
-            var path = Paths.Compose(dir, module.Replace('/', Path.DirectorySeparatorChar));
-            yield return path;
-            loaded.Add(module);
-
-            using (var composer = new ComposerFile(Paths.Compose(path, ComposerFile.NAME)))
-            {
-                foreach (var require in composer.Definitions.Require.Where(pair => pair.Key.Contains('/')))
-                {
-                    if (loaded.Contains(require.Key)) continue;
-
-                    foreach (var transitive in DependenciesAndSelf(dir, require.Key, loaded))
-                    {
-                        yield return transitive;
-                    }
-                }
-            }
         }
 
         /// <summary>Additional modules to load. Overwrite in subclasses if necessary!</summary>
