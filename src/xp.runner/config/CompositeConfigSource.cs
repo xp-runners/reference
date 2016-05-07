@@ -7,17 +7,23 @@ namespace Xp.Runners.Config
 {
     class CompositeConfigSource : ConfigSource 
     {
-        private List<ConfigSource> sources;
-        
-        public CompositeConfigSource(params ConfigSource[] sources) 
+        private IEnumerable<ConfigSource> sources;
+
+        /// <summary>Creates a new composite - supporting varargs</summary>
+        public CompositeConfigSource(params ConfigSource[] sources)
         {
             this.sources = new List<ConfigSource>(sources);
-            this.sources.RemoveAll(delegate(ConfigSource o) { return o == null || !o.Valid(); });
+        }
+
+        /// <summary>Creates a new composite from a enumerable of sources</summary>
+        public CompositeConfigSource(IEnumerable<ConfigSource> sources)
+        {
+            this.sources = sources;
         }
 
         private T AskEach<T>(Func<ConfigSource, T> closure)
         {
-            foreach (var source in this.sources) 
+            foreach (var source in sources) 
             {
                 T value = closure(source);
                 if (value != null) return value;
@@ -28,6 +34,10 @@ namespace Xp.Runners.Config
         /// Returns whether this config source is valid
         public bool Valid()
         {
+            foreach (var source in sources)
+            {
+                if (!source.Valid()) return false;
+            }
             return true;
         }
 

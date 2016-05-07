@@ -28,9 +28,10 @@ namespace Xp.Runners
             { "-cp!", (self, value) => self.path["classpath"].Add("!" + value) },
             { "-m", (self, value) => self.path["modules"].Add(value) },
             { "-watch", (self, value) => self.executionModel = new RunWatching(value) },
-            { "-c", (self, value) => self.config = new IniConfigSource(new Ini(
-                Directory.Exists(value) ? Paths.Compose(value, ini) : value
-            )) }
+            { "-c", (self, value) => self.config = new CompositeConfigSource(
+                new EnvironmentConfigSource(),
+                new IniConfigSource(new Ini(Directory.Exists(value) ? Paths.Compose(value, ini) : value))
+            ) }
         };
 
         private static Dictionary<string, Action<CommandLine>> flags = new Dictionary<string, Action<CommandLine>>()
@@ -81,13 +82,14 @@ namespace Xp.Runners
                 if (null == config)
                 {
                     var home = Environment.GetEnvironmentVariable("HOME");
-                    config = new CompositeConfigSource(
+                    var defaults = new ConfigSource[] {
                         new EnvironmentConfigSource(),
                         new IniConfigSource(new Ini(Paths.Compose(".", ini))),
                         null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
                         new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
                         new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
-                    );
+                    };
+                    return new CompositeConfigSource(defaults.Where(source => source.Valid()));
                 }
                 return config;
             }

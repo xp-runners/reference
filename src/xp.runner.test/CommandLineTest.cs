@@ -205,13 +205,13 @@ namespace Xp.Runners.Test
         [Fact]
         public void explicit_configuration_directory()
         {
-            Assert.IsType<IniConfigSource>(new CommandLine(new string[] { "-c", ".."}).Configuration);
+            Assert.IsType<CompositeConfigSource>(new CommandLine(new string[] { "-c", ".."}).Configuration);
         }
 
         [Fact]
         public void explicit_configuration_file()
         {
-            Assert.IsType<IniConfigSource>(new CommandLine(new string[] { "-c", "../xp.ini"}).Configuration);
+            Assert.IsType<CompositeConfigSource>(new CommandLine(new string[] { "-c", "../xp.ini"}).Configuration);
         }
 
         [Fact]

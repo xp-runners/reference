@@ -34,7 +34,7 @@ namespace Xp.Runners.Config
         /// based on the given runtime version, using the default otherwise.
         public string GetExecutable(string runtime) 
         {
-            return null;
+            return Environment.GetEnvironmentVariable("XP_EXE");
         }
 
         /// Returns the PHP extensions to be loaded from this config source

@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Changed configuration to always to take `XP_RT`, `XP_EXE` and `USE_XP` 
+  environment variables into account.
+  (@thekid)
 * Verify configuration specified is valid and give verbose error if not
   (@thekid)
 * Changed output for unknown command line arguments from an unhandled
