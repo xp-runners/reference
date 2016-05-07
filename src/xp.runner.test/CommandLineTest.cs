@@ -219,5 +219,11 @@ namespace Xp.Runners.Test
         {
             Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-UNKOWN" }));
         }
+
+        [Fact]
+        public void argument_without_required_value()
+        {
+            Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-cp" }));
+        }
     }
 }

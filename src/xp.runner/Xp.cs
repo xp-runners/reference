@@ -15,7 +15,7 @@ namespace Xp.Runners
             }
             catch (ArgumentException e)
             {
-                Console.Error.WriteLine("Unknown argument: `{0}`", e.Message);
+                Console.Error.WriteLine(e.Message);
                 return 2;
             }
             catch (NotImplementedException e)

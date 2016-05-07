@@ -21,6 +21,24 @@ namespace Xp.Runners
             { "-?", typeof(Commands.Help) }
         };
 
+        private static Dictionary<string, Action<CommandLine, string>> options = new Dictionary<string, Action<CommandLine, string>>()
+        {
+            { "-cp", (self, value) => self.path["classpath"].Add(value) },
+            { "-cp?", (self, value) => self.path["classpath"].Add("?" + value) },
+            { "-cp!", (self, value) => self.path["classpath"].Add("!" + value) },
+            { "-m", (self, value) => self.path["modules"].Add(value) },
+            { "-watch", (self, value) => self.executionModel = new RunWatching(value) },
+            { "-c", (self, value) => self.config = new IniConfigSource(new Ini(
+                Directory.Exists(value) ? Paths.Compose(value, ini) : value
+            )) }
+        };
+
+        private static Dictionary<string, Action<CommandLine>> flags = new Dictionary<string, Action<CommandLine>>()
+        {
+            { "-n", (self) => self.config = new EnvironmentConfigSource() },
+            { "-supervise", (self) => self.executionModel = new Supervise() }
+        };
+
         private Dictionary<string, List<string>> path = new Dictionary<string, List<string>>()
         {
             { "classpath", new List<string>() },
@@ -113,52 +131,23 @@ namespace Xp.Runners
                     offset = ++i;
                     break;
                 }
-                else if ("-cp" == argv[i])
+                else if (options.ContainsKey(argv[i]))
                 {
-                    path["classpath"].Add(argv[++i]);
-                    offset = i + 1;
-                }
-                else if ("-cp?" == argv[i] || "-cp!" == argv[i])
-                {
-                    path["classpath"].Add(argv[i].Substring("-cp".Length) + argv[++i]);
-                    offset = i + 1;
-                }
-                else if ("-m" == argv[i])
-                {
-                    path["modules"].Add(argv[++i]);
-                    offset = i + 1;
-                }
-                else if ("-watch".Equals(argv[i]))
-                {
-                    executionModel = new RunWatching(argv[++i]);
-                    offset = i + 1;
-                }
-                else if ("-supervise".Equals(argv[i]))
-                {
-                    executionModel = new Supervise();
-                    offset = i + 1;
-                }
-                else if ("-n".Equals(argv[i]))
-                {
-                    config = new EnvironmentConfigSource();
-                    offset = i + 1;
-                }
-                else if ("-c".Equals(argv[i]))
-                {
-                    var path = argv[++i];
-                    if (Directory.Exists(path))
+                    if (i >= argv.Length - 1)
                     {
-                        config = new IniConfigSource(new Ini(Paths.Compose(path, ini)));
+                        throw new ArgumentException("Argument `" + argv[i] + "` requires a value");
                     }
-                    else
-                    {
-                        config = new IniConfigSource(new Ini(path));
-                    }
+                    options[argv[i]](this, argv[++i]);
+                    offset = i + 1;
+                }
+                else if (flags.ContainsKey(argv[i]))
+                {
+                    flags[argv[i]](this);
                     offset = i + 1;
                 }
                 else if (IsOption(argv[i]))
                 {
-                    throw new ArgumentException(argv[i]);
+                    throw new ArgumentException("Unknown argument `" + argv[i] + "`");
                 }
                 else if (IsCommand(argv[i]))
                 {
