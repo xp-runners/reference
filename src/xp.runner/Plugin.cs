@@ -31,6 +31,7 @@ namespace Xp.Runners
         /// and locally as well as globally installed locations for subcommands, in this order.</summary>
         public override void Initialize(CommandLine cmd, ConfigSource configuration)
         {
+            base.Initialize(cmd, configuration);
             foreach (var dir in cmd.Path["modules"].Concat(new string[] { "." }))
             {
                 if (null == (entry = FindEntryPoint(dir, name))) continue;

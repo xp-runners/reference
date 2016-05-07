@@ -20,7 +20,10 @@ namespace Xp.Runners
         /// <summary>Initialize this command</summary>
         public virtual void Initialize(CommandLine cmd, ConfigSource configuration)
         {
-            // NOOP
+            if (!configuration.Valid())
+            {
+                throw new ArgumentException("Invalid configuration: " + configuration);
+            }
         }
 
         /// <summary>Main script, e.g. "class". Overwrite in subclasses if necessary!</summary>
@@ -65,10 +68,6 @@ namespace Xp.Runners
         /// <summary>Entry point</summary>
         public virtual int Execute(CommandLine cmd, ConfigSource configuration)
         {
-            if (!configuration.Valid())
-            {
-                throw new ArgumentException("Invalid configuration: " + configuration);
-            }
             Initialize(cmd, configuration);
 
             var proc = new Process();

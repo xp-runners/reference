@@ -23,6 +23,8 @@ namespace Xp.Runners.Commands
         /// <summary>Initialize this command</summary>
         public override void Initialize(CommandLine cmd, ConfigSource configuration)
         {
+            base.Initialize(cmd, configuration);
+
             var arg = cmd.Arguments.FirstOrDefault();
             if (null == arg) 
             {
