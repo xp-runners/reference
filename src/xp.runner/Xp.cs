@@ -13,6 +13,11 @@ namespace Xp.Runners
             {
                 return new CommandLine(args).Execute();
             }
+            catch (ArgumentException e)
+            {
+                Console.Error.WriteLine("Unknown argument: `{0}`", e.Message);
+                return 2;
+            }
             catch (NotImplementedException e)
             {
                 Console.Error.WriteLine("Command not implemented: {0}", e.Message);

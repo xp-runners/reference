@@ -158,7 +158,7 @@ namespace Xp.Runners
                 }
                 else if (IsOption(argv[i]))
                 {
-                    throw new ArgumentException("Unknown option `" + argv[i] + "`");
+                    throw new ArgumentException(argv[i]);
                 }
                 else if (IsCommand(argv[i]))
                 {

@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Changed output for unknown command line arguments from an unhandled
+  exception w/ stacktrace to a simple error format
+  (@thekid)
 * Made `xp -c {path}` display an error when the given file or directory
   does not exist. Previously this might have caused no problem but weird
   behavior during bootstrapping, causing confusion.

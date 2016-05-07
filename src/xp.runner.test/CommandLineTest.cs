@@ -213,5 +213,11 @@ namespace Xp.Runners.Test
         {
             Assert.IsType<IniConfigSource>(new CommandLine(new string[] { "-c", "../xp.ini"}).Configuration);
         }
+
+        [Fact]
+        public void unknown_option()
+        {
+            Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-UNKOWN"}));
+        }
     }
 }
