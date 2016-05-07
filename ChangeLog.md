@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Added support for PHP arguments in `XP_RT` as well as for runtime
+  sections inside xp.ini, e.g. `php -d extension_dir=/etc/php`.
+  (@thekid)
 * Changed configuration to always to take the environment variables
   `XP_RT` (runtime) and `USE_XP` (path to XP core) into account.
   (@thekid)
