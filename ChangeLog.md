@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Verify configuration specified is valid and give verbose error if not
+  (@thekid)
 * Changed output for unknown command line arguments from an unhandled
   exception w/ stacktrace to a simple error format
   (@thekid)

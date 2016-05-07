@@ -65,6 +65,10 @@ namespace Xp.Runners
         /// <summary>Entry point</summary>
         public virtual int Execute(CommandLine cmd, ConfigSource configuration)
         {
+            if (!configuration.Valid())
+            {
+                throw new ArgumentException("Invalid configuration: " + configuration);
+            }
             Initialize(cmd, configuration);
 
             var proc = new Process();
