@@ -21,7 +21,7 @@ namespace Xp.Runners
             { "-?", typeof(Commands.Help) }
         };
 
-        private Dictionary<string, List<string>> options = new Dictionary<string, List<string>>()
+        private Dictionary<string, List<string>> path = new Dictionary<string, List<string>>()
         {
             { "classpath", new List<string>() },
             { "modules", new List<string>() }
@@ -32,10 +32,10 @@ namespace Xp.Runners
         private ExecutionModel executionModel;
         private ConfigSource config = null;
 
-        /// <summary>Global options</summary>
-        public Dictionary<string, List<string>> Options
+        /// <summary>Global path</summary>
+        public Dictionary<string, List<string>> Path
         {
-            get { return options; }
+            get { return path; }
         }
 
         /// <summary>Subcommand name</summary>
@@ -115,17 +115,17 @@ namespace Xp.Runners
                 }
                 else if ("-cp" == argv[i])
                 {
-                    options["classpath"].Add(argv[++i]);
+                    path["classpath"].Add(argv[++i]);
                     offset = i + 1;
                 }
                 else if ("-cp?" == argv[i] || "-cp!" == argv[i])
                 {
-                    options["classpath"].Add(argv[i].Substring("-cp".Length) + argv[++i]);
+                    path["classpath"].Add(argv[i].Substring("-cp".Length) + argv[++i]);
                     offset = i + 1;
                 }
                 else if ("-m" == argv[i])
                 {
-                    options["modules"].Add(argv[++i]);
+                    path["modules"].Add(argv[++i]);
                     offset = i + 1;
                 }
                 else if ("-watch".Equals(argv[i]))

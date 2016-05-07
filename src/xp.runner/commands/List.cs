@@ -86,7 +86,7 @@ namespace Xp.Runners.Commands
                 }
                 Console.WriteLine();
 
-                foreach (var dir in cmd.Options["modules"])
+                foreach (var dir in cmd.Path["modules"])
                 {
                     if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) Console.WriteLine();
                 }
