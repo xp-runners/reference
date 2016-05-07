@@ -65,18 +65,6 @@ namespace Xp.Runners
             return ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists);
         }
 
-        private string[] Parse(string executable)
-        {
-            if (executable.Contains(' '))
-            {
-                return executable.Split(new char[] { ' ' }, 2);
-            }
-            else
-            {
-                return new string[] { executable, "" };
-            }
-        }
-
         /// <summary>Entry point</summary>
         public virtual int Execute(CommandLine cmd, ConfigSource configuration)
         {
@@ -109,14 +97,14 @@ namespace Xp.Runners
                 encoding = Encoding.GetEncoding("iso-8859-1");
             }
 
-            var executable = Parse(configuration.GetExecutable(runtime) ?? (runtime ?? "php"));
+            var shell = Shell.Parse(configuration.GetExecutable(runtime) ?? (runtime ?? "php"));
 
             proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.FileName = executable[0];
+            proc.StartInfo.FileName = shell.Executable;
             proc.StartInfo.Arguments = string.Format(
                 "{1} -C -q -d include_path=\".{0}{2}{0}{0}.{0}{3}\" {4} {5} {6}",
                 Paths.Separator,
-                executable[1],
+                string.Join(" ", shell.Arguments),
                 string.Join(Paths.Separator, use.Concat(cmd.Path["modules"].Concat(ModulesFor(cmd)))),
                 string.Join(Paths.Separator, cmd.Path["classpath"].Concat(ClassPathFor(cmd))),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
