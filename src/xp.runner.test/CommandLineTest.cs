@@ -77,7 +77,7 @@ namespace Xp.Runners.Test
         [Fact]
         public void classpath_initially_empty()
         {
-            Assert.Equal(new string[] { }, new CommandLine(new string[] { }).Options["classpath"].ToArray());
+            Assert.Equal(new string[] { }, new CommandLine(new string[] { }).Path["classpath"].ToArray());
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(
                 new string[] { "src/main/php" },
-                new CommandLine(new string[] { "-cp", "src/main/php" }).Options["classpath"].ToArray()
+                new CommandLine(new string[] { "-cp", "src/main/php" }).Path["classpath"].ToArray()
             );
         }
 
@@ -94,7 +94,7 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(
                 new string[] { "src/main/php", "src/test/php" },
-                new CommandLine(new string[] { "-cp", "src/main/php", "-cp", "src/test/php" }).Options["classpath"].ToArray()
+                new CommandLine(new string[] { "-cp", "src/main/php", "-cp", "src/test/php" }).Path["classpath"].ToArray()
             );
         }
 
@@ -103,7 +103,7 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(
                 new string[] { "!src/main/php" },
-                new CommandLine(new string[] { "-cp!", "src/main/php" }).Options["classpath"].ToArray()
+                new CommandLine(new string[] { "-cp!", "src/main/php" }).Path["classpath"].ToArray()
             );
         }
 
@@ -112,14 +112,14 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(
                 new string[] { "?src/main/php" },
-                new CommandLine(new string[] { "-cp?", "src/main/php" }).Options["classpath"].ToArray()
+                new CommandLine(new string[] { "-cp?", "src/main/php" }).Path["classpath"].ToArray()
             );
         }
 
         [Fact]
         public void modules_initially_empty()
         {
-            Assert.Equal(new string[] { }, new CommandLine(new string[] { }).Options["modules"].ToArray());
+            Assert.Equal(new string[] { }, new CommandLine(new string[] { }).Path["modules"].ToArray());
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(
                 new string[] { "test" },
-                new CommandLine(new string[] { "-m", "test" }).Options["modules"].ToArray()
+                new CommandLine(new string[] { "-m", "test" }).Path["modules"].ToArray()
             );
         }
 
@@ -136,7 +136,7 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(
                 new string[] { "test", "data" },
-                new CommandLine(new string[] { "-m", "test", "-m", "data" }).Options["modules"].ToArray()
+                new CommandLine(new string[] { "-m", "test", "-m", "data" }).Path["modules"].ToArray()
             );
         }
 
@@ -215,9 +215,9 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
-        public void unknown_option()
+        public void unknown_argument()
         {
-            Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-UNKOWN"}));
+            Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-UNKOWN" }));
         }
     }
 }
