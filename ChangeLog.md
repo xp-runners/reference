@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Made `xp -c {path}` display an error when the given file or directory
+  does not exist. Previously this might have caused no problem but weird
+  behavior during bootstrapping, causing confusion.
+  (@thekid)
+
 ## 7.4.1 / 2016-03-05
 
 * Merged PR #45: Refactor output handling - @thekid

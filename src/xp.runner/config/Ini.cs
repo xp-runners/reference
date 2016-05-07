@@ -42,8 +42,6 @@ namespace Xp.Runners.Config
         /// <summary>Parse</summary>
         private void Parse(bool reset)
         {
-            if (!Exists()) return;
-
             lock(this) 
             {
                 if (parsed && !reset) return;    // Short-circuit this
