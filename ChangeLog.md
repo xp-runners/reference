@@ -3,8 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
-* Changed configuration to always to take `XP_RT`, `XP_EXE` and `USE_XP` 
-  environment variables into account.
+* Changed configuration to always to take the environment variables
+  `XP_RT` (runtime) and `USE_XP` (path to XP core) into account.
   (@thekid)
 * Verify configuration specified is valid and give verbose error if not
   (@thekid)
