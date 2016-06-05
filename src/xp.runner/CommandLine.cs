@@ -177,11 +177,14 @@ namespace Xp.Runners
         public override string ToString()
         {
             return string.Format(
-                "{0}(Options: {1}, Command: {2}, Arguments: [{3}])",
+                "{0}({1}  Paths: {2}{1}  Config: {3}{1}  ExecutionModel: {4}{1}  Command: {5}{1}  Arguments: [{6}]{1})",
                 typeof(CommandLine),
-                string.Join(", ", options.Select(pair => string.Format("{0}=[{1}]", pair.Key, string.Join(", ", pair.Value)))),
-                command,
-                string.Join(", ", arguments)
+                Environment.NewLine,
+                string.Join(", ", Path.Select(pair => string.Format("{0}=[{1}]", pair.Key, string.Join(", ", pair.Value)))),
+                Configuration.ToString().Replace(Environment.NewLine, Environment.NewLine + "  "),
+                ExecutionModel,
+                Command,
+                string.Join(", ", Arguments)
             );
         }
     }

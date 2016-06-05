@@ -91,13 +91,13 @@ namespace Xp.Runners.Config
         /// Returns a string representation of this config source
         public override string ToString() 
         {
-            var buffer = new StringBuilder(this.GetType().FullName);
-            buffer.Append("@{\n");
-            foreach (var source in this.sources) 
+            var buffer = new StringBuilder(GetType().FullName);
+            buffer.Append("(").Append(Environment.NewLine);
+            foreach (var source in sources)
             {
-                buffer.Append("  " + source + "\n");
+                buffer.Append("  " + source + Environment.NewLine);
             }
-            return buffer.Append("}").ToString(); 
+            return buffer.Append(")").ToString();
         }
     }
 }
