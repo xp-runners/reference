@@ -98,15 +98,16 @@ namespace Xp.Runners
             }
 
             var shell = Shell.Parse(configuration.GetExecutable(runtime) ?? (runtime ?? "php"));
+            var dot = new string[] { "." };
 
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.FileName = shell.Executable;
             proc.StartInfo.Arguments = string.Format(
-                "{1} -C -q -d include_path=\".{0}{2}{0}{0}.{0}{3}\" {4} {5} {6}",
+                "{1} -C -q -d include_path=\"{2}{0}{0}{3}\" {4} {5} {6}",
                 Paths.Separator,
                 string.Join(" ", shell.Arguments),
-                string.Join(Paths.Separator, use.Concat(cmd.Path["modules"].Concat(ModulesFor(cmd)))),
-                string.Join(Paths.Separator, cmd.Path["classpath"].Concat(ClassPathFor(cmd))),
+                string.Join(Paths.Separator, dot.Concat(use.Concat(cmd.Path["modules"].Concat(ModulesFor(cmd))))),
+                string.Join(Paths.Separator, dot.Concat(cmd.Path["classpath"].Concat(ClassPathFor(cmd)))),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
                 main,
                 string.Join(" ", ArgumentsFor(cmd).Select(args))
