@@ -85,11 +85,11 @@ namespace Xp.Runners
             var main = Paths.TryLocate(use, new string[] { Paths.Compose("tools", MainFor(cmd) + ".php") }).FirstOrDefault();
             if (null == main)
             {
-                main = Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { MainFor(cmd) + "-main.php" }).First();
-                encoding = Encoding.UTF8;
+                main = Paths.Locate(new string[] { Paths.DirName(Paths.Binary()) }, new string[] { MainFor(cmd) + "-main.php" }).First();
 
                 // Arguments are encoded in utf-7, which is binary-safe
                 args = Arguments.Encode;
+                encoding = Encoding.UTF8;
             }
             else
             {
