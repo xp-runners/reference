@@ -67,7 +67,7 @@ namespace Xp.Runners.Commands
         }
 
         /// <summary>Entry point</summary>
-        public override int Execute(CommandLine cmd, ConfigSource Consolefiguration)
+        public override int Execute(CommandLine cmd, ConfigSource configuration)
         {
             var self = Assembly.GetExecutingAssembly();
 
