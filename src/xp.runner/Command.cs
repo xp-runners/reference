@@ -86,10 +86,10 @@ namespace Xp.Runners
             if (null == main)
             {
                 main = Paths.Locate(new string[] { Paths.Binary().DirName() }, new string[] { MainFor(cmd) + "-main.php" }).First();
-                encoding = Encoding.UTF8;
 
                 // Arguments are encoded in utf-7, which is binary-safe
                 args = Arguments.Encode;
+                encoding = Encoding.UTF8;
             }
             else
             {
@@ -98,15 +98,17 @@ namespace Xp.Runners
             }
 
             var shell = Shell.Parse(configuration.GetExecutable(runtime) ?? (runtime ?? "php"));
+            var dot = new string[] { "." };
 
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.FileName = shell.Executable;
             proc.StartInfo.Arguments = string.Format(
-                "{1} -C -q -d include_path=\".{0}{2}{0}{0}.{0}{3}\" {4} {5} {6}",
+                "{1} -C -q -d include_path=\"{2}{0}{0}{3}{0}{0}{4}\" {5} {6} {7}",
                 Paths.Separator,
                 string.Join(" ", shell.Arguments),
-                string.Join(Paths.Separator, use.Concat(cmd.Path["modules"].Concat(ModulesFor(cmd)))),
-                string.Join(Paths.Separator, cmd.Path["classpath"].Concat(ClassPathFor(cmd))),
+                string.Join(Paths.Separator, dot.Concat(use.Concat(cmd.Path["modules"].Concat(ModulesFor(cmd))))),
+                string.Join(Paths.Separator, dot.Concat(cmd.Path["classpath"].Concat(ClassPathFor(cmd)))),
+                string.Join(Paths.Separator, configuration.Path()),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
                 main,
                 string.Join(" ", ArgumentsFor(cmd).Select(args))
