@@ -14,13 +14,19 @@ namespace Xp.Runners.Config
             return true;
         }
 
+        /// Returns the path(s) for this config source
+        public IEnumerable<string> Path()
+        {
+            return new string[] { };
+        }
+
         /// Returns the use_xp setting derived from this config source
         public IEnumerable<string> GetUse() 
         {
             var env = Environment.GetEnvironmentVariable("USE_XP");
             return env == null ? null : Paths.Translate(
                 Directory.GetCurrentDirectory(),
-                env.Split(new char[] { Path.PathSeparator })
+                env.Split(new char[] { System.IO.Path.PathSeparator })
             );
         }
         

@@ -8,6 +8,9 @@ namespace Xp.Runners.Config
         /// Returns whether this config source is valid
         bool Valid();
 
+        /// Returns the path(s) for this config source
+        IEnumerable<string> Path();
+
         /// Returns the use_xp setting derived from this config source
         IEnumerable<string> GetUse();
 

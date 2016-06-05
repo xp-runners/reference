@@ -21,14 +21,20 @@ namespace Xp.Runners.Config
         {
             this.ini = ini;
         }
-        
+
+        /// Returns the path(s) for this config source
+        public IEnumerable<string> Path()
+        {
+            yield return Paths.DirName(ini.FileName).TrimEnd(System.IO.Path.DirectorySeparatorChar);
+        }
+
         /// Returns the use_xp setting derived from this config source
         public IEnumerable<string> GetUse() 
         {
             string value = ini.Get("default", "use");
             return null == value ? null : Paths.Translate(
                 Paths.DirName(ini.FileName),
-                value.Split(new char[] { Path.PathSeparator })
+                value.Split(new char[] { System.IO.Path.PathSeparator })
             );
         }
 

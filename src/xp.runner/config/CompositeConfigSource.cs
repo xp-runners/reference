@@ -21,6 +21,18 @@ namespace Xp.Runners.Config
             this.sources = sources;
         }
 
+        /// Returns the path(s) for this config source
+        public IEnumerable<string> Path()
+        {
+            foreach (var source in sources)
+            {
+                foreach (var path in source.Path())
+                {
+                    yield return path;
+                }
+            }
+        }
+
         private T AskEach<T>(Func<ConfigSource, T> closure)
         {
             foreach (var source in sources) 
