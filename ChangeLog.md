@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.5.1 / 2016-06-06
+
 * Fixed issue #50: Problem without HOME  - @thekid
 
 ## 7.5.0 / 2016-05-07
