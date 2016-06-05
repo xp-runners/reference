@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.IO;
+using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
 using System.Collections.Generic;
@@ -110,13 +111,11 @@ namespace Xp.Runners.IO
         /// <summary>Composes a path name of two or more components - varargs</summary>
         public static string Compose(params string[] components) 
         {
-            var s = new StringBuilder();
-            foreach (var component in components)
-            {
-                s.Append(component.TrimEnd(Path.DirectorySeparatorChar)).Append(Path.DirectorySeparatorChar);
-            }
-            s.Length--;           // Remove last directory separator
-            return s.ToString();
+            return string.Join(new string(new char[] { Path.DirectorySeparatorChar }), components
+                .Where(c => !string.IsNullOrEmpty(c))
+                .Select(c => c.TrimEnd(Path.DirectorySeparatorChar))
+                .ToArray()
+            );
         }
         
         /// <summary>Composes a path name of a special folder and a string component</summary>

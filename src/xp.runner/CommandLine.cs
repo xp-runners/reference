@@ -85,7 +85,7 @@ namespace Xp.Runners
                     var defaults = new ConfigSource[] {
                         new EnvironmentConfigSource(),
                         new IniConfigSource(new Ini(Paths.Compose(".", ini))),
-                        null != home ? new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))) : null,
+                        new IniConfigSource(new Ini(Paths.Compose(home, ".xp", ini))),
                         new IniConfigSource(new Ini(Paths.Compose(Environment.SpecialFolder.LocalApplicationData, "Xp", ini))),
                         new IniConfigSource(new Ini(Paths.Compose(Paths.Binary().DirName(), ini)))
                     };

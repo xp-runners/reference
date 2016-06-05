@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed issue #50: Problem without HOME  - @thekid
+
 ## 7.5.0 / 2016-05-07
 
 * Added support for PHP arguments in `XP_RT` as well as for runtime

@@ -32,7 +32,7 @@ namespace Xp.Runners.Test
         [Fact]
         public void useless_compose_usage()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => Paths.Compose());
+            Assert.Equal("", Paths.Compose());
         }
 
         [Fact]
@@ -56,6 +56,24 @@ namespace Xp.Runners.Test
             Assert.Equal(
                 "vendor" + Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar + "cli",
                 Paths.Compose("vendor", "bin", "cli")
+            );
+        }
+
+        [Fact]
+        public void compose_with_empty_component()
+        {
+            Assert.Equal(
+                "path" + Path.DirectorySeparatorChar + "file.txt",
+                Paths.Compose("path", "", "file.txt")
+            );
+        }
+
+        [Fact]
+        public void compose_with_null_component()
+        {
+            Assert.Equal(
+                "path" + Path.DirectorySeparatorChar + "file.txt",
+                Paths.Compose("path", null, "file.txt")
             );
         }
 
