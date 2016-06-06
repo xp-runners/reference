@@ -114,7 +114,8 @@ namespace Xp.Runners
                 main,
                 string.Join(" ", ArgumentsFor(cmd).Select(args))
             );
-            proc.StartInfo.Environment.Add("XP_CMD", string.Format(
+
+            Environment.SetEnvironmentVariable("XP_CMD", string.Format(
                 "exe={0}&version={1}&model={2}&command={3}",
                 binary,
                 Assembly.GetExecutingAssembly().GetName().Version,
