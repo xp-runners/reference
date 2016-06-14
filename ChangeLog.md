@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.5.2 / 2016-06-14
+
 * Fixed issue #52: Shell installer dependencies - @thekid
 
 ## 7.5.1 / 2016-06-06
