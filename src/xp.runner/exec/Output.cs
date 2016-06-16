@@ -19,16 +19,6 @@ namespace Xp.Runners.Exec
 
                 Console.CancelKeyPress += (sender, args) => Console.OutputEncoding = original;
                 Console.OutputEncoding = Encoding.UTF8;
-                if (!Console.IsOutputRedirected)
-                {
-                    output = Console.Out;
-                    Console.SetOut(new ANSISupport(Console.Out));
-                }
-                if (!Console.IsErrorRedirected)
-                {
-                    error = Console.Error;
-                    Console.SetError(new ANSISupport(Console.Error));
-                }
             }
         }
 
