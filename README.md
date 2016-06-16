@@ -100,7 +100,3 @@ Less configuration:
 
 * The timezone is automatically mapped from the OS and need no longer be set via `date.timezone`
 * If no `use` setting is defined, a globally or locally composer-installed framework will be used
-
-Better Windows integration:
-
-* ANSI color escape sequences are also supported when running in Windows Console
