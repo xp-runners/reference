@@ -14,7 +14,7 @@ mkdir -p $TARGET
 rm -f $SETUP $BINTRAY
 
 cat setup.sh.in | sed -e "s/@VERSION@/$VERSION/g" > $SETUP
-tar cvfz $ARCHIVE xp.exe class-main.php web-main.php
+tar cvfz $ARCHIVE xp.exe tput.exe class-main.php web-main.php
 
 # Bintray configuration
 date=$(date +%Y-%m-%d)
