@@ -18,6 +18,9 @@ namespace Xp.Runners.Exec
             };
         }
 
+        /// <summary>Returns the model's name</summary>
+        public override string Name { get { return "watch"; } }
+
         /// <summary>The path being watched</summary>
         public string Path { get { return watcher.Path; }}
 

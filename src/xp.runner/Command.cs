@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
@@ -70,6 +71,7 @@ namespace Xp.Runners
         {
             Initialize(cmd, configuration);
 
+            var binary = Paths.Binary();
             var proc = new Process();
             var runtime = configuration.GetRuntime();
             var ini = new Dictionary<string, IEnumerable<string>>()
@@ -85,7 +87,7 @@ namespace Xp.Runners
             var main = Paths.TryLocate(use, new string[] { Paths.Compose("tools", MainFor(cmd) + ".php") }).FirstOrDefault();
             if (null == main)
             {
-                main = Paths.Locate(new string[] { Paths.DirName(Paths.Binary()) }, new string[] { MainFor(cmd) + "-main.php" }).First();
+                main = Paths.Locate(new string[] { Paths.DirName(binary) }, new string[] { MainFor(cmd) + "-main.php" }).First();
 
                 // Arguments are encoded in utf-7, which is binary-safe
                 args = Arguments.Encode;
@@ -112,6 +114,12 @@ namespace Xp.Runners
                 main,
                 string.Join(" ", ArgumentsFor(cmd).Select(args))
             );
+
+            var env = proc.StartInfo.EnvironmentVariables;
+            env.Add("XP_EXE", binary);
+            env.Add("XP_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            env.Add("XP_MODEL", cmd.ExecutionModel.Name);
+            env.Add("XP_COMMAND", GetType().Name.ToLower());
 
             return cmd.ExecutionModel.Execute(proc, encoding);
         }

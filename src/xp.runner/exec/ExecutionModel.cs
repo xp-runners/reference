@@ -8,6 +8,10 @@ namespace Xp.Runners.Exec
 {
     public abstract class ExecutionModel
     {
+
+        /// <summary>Returns the model's name</summary>
+        public abstract string Name { get; }
+
         /// <summary>Execute the process and return its exitcode</summary>
         public abstract int Execute(Process proc, Encoding encoding);
 
