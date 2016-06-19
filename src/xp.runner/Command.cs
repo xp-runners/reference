@@ -114,12 +114,6 @@ namespace Xp.Runners
                 main,
                 string.Join(" ", ArgumentsFor(cmd).Select(args))
             );
-            proc.StartInfo.EnvironmentVariables["PATH"]= string.Format(
-                "{0}{1}{2}",
-                Environment.GetEnvironmentVariable("PATH"),
-                Path.PathSeparator,
-                Paths.DirName(binary)
-            );
 
             var env = proc.StartInfo.EnvironmentVariables;
             env.Add("XP_EXE", binary);
