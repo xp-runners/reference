@@ -10,6 +10,9 @@ namespace Xp.Runners.Exec
     {
         private static PassThrough passThrough = new PassThrough();
 
+        /// <summary>Returns the model's name</summary>
+        public abstract string Name { get; }
+
         /// <summary>Execute the process and return its exitcode</summary>
         public abstract int Execute(Process proc, Encoding encoding);
 

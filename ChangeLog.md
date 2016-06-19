@@ -3,6 +3,15 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #51: Pass `XP_*` environment variables, for example:
+  ```
+  XP_EXE => "/usr/bin/xp"
+  XP_VERSION => "7.5.2.1916"
+  XP_MODEL => "default"
+  XP_COMMAND => "write"
+  ```
+  (@thekid)
+
 ## 7.5.2 / 2016-06-14
 
 * Fixed issue #52: Shell installer dependencies - @thekid

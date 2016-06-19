@@ -11,6 +11,9 @@ namespace Xp.Runners.Exec
         const int WAIT_BEFORE_RESPAWN = 1;
         const int WAIT_FOR_STARTUP = 2;
 
+        /// <summary>Returns the model's name</summary>
+        public override string Name { get { return "supervise"; } }
+
         /// <summary>Execute the process and return its exitcode</summary>
         public override int Execute(Process proc, Encoding encoding)
         {

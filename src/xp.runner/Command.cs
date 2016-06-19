@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
@@ -119,6 +120,12 @@ namespace Xp.Runners
                 Path.PathSeparator,
                 Paths.DirName(binary)
             );
+
+            var env = proc.StartInfo.EnvironmentVariables;
+            env.Add("XP_EXE", binary);
+            env.Add("XP_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            env.Add("XP_MODEL", cmd.ExecutionModel.Name);
+            env.Add("XP_COMMAND", GetType().Name.ToLower());
 
             return cmd.ExecutionModel.Execute(proc, encoding);
         }
