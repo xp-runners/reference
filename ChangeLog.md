@@ -3,6 +3,7 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #54: Remove ANSI escape sequence emulation - @thekid
 * Merged PR #55: Add `tput` drop-in replacement - @thekid
 * Merged PR #51: Pass `XP_*` environment variables, for example:
   ```
