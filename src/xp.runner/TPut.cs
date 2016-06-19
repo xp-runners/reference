@@ -41,7 +41,7 @@ namespace Xp.Runners
             }
             else if ("-V" == args[0])
             {
-                Console.WriteLine(Assembly.GetExecutingAssembly().GetName());
+                Console.WriteLine("xp-runners {0}", Assembly.GetExecutingAssembly().GetName().Version);
                 return 0;
             }
 
