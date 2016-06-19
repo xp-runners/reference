@@ -114,13 +114,12 @@ namespace Xp.Runners
                 main,
                 string.Join(" ", ArgumentsFor(cmd).Select(args))
             );
-            proc.StartInfo.EnvironmentVariables.Add("XP_CMD", string.Format(
-                "exe={0}&version={1}&model={2}&command={3}",
-                binary,
-                Assembly.GetExecutingAssembly().GetName().Version,
-                cmd.ExecutionModel.Name,
-                GetType().Name.ToLower()
-            ));
+
+            var env = proc.StartInfo.EnvironmentVariables;
+            env.Add("XP_EXE", binary);
+            env.Add("XP_VERSION", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            env.Add("XP_MODEL", cmd.ExecutionModel.Name);
+            env.Add("XP_COMMAND", GetType().Name.ToLower());
 
             return cmd.ExecutionModel.Execute(proc, encoding);
         }
