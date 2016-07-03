@@ -51,7 +51,7 @@ namespace Xp.Runners.Exec
                 });
                 var elapsed = DateTime.Now - start;
 
-                if (code > 0)
+                if (code != 0)
                 {
                     if (elapsed.Seconds < WAIT_FOR_STARTUP)
                     {
@@ -67,7 +67,7 @@ namespace Xp.Runners.Exec
                         Thread.Sleep(WAIT_BEFORE_RESPAWN * 1000);
                     }
                 }
-            } while (code > 0);
+            } while (code != 0);
 
             // Either via user-interactive shutdown or via runtime exiting itself
             stdin.Close();

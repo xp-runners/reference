@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.6.1 / 2016-07-03
+
+* Fixed supervise execution model not respawning when PHP's exitcode is
+  something like `-1073741819` (e.g., because it crashed)
+  (@thekid)
+
 ## 7.6.0 / 2016-06-20
 
 * Merged PR #54: Remove ANSI escape sequence emulation - @thekid
