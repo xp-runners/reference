@@ -23,7 +23,7 @@ namespace Xp.Runners.Commands
         }
 
         /// <summary>Creates an instance from a given file name</summary>
-        public ComposerFile(string file) : this(new FileStream(file, FileMode.Open))
+        public ComposerFile(string file) : this(new FileStream(file, FileMode.Open, FileAccess.Read))
         {
         }
 

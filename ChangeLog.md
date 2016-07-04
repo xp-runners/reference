@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.6.2 / 2016-07-04
+
+* Fixed issue #56: Permission denied - @thekid
+
 ## 7.6.1 / 2016-07-03
 
 * Fixed supervise execution model not respawning when PHP's exitcode is
