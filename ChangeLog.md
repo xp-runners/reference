@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.6.3 / 2016-07-11
+
+* Fixed issue #57: Error message improvement - @thekid
+
 ## 7.6.2 / 2016-07-04
 
 * Fixed issue #56: Permission denied - @thekid
