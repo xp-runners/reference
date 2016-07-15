@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.6.4 / 2016-07-15
+
+* Fixed issue #58: PHP 5.6: Call to undefined function T::main() - @thekid
+
 ## 7.6.3 / 2016-07-11
 
 * Fixed issue #57: Error message improvement - @thekid
