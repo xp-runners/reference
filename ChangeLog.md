@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.6.5 / 2016-07-15
+
+* Fixed issue #59: Depends: php5-cli but it is not installable - @thekid
+
 ## 7.6.4 / 2016-07-15
 
 * Fixed issue #58: PHP 5.6: Call to undefined function T::main() - @thekid
