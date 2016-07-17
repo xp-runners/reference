@@ -118,7 +118,7 @@ namespace Xp.Runners.Exec
             if (delay < TimeSpan.Zero)
             {
                 Console.WriteLine(
-                    "Warning: Execution time exceeded scheduled {0} by {1}, running immediately",
+                    "\x1b[33;1mWarning: Execution time exceeded scheduled {0} by {1}, running immediately\x1b[0m",
                     wait.ToString(INTERVAL_FORMAT),
                     delay.Negate().ToString(INTERVAL_FORMAT)
                 );
