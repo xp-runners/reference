@@ -7,6 +7,8 @@ namespace Xp.Runners.Exec
 {
     public class Schedule
     {
+        const string INTERVAL_FORMAT = "hh\\:mm\\:ss";
+
         private TimeSpan wait;
         private Func<int, bool> until;
 
@@ -109,11 +111,22 @@ namespace Xp.Runners.Exec
         }
 
         /// <summary>Returns whether execution should continue and waits</summary>
-        public bool Continue(Action<TimeSpan> wait)
+        public bool Continue(Action<TimeSpan> waitFor)
         {
             if (condition) return false;
 
-            wait(delay);
+            if (delay < TimeSpan.Zero)
+            {
+                Console.WriteLine(
+                    "Warning: Execution time exceeded scheduled {0} by {1}, running immediately",
+                    wait.ToString(INTERVAL_FORMAT),
+                    delay.Negate().ToString(INTERVAL_FORMAT)
+                );
+            }
+            else
+            {
+                waitFor(delay);
+            }
             return true;
         }
 
