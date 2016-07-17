@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Diagnostics;
 
@@ -10,7 +11,13 @@ namespace Xp.Runners.Exec
         /// <summary>Creates a new repeating runner</summary>
         public RunRepeatedly(string spec)
         {
-            schedule = new Schedule(spec);
+            try
+            {
+                schedule = new Schedule(spec);
+            } catch (Exception e)
+            {
+                throw new ArgumentException("Repeat: " + e.Message, e);
+            }
         }
 
         /// <summary>Returns the model's name</summary>
