@@ -66,7 +66,10 @@ namespace Xp.Runners.Exec
                 }
                 else
                 {
-                    throw new ArgumentException("Cannot parse definition `" + definition + "', expecting every, after or until");
+                    throw new ArgumentException(string.Format(
+                        "Cannot parse definition `{0}', expecting one of `forever', `immediately', `every', `after' or `until'",
+                        args[0]
+                    ));
                 }
             }
         }
