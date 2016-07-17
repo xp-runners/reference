@@ -68,6 +68,17 @@ namespace Xp.Runners.Exec
                     var times = args.Skip(1).Select(TimeFrom).ToArray();
                     var offset = 0;
 
+                    // Find first element in the future, start there. If all times are in the past,
+                    // start at beginning (which will add a day).
+                    while (now.TimeOfDay > times[offset])
+                    {
+                        if (++offset >= times.Length)
+                        {
+                            offset= 0;
+                            break;
+                        }
+                    }
+
                     // Delay until next
                     next = (start, end) => {
                         wait = times[offset];

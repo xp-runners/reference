@@ -218,6 +218,16 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
+        public void starts_at_first_time_in_future()
+        {
+            var schedule = new Schedule("at 03:00 06:30 09:15", At(DateTime.Today, "04:00"));
+            var delayed = TimeSpan.Zero;
+
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(TimeSpan.FromHours(2.5), delayed);
+        }
+
+        [Fact]
         public void running_at_list_of_times()
         {
             var schedule = new Schedule("at 03:00 06:30 09:15", DateTime.Today);
