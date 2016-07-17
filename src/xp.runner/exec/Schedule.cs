@@ -62,19 +62,7 @@ namespace Xp.Runners.Exec
                 }
                 else if ("until" == args[0])
                 {
-                    if ("success" == args[1])
-                    {
-                        until = exitcode => (exitcode == 0);
-                    }
-                    else if ("error" == args[1])
-                    {
-                        until = exitcode => (exitcode != 0);
-                    }
-                    else
-                    {
-                        var codes = args[1].Split('|').Select(chunk => Convert.ToInt32(chunk)).ToArray();
-                        until = exitcode => (Array.IndexOf(codes, exitcode) != -1);
-                    }
+                    until = ConditionFrom(args[1]);
                 }
                 else
                 {
@@ -93,6 +81,24 @@ namespace Xp.Runners.Exec
                 case 3: return new TimeSpan(Convert.ToInt32(c[0]), Convert.ToInt32(c[0]), Convert.ToInt32(c[1]));
             }
             throw new FormatException("Cannot parse span `" + input + "'");
+        }
+
+        /// <summary>Parses a stop condition from a string</summary>
+        private Func<int, bool> ConditionFrom(string input)
+        {
+            if ("success" == input)
+            {
+                return exitcode => (exitcode == 0);
+            }
+            else if ("error" == input)
+            {
+                return exitcode => (exitcode != 0);
+            }
+            else
+            {
+                var codes = input.Split('|').Select(chunk => Convert.ToInt32(chunk)).ToArray();
+                return exitcode => (Array.IndexOf(codes, exitcode) != -1);
+            }
         }
 
         /// <summary>Runs a block and calculates continuation and delay</summary>
