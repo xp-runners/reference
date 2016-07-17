@@ -14,7 +14,8 @@ namespace Xp.Runners.Exec
             try
             {
                 schedule = new Schedule(spec);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 throw new ArgumentException("Repeat: " + e.Message, e);
             }
@@ -35,7 +36,6 @@ namespace Xp.Runners.Exec
             {
                 exitcode = schedule.Run(() => Run(proc, encoding));
             } while (schedule.Continue());
-
             return exitcode;
         }
     }
