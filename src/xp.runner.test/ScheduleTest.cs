@@ -11,54 +11,10 @@ namespace Xp.Runners.Test
 
         private TimeSpan runtime = TimeSpan.FromSeconds(30.0);
 
-        [Theory]
-        [InlineData("")]
-        [InlineData("immediately")]
-        public void immediate(string input)
+        private DateTime At(DateTime date, string time)
         {
-            var schedule = new Schedule(input);
-            Assert.Equal(0.0, schedule.Wait.TotalSeconds, PRECISION);
-        }
-
-        [Fact]
-        public void every_five_minutes()
-        {
-            var schedule = new Schedule("every 5:00");
-            Assert.Equal(300.0, schedule.Wait.TotalSeconds, PRECISION);
-        }
-
-        [Fact]
-        public void after_thirty_seconds()
-        {
-            var schedule = new Schedule("after 0:30");
-            Assert.Equal(30.0, schedule.Wait.TotalSeconds, PRECISION);
-        }
-
-        [Theory]
-        [InlineData("")]
-        [InlineData("forever")]
-        public void forever(string input)
-        {
-            var schedule = new Schedule(input);
-            Assert.Equal(false, schedule.Until(0));
-        }
-
-        [Theory]
-        [InlineData("until 0")]
-        [InlineData("until success")]
-        public void until_success(string input)
-        {
-            var schedule = new Schedule(input);
-            Assert.Equal(true, schedule.Until(0));
-        }
-
-        [Theory]
-        [InlineData("until 255")]
-        [InlineData("until error")]
-        public void until_error(string input)
-        {
-            var schedule = new Schedule(input);
-            Assert.Equal(true, schedule.Until(255));
+            var t = time.Split(':');
+            return date.AddHours(Convert.ToInt32(t[0])).AddMinutes(Convert.ToInt32(t[1]));
         }
 
         [Theory]
@@ -77,6 +33,13 @@ namespace Xp.Runners.Test
             Assert.Throws<InvalidOperationException>(() => new Schedule("").Run(() => {
                 throw new InvalidOperationException("Expected");
             }));
+        }
+
+        [Fact]
+        public void continues_true_before_first_run()
+        {
+            var schedule = new Schedule("");
+            Assert.Equal(true, schedule.Continue());
         }
 
         [Theory]
@@ -144,6 +107,17 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
+        public void continues_immediately_by_default()
+        {
+            var schedule = new Schedule("");
+            schedule.Run(() => 0);
+
+            var delayed = TimeSpan.Zero;
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(TimeSpan.Zero, delayed);
+        }
+
+        [Fact]
         public void continue_immediately()
         {
             var schedule = new Schedule("immediately");
@@ -167,10 +141,10 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
-        public void delay_running_every()
+        public void delay_when_running_every()
         {
             var schedule = new Schedule("every 1:00");
-            schedule.Run(() => 0, DateTime.Now - runtime);
+            schedule.Run(() => 0, DateTime.Now, runtime);
 
             var delayed = TimeSpan.Zero;
             schedule.Continue(delay => delayed = delay);
@@ -178,14 +152,95 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
-        public void delay_running_after()
+        public void delay_when_running_after()
         {
             var schedule = new Schedule("after 1:00");
-            schedule.Run(() => 0, DateTime.Now - runtime);
+            schedule.Run(() => 0, DateTime.Now, runtime);
 
             var delayed = TimeSpan.Zero;
             schedule.Continue(delay => delayed = delay);
             Assert.Equal(60.0, delayed.TotalSeconds, PRECISION);
+        }
+
+        [Theory]
+        [InlineData("every 1:00")]
+        [InlineData("after 1:00")]
+        [InlineData("immediately")]
+        public void no_initial_delay_for(string input)
+        {
+            var schedule = new Schedule(input);
+
+            var delayed = TimeSpan.Zero;
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(0.0, delayed.TotalSeconds, PRECISION);
+        }
+
+        [Theory]
+        [InlineData(0, 0, 0)]
+        [InlineData(0, 0, 1)]
+        [InlineData(0, 30, 0)]
+        [InlineData(3, 42, 1)]
+        [InlineData(16, 0, 0)]
+        [InlineData(23, 59, 59)]
+        public void initial_delay_running_at(int hour, int minute, int second)
+        {
+            var schedule = new Schedule("at " + hour + ":" + minute + ":" + second, DateTime.Today);
+
+            var delayed = TimeSpan.Zero;
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(hour * 3600.0 + minute * 60.0 + second, delayed.TotalSeconds, PRECISION);
+        }
+
+        [Theory]
+        [InlineData(12, 0, 0)]
+        [InlineData(16, 42, 35)]
+        [InlineData(23, 59, 59)]
+        public void initial_delay_on_same_day(int hour, int minute, int second)
+        {
+            var schedule = new Schedule("at " + hour + ":" + minute + ":" + second, At(DateTime.Today, "12:00"));
+
+            var delayed = TimeSpan.Zero;
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal((hour - 12) * 3600.0 + minute * 60.0 + second, delayed.TotalSeconds, PRECISION);
+        }
+
+        [Theory]
+        [InlineData(0, 0, 0)]
+        [InlineData(3, 42, 1)]
+        [InlineData(11, 59, 59)]
+        public void initial_delay_until_next_day(int hour, int minute, int second)
+        {
+            var schedule = new Schedule("at " + hour + ":" + minute + ":" + second, At(DateTime.Today, "12:00"));
+
+            var delayed = TimeSpan.Zero;
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal((hour + 12) * 3600.0 + minute * 60.0 + second, delayed.TotalSeconds, PRECISION);
+        }
+
+        [Fact]
+        public void running_at_list_of_times()
+        {
+            var schedule = new Schedule("at 03:00 06:30 09:15", DateTime.Today);
+            var delayed = TimeSpan.Zero;
+
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(TimeSpan.FromHours(3.0), delayed);
+
+            schedule.Run(() => 0, At(DateTime.Today, "03:00"), TimeSpan.FromMinutes(15));
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(TimeSpan.FromHours(3.25), delayed);
+
+            schedule.Run(() => 0, At(DateTime.Today, "06:30"), TimeSpan.Zero);
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(TimeSpan.FromHours(2.75), delayed);
+
+            schedule.Run(() => 0, At(DateTime.Today, "09:15"), TimeSpan.FromMinutes(15));
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(TimeSpan.FromHours(17.50), delayed);
+
+            schedule.Run(() => 0, At(DateTime.Today.AddDays(1), "03:00"), TimeSpan.FromMinutes(30));
+            schedule.Continue(delay => delayed = delay);
+            Assert.Equal(TimeSpan.FromHours(3.0), delayed);
         }
 
         [Fact]
@@ -202,6 +257,7 @@ namespace Xp.Runners.Test
         [InlineData("everi 1:00")]
         [InlineData("afters 0:30")]
         [InlineData("untyl 2")]
+        [InlineData("ät 3:00")]
         public void unparseable_spec(string input)
         {
             Assert.Throws<ArgumentException>(() => new Schedule(input));
@@ -211,6 +267,7 @@ namespace Xp.Runners.Test
         [InlineData("every")]
         [InlineData("after")]
         [InlineData("until")]
+        [InlineData("at")]
         [InlineData("every 0:30,until")]
         public void missing_arg_for_spec(string input)
         {

@@ -30,12 +30,12 @@ namespace Xp.Runners.Exec
         /// <summary>Execute the process and return its exitcode</summary>
         public override int Execute(Process proc, Encoding encoding)
         {
-            int exitcode;
+            int exitcode = 0;
 
-            do
+            while (schedule.Continue())
             {
                 exitcode = schedule.Run(() => Run(proc, encoding));
-            } while (schedule.Continue());
+            }
             return exitcode;
         }
     }

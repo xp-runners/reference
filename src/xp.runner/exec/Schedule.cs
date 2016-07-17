@@ -9,31 +9,34 @@ namespace Xp.Runners.Exec
     {
         const string INTERVAL_FORMAT = "hh\\:mm\\:ss";
 
-        private TimeSpan wait;
-        private Func<int, bool> until;
-
+        // Recalculated on runs
         private TimeSpan delay;
         private bool condition;
-        private Func<DateTime, TimeSpan> diff;
 
-        /// <summary>Returns how long we need to wait</summary>
-        public TimeSpan Wait { get { return wait; } }
+        // Updated by "at" mode
+        private TimeSpan wait;
 
-        /// <summary>Returns stop condition</summary>
-        public Func<int, bool> Until { get { return until; } }
+        // Unchanged after constructor
+        private Func<int, bool> until;
+        private Func<DateTime, DateTime, TimeSpan> next;
 
         /// <summary>Creates a new schedule from a string</summary>
-        public Schedule(string schedule): this(schedule.Split(','))
-        {
-        }
+        public Schedule(string schedule): this(schedule.Split(','), DateTime.Now) { }
+
+        /// <summary>Creates a new schedule from a string</summary>
+        public Schedule(string schedule, DateTime now): this(schedule.Split(','), now) { }
 
         /// <summary>Creates a new schedule from a list of definitions</summary>
-        public Schedule(IEnumerable<string> schedule)
+        public Schedule(IEnumerable<string> schedule): this(schedule, DateTime.Now) { }
+
+        /// <summary>Creates a new schedule from a list of definitions</summary>
+        public Schedule(IEnumerable<string> schedule, DateTime now)
         {
-            // Defaults: Run forever without pause
+            // Defaults: Start running immediately, forever without pause
+            delay = TimeSpan.Zero;
             until = exitcode => false;
             wait = TimeSpan.Zero;
-            diff = start => wait;
+            next = (start, end) => TimeSpan.Zero;
 
             foreach (var definition in schedule.Where(definition => !String.IsNullOrEmpty(definition)))
             {
@@ -53,12 +56,31 @@ namespace Xp.Runners.Exec
                 else if ("every" == args[0])
                 {
                     wait = SpanFrom(args[1]);
-                    diff = start => wait - (DateTime.Now - start);
+                    next = (start, end) => wait - (end - start);
                 }
                 else if ("after" == args[0])
                 {
                     wait = SpanFrom(args[1]);
-                    diff = start => wait;
+                    next = (start, end) => wait;
+                }
+                else if ("at" == args[0])
+                {
+                    var times = args.Skip(1).Select(TimeFrom).ToArray();
+                    var offset = 0;
+
+                    // Delay until next
+                    next = (start, end) => {
+                        wait = times[offset];
+                        var wrap = offset > 0 || start.TimeOfDay <= wait ? start : start.AddDays(1);
+                        var target = new DateTime(wrap.Year, wrap.Month, wrap.Day, wait.Hours, wait.Minutes, wait.Seconds);
+
+                        Console.WriteLine("> \x1b[32;1mNext run on {0}\x1b[0m", target);
+                        if (++offset >= times.Length) offset = 0;
+                        return target - end;
+                    };
+
+                    // Initial delay
+                    delay = next(now, now);
                 }
                 else if ("until" == args[0])
                 {
@@ -67,11 +89,14 @@ namespace Xp.Runners.Exec
                 else
                 {
                     throw new ArgumentException(string.Format(
-                        "Cannot parse definition `{0}', expecting one of `forever', `immediately', `every', `after' or `until'",
+                        "Cannot parse definition `{0}', expecting one of `forever', `immediately', `every', `after', `at' or `until'",
                         args[0]
                     ));
                 }
             }
+
+            // First Continue() should always run
+            condition = false;
         }
 
         /// <summary>Parses a string into a timespan. Accepts mm:ss and hh:mm:ss</summary>
@@ -81,9 +106,21 @@ namespace Xp.Runners.Exec
             switch (c.Length)
             {
                 case 2: return new TimeSpan(0, Convert.ToInt32(c[0]), Convert.ToInt32(c[1]));
-                case 3: return new TimeSpan(Convert.ToInt32(c[0]), Convert.ToInt32(c[0]), Convert.ToInt32(c[1]));
+                case 3: return new TimeSpan(Convert.ToInt32(c[0]), Convert.ToInt32(c[1]), Convert.ToInt32(c[2]));
             }
             throw new FormatException("Cannot parse span `" + input + "'");
+        }
+
+        /// <summary>Parses a string into a date. Accepts hh:mm and hh:mm:ss</summary>
+        private TimeSpan TimeFrom(string input)
+        {
+            var c = input.Split(':');
+            switch (c.Length)
+            {
+                case 2: return new TimeSpan(Convert.ToInt32(c[0]), Convert.ToInt32(c[1]), 0);
+                case 3: return new TimeSpan(Convert.ToInt32(c[0]), Convert.ToInt32(c[1]), Convert.ToInt32(c[2]));
+            }
+            throw new FormatException("Cannot parse time `" + input + "'");
         }
 
         /// <summary>Parses a stop condition from a string</summary>
@@ -105,10 +142,10 @@ namespace Xp.Runners.Exec
         }
 
         /// <summary>Runs a block and calculates continuation and delay</summary>
-        public int Run(Func<int> block, DateTime start)
+        public int Run(Func<int> block, DateTime start, TimeSpan runtime)
         {
-            int exitcode = block();
-            delay = diff(start);
+            var exitcode = block();
+            delay = next(start, start + runtime);
             condition = until(exitcode);
             return exitcode;
         }
@@ -116,7 +153,11 @@ namespace Xp.Runners.Exec
         /// <summary>Runs a block and calculates continuation and delay</summary>
         public int Run(Func<int> block)
         {
-            return Run(block, DateTime.Now);
+            var start = DateTime.Now;
+            var exitcode = block();
+            delay = next(start, DateTime.Now);
+            condition = until(exitcode);
+            return exitcode;
         }
 
         /// <summary>Returns whether execution should continue and waits</summary>
@@ -127,7 +168,7 @@ namespace Xp.Runners.Exec
             if (delay < TimeSpan.Zero)
             {
                 Console.WriteLine(
-                    "\x1b[33;1mWarning: Execution time exceeded scheduled {0} by {1}, running immediately\x1b[0m",
+                    "> \x1b[33;1mExecution time exceeded scheduled {0} by {1}, running immediately\x1b[0m",
                     wait.ToString(INTERVAL_FORMAT),
                     delay.Negate().ToString(INTERVAL_FORMAT)
                 );
