@@ -23,8 +23,7 @@ namespace Xp.Runners.Test
         [InlineData(255)]
         public void run(int exitcode)
         {
-            var schedule = new Schedule("");
-            Assert.Equal(exitcode, schedule.Run(() => exitcode));
+            Assert.Equal(exitcode, new Schedule("").Run(() => exitcode));
         }
 
         [Fact]
@@ -38,8 +37,7 @@ namespace Xp.Runners.Test
         [Fact]
         public void continues_true_before_first_run()
         {
-            var schedule = new Schedule("");
-            Assert.Equal(true, schedule.Continue());
+            Assert.Equal(true, new Schedule("").Continue());
         }
 
         [Theory]
