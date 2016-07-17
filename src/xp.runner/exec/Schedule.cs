@@ -23,21 +23,21 @@ namespace Xp.Runners.Exec
         public Func<int, bool> Until { get { return until; } }
 
         /// <summary>Creates a new schedule from a string</summary>
-        public Schedule(string specs): this(specs.Split(','))
+        public Schedule(string schedule): this(schedule.Split(','))
         {
         }
 
-        /// <summary>Creates a new schedule from a list of spec</summary>
-        public Schedule(IEnumerable<string> specs)
+        /// <summary>Creates a new schedule from a list of definitions</summary>
+        public Schedule(IEnumerable<string> schedule)
         {
             // Defaults: Run forever without pause
             until = exitcode => false;
             wait = TimeSpan.Zero;
             diff = start => wait;
 
-            foreach (var spec in specs.Where(spec => !String.IsNullOrEmpty(spec)))
+            foreach (var definition in schedule.Where(definition => !String.IsNullOrEmpty(definition)))
             {
-                var args = spec.Split(' ');
+                var args = definition.Split(' ');
                 if ("forever" == args[0])
                 {
                     until = exitcode => false;
@@ -48,7 +48,7 @@ namespace Xp.Runners.Exec
                 }
                 else if (args.Length < 2)
                 {
-                    throw new ArgumentException("Missing argument for spec `" + spec + "'");
+                    throw new ArgumentException("Missing argument for definition `" + definition + "'");
                 }
                 else if ("every" == args[0])
                 {
@@ -66,7 +66,7 @@ namespace Xp.Runners.Exec
                 }
                 else
                 {
-                    throw new ArgumentException("Cannot parse spec `" + spec + "', expecting every, after or until");
+                    throw new ArgumentException("Cannot parse definition `" + definition + "', expecting every, after or until");
                 }
             }
         }
