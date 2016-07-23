@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.7.0 / 2016-07-23
+
 * Implemented xp-framework/rfc#314: Repeated execution model, see PR #60.
   (@thekid)
 
