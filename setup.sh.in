@@ -196,7 +196,12 @@ main() {
         ver=$($php -r 'echo substr(PHP_VERSION, 0, 3);')
         configure "rt=$ver" "" "[runtime@$ver]" "default=$php"
       fi
-      rm -f xp ; ln -s xp.exe xp
+      rm -f xp
+      ln -s xp.exe xp || {
+        echo '#!/bin/sh' > xp
+        echo $(which mono)' $(dirname "$0")/xp.exe "$@"' >> xp
+        chmod 755 xp
+      }
       ;;
 
     *)

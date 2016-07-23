@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed issue #61: Setup: Symlink errors - @thekid
+
 ## 7.7.0 / 2016-07-23
 
 * Implemented xp-framework/rfc#314: Repeated execution model, see PR #60.
