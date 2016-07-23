@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Implemented xp-framework/rfc#314: Repeated execution model, see PR #60.
+  (@thekid)
+
 ## 7.6.5 / 2016-07-15
 
 * Fixed issue #59: Depends: php5-cli but it is not installable - @thekid
