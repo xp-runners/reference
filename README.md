@@ -86,11 +86,12 @@ Time taken: 0.000 seconds
 
 Execution
 ---------
-There are three execution models:
+There are four execution models:
 
 1. Run once, exit (*this is the default*)
 2. Watch a directory, spawn process every time a change occurs (*via `-watch {directory}`*)
 3. Start the process, keep it running until exits with exitcode 0 or the user presses enter (*via `-supervise`*)
+4. Repeated runs, cron-like (*via `-repeat {schedule}`*)
 
 The second model is useful e.g. to implement continuous unittest running, see [here](https://github.com/xp-framework/xp-runners/pull/24).
 
