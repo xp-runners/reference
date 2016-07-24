@@ -3,6 +3,25 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.8.0 / 2016-07-24
+
+* Added ultra-slim XP runner `xp-run`. Intended for use inside Travis CI
+  and to replace XP runners 6.X. Does not support any of the following:
+
+  - Different execution models
+  - Configuration files
+  - Subcommands, neither builtin nor as plugins
+  - System timezone handling
+  - Binary-safe unicode argument handling
+  - XP5 entry points (tools/class.php)
+  - Class path or module path
+  - Handling of "-v", "-e", "-w", "-d" and "-?" shortcuts
+  - Composer support
+
+  Download: https://dl.bintray.com/xp-runners/generic/xp-run-master.sh
+  Example: https://github.com/xp-forge/mirrors/blob/master/.travis.yml
+  (@thekid)
+
 ## 7.7.1 / 2016-07-24
 
 * Fixed timezone handling on non-Windows systems: If system timezone already
