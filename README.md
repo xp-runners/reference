@@ -11,7 +11,7 @@ Getting started
 To install the XP runners, you can choose between the generic installer:
 
 ```sh
-$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.6.5.sh | sh
+$ curl -sSL https://bintray.com/artifact/download/xp-runners/generic/setup-7.7.1.sh | sh
 # ...
 ```
 
@@ -32,7 +32,7 @@ $ composer global require xp-framework/core
 # ...
 
 $ xp version
-XP 7.3.1 { PHP 7.0.8 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
+XP 7.5.0 { PHP 7.0.9 & ZE 3.0.0 } @ Windows NT SLATE 10.0 build 10586 (Windows 10) i586
 Copyright (c) 2001-2016 the XP group
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/php>
@@ -86,11 +86,12 @@ Time taken: 0.000 seconds
 
 Execution
 ---------
-There are three execution models:
+There are four execution models:
 
 1. Run once, exit (*this is the default*)
 2. Watch a directory, spawn process every time a change occurs (*via `-watch {directory}`*)
 3. Start the process, keep it running until exits with exitcode 0 or the user presses enter (*via `-supervise`*)
+4. Repeated runs, cron-like (*via `-repeat {schedule}`*)
 
 The second model is useful e.g. to implement continuous unittest running, see [here](https://github.com/xp-framework/xp-runners/pull/24).
 

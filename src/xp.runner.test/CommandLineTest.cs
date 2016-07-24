@@ -155,7 +155,13 @@ namespace Xp.Runners.Test
         [Fact]
         public void supervise_execution_model()
         {
-            Assert.IsType<Supervise>(new CommandLine(new string[] { "-supervise", "." }).ExecutionModel);
+            Assert.IsType<Supervise>(new CommandLine(new string[] { "-supervise" }).ExecutionModel);
+        }
+
+        [Fact]
+        public void repeat_execution_model()
+        {
+            Assert.IsType<RunRepeatedly>(new CommandLine(new string[] { "-repeat", "every 01:00" }).ExecutionModel);
         }
 
         [Theory]

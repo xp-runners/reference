@@ -3,6 +3,18 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.7.1 / 2016-07-24
+
+* Fixed timezone handling on non-Windows systems: If system timezone already
+  is a valid Olson identifier, use it.
+  (@thekid)
+* Fixed issue #61: Setup: Symlink errors - @thekid
+
+## 7.7.0 / 2016-07-23
+
+* Implemented xp-framework/rfc#314: Repeated execution model, see PR #60.
+  (@thekid)
+
 ## 7.6.5 / 2016-07-15
 
 * Fixed issue #59: Depends: php5-cli but it is not installable - @thekid

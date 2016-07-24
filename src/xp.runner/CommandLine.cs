@@ -28,6 +28,7 @@ namespace Xp.Runners
             { "-cp!", (self, value) => self.path["classpath"].Add("!" + value) },
             { "-m", (self, value) => self.path["modules"].Add(value) },
             { "-watch", (self, value) => self.executionModel = new RunWatching(value) },
+            { "-repeat", (self, value) => self.executionModel = new RunRepeatedly(value) },
             { "-c", (self, value) => self.config = new CompositeConfigSource(
                 new EnvironmentConfigSource(),
                 new IniConfigSource(new Ini(Directory.Exists(value) ? Paths.Compose(value, ini) : value))

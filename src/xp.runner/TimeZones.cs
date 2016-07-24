@@ -1,5 +1,6 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Xp.Runners
 {
@@ -122,12 +123,25 @@ namespace Xp.Runners
             { "Line Islands Standard Time", "Pacific/Kiritimati" }
         };
 
+        private static Regex olson = new Regex("^[A-Za-z]+/[A-Za-z0-0_-]+$");
+
         /// <summary>Maps a Windows timezone to the Olson equivalent. Returns null failure</summary>
         public static string Olson(this TimeZoneInfo self)
         {
-            string value = null;
-            mapping.TryGetValue(self.Id, out value);
-            return value;
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                string value = null;
+                mapping.TryGetValue(self.Id, out value);
+                return value;
+            }
+            else if (olson.IsMatch(self.DisplayName))
+            {
+                return self.DisplayName;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
