@@ -18,6 +18,8 @@ XP Runners change log
   - Handling of "-v", "-e", "-w", "-d" and "-?" shortcuts
   - Composer support
 
+  On the other side, it does not have any dependencies except `/bin/sh`
+
   Download: https://dl.bintray.com/xp-runners/generic/xp-run-master.sh
   Example: https://github.com/xp-forge/mirrors/blob/master/.travis.yml
   (@thekid)
