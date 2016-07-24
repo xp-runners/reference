@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.7.1 / 2016-07-24
+
 * Fixed timezone handling on non-Windows systems: If system timezone already
   is a valid Olson identifier, use it.
   (@thekid)
