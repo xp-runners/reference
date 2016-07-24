@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed timezone handling on non-Windows systems: If system timezone already
+  is a valid Olson identifier, use it.
+  (@thekid)
 * Fixed issue #61: Setup: Symlink errors - @thekid
 
 ## 7.7.0 / 2016-07-23
