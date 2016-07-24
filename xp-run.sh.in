@@ -1,0 +1,18 @@
+#!/bin/sh
+#<?php echo "\r"; <<<'EOF'
+
+php=${XP_RT-php}
+tz=${TZ-UTC}
+use=${USE_XP-.}
+
+# Export environment
+XP_EXE=$0
+XP_COMMAND=run
+XP_MODEL=slim
+XP_VERSION=@VERSION@
+
+# Run PHP
+exec $php -C -q -d include_path="$use" -d date.timezone="$tz" $0 "$@"
+exit $?
+
+EOF;

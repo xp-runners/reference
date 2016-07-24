@@ -8,6 +8,7 @@ set -u
 TARGET=$(pwd)/target
 ARCHIVE=$TARGET/xp-runners_${VERSION}.tar.gz
 SETUP=$TARGET/setup-${VERSION}.sh
+SLIM=$TARGET/xp-run-${VERSION}.sh
 BINTRAY=$TARGET/generic.config
 
 mkdir -p $TARGET
@@ -15,6 +16,9 @@ rm -f $SETUP $BINTRAY
 
 cat setup.sh.in | sed -e "s/@VERSION@/$VERSION/g" > $SETUP
 tar cvfz $ARCHIVE xp.exe tput.exe class-main.php web-main.php
+
+# Slim runner
+(cat xp-run.sh.in | sed -e "s/@VERSION@/$VERSION/g" ; cat class-main.php | sed -e 's/<?php namespace xp;//g') > $SLIM
 
 # Bintray configuration
 date=$(date +%Y-%m-%d)
@@ -34,7 +38,7 @@ cat <<-EOF > $BINTRAY
     },
     "files": [
       {
-        "includePattern" : "target/(setup.*sh|xp-runners.*tar.gz)",
+        "includePattern" : "target/(setup.*sh|xp-run.*sh|xp-runners.*tar.gz)",
         "uploadPattern"  : "\$1",
         "matrixParams"   : { "override": 1 }
       }
