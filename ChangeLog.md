@@ -5,8 +5,9 @@ XP Runners change log
 
 ## 7.8.2 / 2016-08-14
 
-* Fixed `Fatal error:  Class 'xp\xar' not found` with ultra-slim runners
-  See 
+* Fixed ultra-slim runners to work with xp-framework/core
+  - XAR stream wrapper missing: (`Error: Class 'xp\xar' not found`)
+  - Bootstrap script unaccesable via `lang.Runtime` class
   (@thekid)
 
 ## 7.8.1 / 2016-08-04
