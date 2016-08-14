@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed `Fatal error:  Class 'xp\xar' not found` with ultra-slim runners
+  See 
+  (@thekid)
+
 ## 7.8.1 / 2016-08-04
 
 * Fixed coloring on Windows 10 redstone 1 - @thekid
