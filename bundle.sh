@@ -7,7 +7,7 @@ set -u
 
 temp=${TMPDIR-${TEMP-${TMP-/tmp}}}
 BUILD=$(mktemp -d "$temp/tmp.XXXXXXXXXX")
-SOURCES="bootstrap.php class-main.php class-path.php scan-path.php web-main.php xar-support.php entry.php"
+SOURCES="bootstrap.php class-main.php class-path.php scan-path.php web-main.php xar-support.php entry.php stringof.php"
 TARGETS="class-main.php web-main.php"
 EXE=$(pwd)/xp.exe
 
