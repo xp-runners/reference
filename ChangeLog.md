@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.8.1 / 2016-08-04
+
+* Fixed coloring on Windows 10 redstone 1 - @thekid
+
 ## 7.8.0 / 2016-07-24
 
 * Added ultra-slim XP runner `xp-run`. Intended for use inside Travis CI
