@@ -11,7 +11,7 @@ Getting started
 To install the XP runners, you can choose between the generic installer:
 
 ```sh
-$ curl -sSL https://dl.bintray.com/xp-runners/generic/setup-7.8.3.sh | sh
+$ curl -sSL https://dl.bintray.com/xp-runners/generic/setup-7.8.4.sh | sh
 # ...
 ```
 
