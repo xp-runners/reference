@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Fixed issue #62 ("WSL: Exec format error") by always creating wrapper
+  scripts on Linux, MacOS and Unix systems.
+  (@thekid)
+
 ## 7.8.3 / 2016-08-15
 
 * Changed output arguments and files in stack trace of uncaught exceptions

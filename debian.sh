@@ -25,7 +25,9 @@ echo '2.0' > debian-binary
 
 # data.tar.xz
 mkdir -p usr/bin
-cp $ORIGIN/xp.exe usr/bin/xp
+printf '#!/bin/sh\nexec /usr/bin/mono /usr/bin/xp.exe "$@"\n' > usr/bin/xp
+chmod 755 usr/bin/xp
+cp $ORIGIN/xp.exe usr/bin/xp.exe
 cp $ORIGIN/class-main.php $ORIGIN/web-main.php usr/bin
 $fakeroot tar cfJ data.tar.xz usr/bin/*
 
