@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Changed output arguments in stack trace of uncaught exceptions during
+  bootstrap to be less verbose - see issue #64
+  (@thekid)
+
 ## 7.8.2 / 2016-08-14
 
 * Fixed ultra-slim runners to work with xp-framework/core
