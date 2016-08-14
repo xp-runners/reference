@@ -11,15 +11,15 @@ XP_MODEL=slim
 XP_VERSION=@VERSION@
 
 # Extract entry
-entry=$(mktemp -d)/class-main.php
-sed '0,/^EOF;$/d' $0 > $entry
+entry="$(mktemp -d)"
+sed '0,/^EOF;$/d' $0 > "$entry/class-main.php"
 
 # Run PHP
-$php -C -q -d include_path="$use" -d date.timezone="$tz" $entry "$@"
-exit=$?
+$php -C -q -d include_path="$use" -d date.timezone="$tz" "$entry/class-main.php" "$@"
+result=$?
 
 # Cleanup entry point
-rm -rf $(dirname $entry)
-exit $exit
+rm -rf "$entry"
+exit $result
 
 EOF;
