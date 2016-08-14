@@ -3,8 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
-* Changed output arguments in stack trace of uncaught exceptions during
-  bootstrap to be less verbose - see issue #64
+* Changed output arguments and files in stack trace of uncaught exceptions
+  during bootstrap to be less verbose - see issue #64
   (@thekid)
 
 ## 7.8.2 / 2016-08-14
