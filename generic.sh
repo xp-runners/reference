@@ -18,7 +18,11 @@ cat setup.sh.in | sed -e "s/@VERSION@/$VERSION/g" > $SETUP
 tar cvfz $ARCHIVE xp.exe tput.exe class-main.php web-main.php
 
 # Slim runner
-(cat xp-run.sh.in | sed -e "s/@VERSION@/$VERSION/g" ; cat class-main.php | sed -e 's/<?php namespace xp;//g' | sed -e 's/xp\\//g') > $SLIM
+(cat xp-run.sh.in | sed -e "s/@VERSION@/$VERSION/g" ; cat class-main.php \
+  | sed -e "s/<?php namespace xp;//g" \
+  | sed -e "s/xp\\//g" \
+  | sed -e "s/stream_wrapper_register/class_alias('xar', 'xp\\\\xar'); stream_wrapper_register/g" \
+) > $SLIM
 
 # Bintray configuration
 date=$(date +%Y-%m-%d)
@@ -48,4 +52,4 @@ cat <<-EOF > $BINTRAY
 EOF
 
 # Done
-ls -al $SETUP $ARCHIVE $BINTRAY
+ls -al $SETUP $ARCHIVE $BINTRAY $SLIM
