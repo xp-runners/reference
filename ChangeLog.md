@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.8.2 / 2016-08-14
+
 * Fixed `Fatal error:  Class 'xp\xar' not found` with ultra-slim runners
   See 
   (@thekid)
