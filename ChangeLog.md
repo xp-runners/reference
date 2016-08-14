@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.8.3 / 2016-08-15
+
 * Changed output arguments and files in stack trace of uncaught exceptions
   during bootstrap to be less verbose - see issue #64
   (@thekid)
