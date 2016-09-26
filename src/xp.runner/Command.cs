@@ -77,7 +77,7 @@ namespace Xp.Runners
             var ini = new Dictionary<string, IEnumerable<string>>()
             {
                 { "magic_quotes_gpc", new string[] { "0" } },
-                { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? "UTC" } },
+                { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? Environment.GetEnvironmentVariable("TZ") ?? "UTC" } },
                 { "extension", configuration.GetExtensions(runtime) }
             };
             var use = configuration.GetUse() ?? UseComposer();

@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.8.5 / 2016-09-26
+
+* Fixed issue #65: Timezone not set correctly - @thekid
+
 ## 7.8.4 / 2016-08-15
 
 * Fixed issue #62 ("WSL: Exec format error") by always creating wrapper
