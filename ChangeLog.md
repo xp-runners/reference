@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.8.6 / 2017-01-16
+
+* Fixed "Call to undefined function raise()" when handling malformed XAR
+  archives inside class path
+  (@thekid)
+
 ## 7.8.5 / 2016-09-26
 
 * Fixed issue #65: Timezone not set correctly - @thekid
