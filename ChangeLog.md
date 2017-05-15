@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.8.7 / 2017-05-15
+
+* Fixed issue #66: XP running XP - @thekid
+
 ## 7.8.6 / 2017-01-16
 
 * Fixed "Call to undefined function raise()" when handling malformed XAR
