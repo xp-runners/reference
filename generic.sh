@@ -15,7 +15,7 @@ mkdir -p $TARGET
 rm -f $SETUP $BINTRAY
 
 cat setup.sh.in | sed -e "s/@VERSION@/$VERSION/g" > $SETUP
-tar cvfz $ARCHIVE xp.exe tput.exe class-main.php web-main.php
+tar cvfz $ARCHIVE xp.exe xar.exe tput.exe class-main.php web-main.php
 
 # Slim runner
 (cat xp-run.sh.in | sed -e "s/@VERSION@/$VERSION/g" ; cat class-main.php ) > $SLIM
