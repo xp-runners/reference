@@ -179,7 +179,7 @@ main() {
           "extension_dir=$(cygpath -w $(dirname $php))\\ext" \
           "extension=php_com_dotnet.dll"
       fi
-      EXTRACT="$EXTRACT tput.exe"
+      EXTRACT="$EXTRACT xar.exe tput.exe"
       ;;
 
     Ubuntu*|Debian*)
@@ -200,6 +200,10 @@ main() {
       echo '#!/bin/sh' > xp
       echo 'exec '$(which mono)' $(dirname "$0")/xp.exe "$@"' >> xp
       chmod 755 xp
+
+      echo '#!/bin/sh' > xar
+      echo 'exec '$(which mono)' $(dirname "$0")/xp.exe ar "$@"' >> xar
+      chmod 755 xar
       ;;
 
     *)
@@ -220,6 +224,10 @@ main() {
       echo '#!/bin/sh' > xp
       echo 'exec '$(which mono)' $(dirname "$0")/xp.exe "$@"' >> xp
       chmod 755 xp
+
+      echo '#!/bin/sh' > xar
+      echo 'exec '$(which mono)' $(dirname "$0")/xp.exe ar "$@"' >> xar
+      chmod 755 xar
       ;;
   esac
 
