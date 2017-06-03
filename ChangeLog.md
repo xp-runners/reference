@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.9.0 / 2017-06-03
+
+* Refactored entry point code to no longer use `xp::stringOf()`, which
+  will be deprecated in XP9. See xp-framework/rfc#324
+  (@thekid)
+
 ## 7.8.7 / 2017-05-15
 
 * Fixed issue #66: XP running XP - @thekid
