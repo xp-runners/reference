@@ -5,6 +5,7 @@ XP Runners change log
 
 ## 7.9.0 / 2017-06-03
 
+* Reinstated xar command, implementing issue #67 - @thekid
 * Refactored entry point code to no longer use `xp::stringOf()`, which
   will be deprecated in XP9. See xp-framework/rfc#324
   (@thekid)
