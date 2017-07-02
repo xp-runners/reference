@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.9.1 / 2017-07-02 
+
+* Fixed error message when .NET Framework is not installed. The list
+  of dependencies it was suggesting to install was not complete!
+  (@thekid)
+
 ## 7.9.0 / 2017-06-03
 
 * Reinstated xar command, implementing issue #67 - @thekid
