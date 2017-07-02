@@ -3,6 +3,13 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.9.2 / 2017-07-02 
+
+* Fixed issue #69: Hash marks (#) comments causing exceptions - adjusted
+  the ini file parser to simply ignore lines neither containing sections
+  nor key/value pairs.
+  (@thekid)
+
 ## 7.9.1 / 2017-07-02 
 
 * Fixed error message when .NET Framework is not installed. The list
