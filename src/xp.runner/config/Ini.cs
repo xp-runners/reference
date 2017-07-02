@@ -8,8 +8,6 @@ namespace Xp.Runners.Config
 {
     class Ini
     {
-        private const int KEY = 0;
-        private const int VALUE = 1;
         private static char[] SEPARATOR = new char[] { '=' };
 
         private string file;
@@ -46,30 +44,27 @@ namespace Xp.Runners.Config
             {
                 if (parsed && !reset) return;    // Short-circuit this
 
-                string section = "default";
+                var section = "default";
                 sections[section] = new Dictionary<string, List<string>>();
                 foreach (string line in File.ReadAllLines(FileName))
                 {
-                    if (string.IsNullOrEmpty(line) || line.StartsWith(";")) 
-                    {
-                        continue;
-                    } 
-                    else if (line.StartsWith("[")) 
+                    if (line.StartsWith("[")) 
                     {
                         section = line.Substring(1, line.Length - 1 - 1);    
                         sections[section] = new Dictionary<string, List<string>>();
-                        continue;
                     }
-                    else
+                    else if (line.Contains('='))
                     {
                         var pair = line.Split(SEPARATOR, 2);
-                        if (!sections[section].ContainsKey(pair[KEY])) 
+                        var key = pair[0].Trim();
+                        var val = pair[1].Trim();
+                        if (!sections[section].ContainsKey(key)) 
                         {
-                            sections[section][pair[KEY]] = new List<string>();
+                            sections[section][key] = new List<string>();
                         }
-                        if (!String.IsNullOrEmpty(pair[VALUE]))
+                        if ("" != val)
                         {
-                            sections[section][pair[KEY]].Add(pair[VALUE]);
+                            sections[section][key].Add(val);
                         }
                     }
                 }
