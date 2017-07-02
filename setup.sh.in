@@ -186,7 +186,7 @@ main() {
       run 'Linux' "uname -a"
       run 'Tar' "commands tar" "sudo apt-get -y install tar"
       run 'Curl' "commands curl wget" "sudo apt-get -y install curl"
-      run '.NET Framework installed' "mono --version" "sudo apt-get -y install libmono-corlib4.5-cil libmono-system-core4.0-cil" $CHECKS
+      run '.NET Framework installed' "mono --version" "sudo apt-get -y install libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil" $CHECKS
       run 'PHP runtime available' "php -v" "sudo apt-get -y install php5-cli" $CHECKS
 
       php=$(which php 2>/dev/null || echo No)
