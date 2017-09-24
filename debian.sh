@@ -17,8 +17,6 @@ DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
 BINTRAY=$TARGET/debian.config
 
 echo "Creating package $DEB in $BUILD"
-which fakeroot
-which fakeroot-ng
 
 mkdir -p target
 rm -f $DEB $BINTRAY
