@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 7.9.3 / 2017-09-24
+
+* Made compatible with PHP 7.1 on Debian (provided via https://deb.sury.org/)
+  (@thekid)
+
 ## 7.9.2 / 2017-07-02 
 
 * Fixed issue #69: Hash marks (#) comments causing exceptions - adjusted
