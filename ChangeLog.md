@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.0.0 / ????-??-??
+
+* Implemented pull request #70: Signalling socket. This allows graceful
+  shutdown when being run inside `xp -supervise`.
+  (@thekid)
+
 ## 7.9.2 / 2017-07-02 
 
 * Fixed issue #69: Hash marks (#) comments causing exceptions - adjusted
