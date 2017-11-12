@@ -64,7 +64,7 @@ namespace Xp.Runners.Exec
 
                     if (result.IsCompleted)
                     {
-                        Console.Write("==> Shut down ");
+                        Console.Write("> Shut down ");
                         stdin.EndRead(result);
                         shutdown();
                         return 0;
@@ -97,6 +97,7 @@ namespace Xp.Runners.Exec
 
             // Either via user-interactive shutdown or via runtime exiting itself
             stdin.Close();
+            sock.Close();
             return code;
         }
     }
