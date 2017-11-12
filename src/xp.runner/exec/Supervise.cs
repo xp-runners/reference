@@ -20,7 +20,7 @@ namespace Xp.Runners.Exec
         /// <summary>Execute the process and return its exitcode</summary>
         public override int Execute(Process proc, Encoding encoding)
         {
-            Action shutdown = () => proc.Kill();
+            Action shutdown = proc.Kill;
 
             // Read from STDIN
             var cancel = new ManualResetEvent(false);
@@ -28,7 +28,8 @@ namespace Xp.Runners.Exec
             var stdin = Console.OpenStandardInput();
             var result = stdin.BeginRead(buffer, 0, buffer.Length, ar => cancel.Set(), null);
 
-            // Set up signalling socket
+            // Set up signalling socket. Once PHP connects to it, rewrite shutdown action
+            // to a graceful variant: Sending a quit message to the signalling socket.
             var sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             sock.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0));
             sock.Listen(1);
