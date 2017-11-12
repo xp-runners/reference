@@ -3,7 +3,7 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
-## 8.0.0 / ????-??-??
+## 8.0.0 / 2017-11-12
 
 * Implemented pull request #70: Signalling socket. This allows graceful
   shutdown when being run inside `xp -supervise`.
