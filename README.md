@@ -32,7 +32,7 @@ $ composer global require xp-framework/core
 # ...
 
 $ xp version
-XP 9.0.0 { PHP 7.1.11 & ZE 3.1.0 } @ Windows NT SLATE 10.0 build 16299 (Windows 10) AMD64
+XP 9.2.0 { PHP 7.1.11 & ZE 3.1.0 } @ Windows NT SLATE 10.0 build 16299 (Windows 10) AMD64
 Copyright (c) 2001-2017 the XP group
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/php>
