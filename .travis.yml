@@ -1,5 +1,11 @@
 language: csharp
 
+
+addons:
+  apt:
+    packages:
+      - fakeroot
+
 install:
   - nuget install xunit -Version 1.9.2 -OutputDirectory testrunner
   - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
