@@ -16,6 +16,8 @@ TARGET=$ORIGIN/target
 DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
 BINTRAY=$TARGET/debian.config
 
+echo "Creating package $DEB in $BUILD"
+
 mkdir -p target
 rm -f $DEB $BINTRAY
 fakeroot=$(which fakeroot)
@@ -47,7 +49,7 @@ cat <<-EOF > control
 	Maintainer: XP Team <xp-runners@xp-framework.net>
 	Architecture: all
 	Version: ${VERSION}-1
-	Depends: php5-cli | php7.0-cli, libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil
+	Depends: php7.1-cli | php7.0-cli | php5-cli, libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil
 	Provides: xp-runners
 	Description: XP Runners
 EOF
