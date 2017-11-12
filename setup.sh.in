@@ -132,7 +132,7 @@ configure() {
 
 main() {
   printf "\033[32;1mXP Runners setup (@VERSION@)\033[0m\n"
-  echo '(c) 2016 https://github.com/xp-runners/reference/'
+  echo '(c) 2017 https://github.com/xp-runners/reference/'
   echo
 
   temp=${TMPDIR-${TEMP-${TMP-/tmp}}}
