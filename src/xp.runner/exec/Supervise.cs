@@ -12,7 +12,7 @@ namespace Xp.Runners.Exec
     {
         const int WAIT_BEFORE_RESPAWN = 1;
         const int WAIT_FOR_STARTUP = 2;
-        private static byte[] QUIT = new byte[] { 81, 85, 73, 84 };
+        private static byte[] QUIT = new byte[] { 81, 85, 73, 84, 13, 10 };  // "QUIT\r\n"
 
         /// <summary>Returns the model's name</summary>
         public override string Name { get { return "supervise"; } }
