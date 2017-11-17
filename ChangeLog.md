@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.0.0 / 2017-11-12
+
+* Implemented pull request #70: Signalling socket. This allows graceful
+  shutdown when being run inside `xp -supervise`.
+
 ## 7.9.3 / 2017-09-24
 
 * Made compatible with PHP 7.1 on Debian (provided via https://deb.sury.org/)
