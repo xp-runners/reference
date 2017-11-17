@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.0.1 / 2017-11-17
+
+* Fixed "undefined variable: $cwd" inside web-main.php - @thekid
+
 ## 8.0.0 / 2017-11-12
 
 * Implemented pull request #70: Signalling socket. This allows graceful
