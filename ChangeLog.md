@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.0.2 / 2017-12-11
+
+* Fixed issue #72: Installing on Alpine Linux - @thekid
+
 ## 8.0.1 / 2017-11-17
 
 * Fixed "undefined variable: $cwd" inside web-main.php - @thekid

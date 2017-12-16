@@ -158,7 +158,7 @@ main() {
 
   EXTRACT='xp.exe class-main.php web-main.php'
   OS=$(uname)
-  if [ 'Linux' = "$OS" ] ; then OS=$(lsb_release -si) ; fi
+  if [ 'Linux' = "$OS" ] && [ $(which lsb_release) ] ; then OS=$(lsb_release -si) ; fi
   case $OS in
     CYGWIN*)
       run 'Cygwin' "uname -a"
