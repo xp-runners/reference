@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.1.0 / 2017-12-16
+
 * Implemented #71: Allow loading extensions by name - @thekid
 
 ## 8.0.2 / 2017-12-11
