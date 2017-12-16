@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Implemented #71: Allow loading extensions by name - @thekid
+
 ## 8.0.2 / 2017-12-11
 
 * Fixed issue #72: Installing on Alpine Linux - @thekid

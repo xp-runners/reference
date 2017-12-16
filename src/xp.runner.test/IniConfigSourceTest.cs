@@ -83,7 +83,7 @@ namespace Xp.Runners.Test
         [Fact]
         public void no_extensions_by_default()
         {
-            Assert.Null(fixture("").GetExtensions(null));
+            Assert.Equal(new string[] { }, fixture("").GetExtensions(null));
         }
 
         [Fact]
@@ -92,6 +92,15 @@ namespace Xp.Runners.Test
             Assert.Equal(
                 new string[] { "php_mysql.dll", "php_sybase_ct.dll" },
                 fixture("[runtime]\nextension=php_mysql.dll\nextension=php_sybase_ct.dll").GetExtensions(null).ToArray()
+            );
+        }
+
+        [Fact]
+        public void named_extension()
+        {
+            Assert.Equal(
+                new string[] { Environment.OSVersion.Platform == PlatformID.Win32NT ? "php_mysql.dll" : "mysql.so" },
+                fixture("[runtime]\nextension=mysql").GetExtensions(null).ToArray()
             );
         }
 

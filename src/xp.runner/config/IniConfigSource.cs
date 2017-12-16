@@ -9,6 +9,7 @@ namespace Xp.Runners.Config
     class IniConfigSource : ConfigSource 
     {
         private Ini ini;
+        private static string EXTENSION = Environment.OSVersion.Platform == PlatformID.Win32NT ? "php_{0}.dll" : "{0}.so";
 
         /// Returns whether this config source is valid
         public bool Valid() 
@@ -45,29 +46,19 @@ namespace Xp.Runners.Config
             return ini.Get("runtime@" + runtime, "default") ?? ini.Get("runtime", "default");
         }
 
-        /// Concatenates all given enumerables
-        protected IEnumerable<T> Concat<T>(params IEnumerable<T>[] args)
-        {
-            foreach (var enumerable in args)
-            {
-                if (null == enumerable) continue;
-
-                foreach (var e in enumerable)
-                {
-                    yield return e;
-                }
-            }
-        }
-
         /// Returns the PHP extensions to be loaded from this config source
         /// based on the given runtime version and the defaults.
         public IEnumerable<string> GetExtensions(string runtime)
         {
-            var extensions = ini.GetAll("runtime", "extension");
-            var vextensions = ini.GetAll("runtime@" + runtime, "extension");
-            if (null == extensions && null == vextensions) return null;
-
-            return Concat<string>(extensions, vextensions);
+            var empty = new string[] {};
+            foreach (var extension in ini.GetAll("runtime", "extension", empty))
+            {
+                yield return extension.Contains(".") ? extension : string.Format(EXTENSION, extension);
+            }
+            foreach (var extension in ini.GetAll("runtime@" + runtime, "extension", empty))
+            {
+                yield return extension.Contains(".") ? extension : string.Format(EXTENSION, extension);
+            }
         }
 
         /// Returns all keys in a given section as key/value pair
@@ -88,7 +79,6 @@ namespace Xp.Runners.Config
         public Dictionary<string, IEnumerable<string>> GetArgs(string runtime)
         {
             var args = new Dictionary<string, IEnumerable<string>>();
-
             foreach (var pair in ArgsInSection("runtime"))
             {
                 args[pair.Key] = pair.Value;
