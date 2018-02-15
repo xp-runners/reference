@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.1.1 / 2018-02-15
+
+* Fixed solution message when Mono is not installed - @thekid
+
 ## 8.1.0 / 2017-12-16
 
 * Implemented #71: Allow loading extensions by name - @thekid
