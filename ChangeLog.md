@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.1.2 / 2018-02-15
+
+* Fixed copyright year - a belated *welcome 2018* - @thekid
+
 ## 8.1.1 / 2018-02-15
 
 * Fixed solution message when Mono is not installed - @thekid
