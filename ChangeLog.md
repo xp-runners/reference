@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.1.3 / 2018-03-30
+
+* Made compatible with PHP 7.2 on Debian (provided via https://deb.sury.org/)
+  (@thekid)
+
 ## 8.1.2 / 2018-02-15
 
 * Fixed copyright year - a belated *welcome 2018* - @thekid

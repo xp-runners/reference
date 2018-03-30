@@ -49,7 +49,7 @@ cat <<-EOF > control
 	Maintainer: XP Team <xp-runners@xp-framework.net>
 	Architecture: all
 	Version: ${VERSION}-1
-	Depends: php7.1-cli | php7.0-cli | php5-cli, libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil
+	Depends: php7.2-cli | php7.1-cli | php7.0-cli | php5-cli, libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil
 	Provides: xp-runners
 	Description: XP Runners
 EOF
