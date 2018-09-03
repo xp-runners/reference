@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.1.4 / 2018-09-04
+
+* Fixed `xp-run` compatiblity with non-GNU sed variants, e.g. on Alpine
+  (@thekid)
+
 ## 8.1.3 / 2018-03-30
 
 * Made compatible with PHP 7.2 on Debian (provided via https://deb.sury.org/)
