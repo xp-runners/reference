@@ -21,6 +21,7 @@ script:
   - csc -r:xunit.dll -r:xunit.extensions.dll src/xp.runner/*.cs src/xp.runner/*/*.cs src/xp.runner.test/*.cs -target:library -out:tests.dll
   - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe tests.dll
   - mono ./xp.exe list
+  - chmod 755 ./xp.exe
 
 before_deploy:
   - sh bundle.sh
