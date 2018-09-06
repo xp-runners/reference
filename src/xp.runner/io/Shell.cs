@@ -71,8 +71,8 @@ namespace Xp.Runners.IO
             switch (components.Length)
             {
                 case 0: throw new ArgumentException("Cannot parse empty shell command");
-                case 1: return new Shell(components[0].Trim('"'));
-                default: return new Shell(components[0].Trim('"'), components.Skip(1).ToArray());
+                case 1: return new Shell(components[0].Trim(new char[] { '"' }));
+                default: return new Shell(components[0].Trim(new char[] { '"' }), components.Skip(1).ToArray());
             }
         }
 

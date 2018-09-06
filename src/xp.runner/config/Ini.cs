@@ -53,7 +53,7 @@ namespace Xp.Runners.Config
                         section = line.Substring(1, line.Length - 1 - 1);    
                         sections[section] = new Dictionary<string, List<string>>();
                     }
-                    else if (line.Contains('='))
+                    else if (line.Contains("="))
                     {
                         var pair = line.Split(SEPARATOR, 2);
                         var key = pair[0].Trim();
