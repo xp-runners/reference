@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.1.5 / 2018-09-06
+
+* Fixed issue #75: Unhandled exceptions with latest release 8.1.4
+  (@thekid)
+
 ## 8.1.4 / 2018-09-04
 
 * Fixed `xp-run` compatiblity with non-GNU sed variants, e.g. on Alpine
