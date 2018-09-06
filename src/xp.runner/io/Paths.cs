@@ -31,7 +31,7 @@ namespace Xp.Runners.IO
             {
                 foreach (var file in files)
                 {
-                    var qualified = path.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar + file;
+                    var qualified = path.TrimEnd(new char[] { Path.DirectorySeparatorChar }) + Path.DirectorySeparatorChar + file;
                     if (File.Exists(qualified))
                     {
                         yield return qualified;
@@ -68,7 +68,7 @@ namespace Xp.Runners.IO
         public static string Resolve(string path)
         {
             var info = new FileInfo(path);
-            var normalized = info.FullName.TrimEnd(Path.DirectorySeparatorChar);
+            var normalized = info.FullName.TrimEnd(new char[] { Path.DirectorySeparatorChar });
             if (!info.Exists)
             {
                 var link = normalized + ".lnk";
@@ -113,7 +113,7 @@ namespace Xp.Runners.IO
         {
             return string.Join(new string(new char[] { Path.DirectorySeparatorChar }), components
                 .Where(c => !string.IsNullOrEmpty(c))
-                .Select(c => c.TrimEnd(Path.DirectorySeparatorChar))
+                .Select(c => c.TrimEnd(new char[] { Path.DirectorySeparatorChar }))
                 .ToArray()
             );
         }
