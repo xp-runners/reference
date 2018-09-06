@@ -16,7 +16,7 @@ namespace Xp.Runners
         /// <summary>Creates a new entry point from a file, e.g. xp.xp-framework.unittest.test</summary>
         public EntryPoint(string file)
         {
-                var spec = file.Split('.');
+                var spec = file.Split(new char[] { '.' });
                 if (spec.Length <= NAME)
                 {
                     throw new ArgumentException("Malformed input string `" + file + "`");

@@ -74,7 +74,7 @@ namespace Xp.Runners
 
             using (var composer = new ComposerFile(Paths.Compose(path, ComposerFile.NAME)))
             {
-                foreach (var require in composer.Definitions.Require.Where(pair => pair.Key.Contains('/')))
+                foreach (var require in composer.Definitions.Require.Where(pair => pair.Key.Contains("/")))
                 {
                     if (loaded.Contains(require.Key)) continue;
 

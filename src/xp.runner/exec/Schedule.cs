@@ -21,10 +21,10 @@ namespace Xp.Runners.Exec
         private Func<DateTime, DateTime, TimeSpan> next;
 
         /// <summary>Creates a new schedule from a string</summary>
-        public Schedule(string schedule): this(schedule.Split(','), DateTime.Now) { }
+        public Schedule(string schedule): this(schedule.Split(new char[] { ',' }), DateTime.Now) { }
 
         /// <summary>Creates a new schedule from a string</summary>
-        public Schedule(string schedule, DateTime now): this(schedule.Split(','), now) { }
+        public Schedule(string schedule, DateTime now): this(schedule.Split(new char[] { ',' }), now) { }
 
         /// <summary>Creates a new schedule from a list of definitions</summary>
         public Schedule(IEnumerable<string> schedule): this(schedule, DateTime.Now) { }
@@ -40,7 +40,7 @@ namespace Xp.Runners.Exec
 
             foreach (var definition in schedule.Where(definition => !String.IsNullOrEmpty(definition)))
             {
-                var args = definition.Split(' ');
+                var args = definition.Split(new char[] { ' ' });
                 if ("forever" == args[0])
                 {
                     until = exitcode => false;
@@ -113,7 +113,7 @@ namespace Xp.Runners.Exec
         /// <summary>Parses a string into a timespan. Accepts mm:ss and hh:mm:ss</summary>
         private TimeSpan SpanFrom(string input)
         {
-            var c = input.Split(':');
+            var c = input.Split(new char[] { ':' });
             switch (c.Length)
             {
                 case 2: return new TimeSpan(0, Convert.ToInt32(c[0]), Convert.ToInt32(c[1]));
@@ -125,7 +125,7 @@ namespace Xp.Runners.Exec
         /// <summary>Parses a string into a date. Accepts hh:mm and hh:mm:ss</summary>
         private TimeSpan TimeFrom(string input)
         {
-            var c = input.Split(':');
+            var c = input.Split(new char[] { ':' });
             switch (c.Length)
             {
                 case 2: return new TimeSpan(Convert.ToInt32(c[0]), Convert.ToInt32(c[1]), 0);
@@ -147,7 +147,7 @@ namespace Xp.Runners.Exec
             }
             else
             {
-                var codes = input.Split('|').Select(chunk => Convert.ToInt32(chunk)).ToArray();
+                var codes = input.Split(new char[] { '|' }).Select(chunk => Convert.ToInt32(chunk)).ToArray();
                 return exitcode => (Array.IndexOf(codes, exitcode) != -1);
             }
         }
