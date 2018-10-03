@@ -9,26 +9,18 @@ namespace Xp.Runners.IO
     {
         public const string VENDOR = "vendor";
 
-        /// <summary>Returns whether the environment indicates this system conforms to
-        /// https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html</summary>
-        private static bool UseXDG()
-        {
-            foreach (string variable in Environment.GetEnvironmentVariables().Keys)
-            {
-                if (variable.StartsWith("XDG_")) return true;
-            }
-            return false;
-        }
-
         /// <summary>Returns well-known locations of Composer directories</summary>
         public static IEnumerable<string> For(PlatformID platform, Func<string, bool> exists)
         {
             yield return Paths.Compose(".", VENDOR);
 
+            // Don't use Paths.UserDir() here as the order of preference is a bit different:
+            // 1. If ~/.composer exists, it is preferred over the XDG config dir
+            // 2. We will always use $APPDATA/Composer on Windows, ignoring $HOME
             if (PlatformID.Unix == platform)
             {
                 var composer = Paths.Compose(Paths.Home(), ".composer");
-                if (!exists(composer) && UseXDG())
+                if (!exists(composer) && Paths.UseXDG())
                 {
                     yield return Paths.Compose(
                         Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? Paths.Compose(Paths.Home(), ".config"),
