@@ -96,7 +96,6 @@ namespace Xp.Runners.IO
             {
                 return Compose(home, "." + name);
             }
-
         }
 
         /// <summary>Resolve a path. If the path is actually a shell link (.lnk file), this link's target path is used</summary>
