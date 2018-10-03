@@ -13,38 +13,6 @@ namespace Xp.Runners.Commands
     {
         private static Regex ns = new Regex("\\<\\?php namespace (?<ns>[^;]+);");
 
-        /// <summary>Returns whether the environment indicates this system conforms to
-        /// https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html</summary>
-        private static bool UseXDG()
-        {
-            foreach (string variable in Environment.GetEnvironmentVariables().Keys)
-            {
-                if (variable.StartsWith("XDG_")) return true;
-            }
-            return false;
-        }
-
-        /// <summary>Returns the user-specific config directory. Respects $HOME, XDG-compliant
-        /// systems and falls back to using %APPDATA%</summary>
-        private string UserDir()
-        {
-            if (UseXDG())
-            {
-                return Paths.Compose(
-                    Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? Paths.Compose(Paths.Home(), ".config"),
-                    "xp"
-                );
-            }
-
-            var home = Environment.GetEnvironmentVariable("HOME");
-            if (!String.IsNullOrEmpty(home))
-            {
-                return Paths.Compose(home, ".xp");
-            }
-
-            return Paths.Compose(Environment.SpecialFolder.ApplicationData, "XP");
-        }
-
         /// <summary>Additional class path entries to load</summary>
         protected override IEnumerable<string> ClassPathFor(CommandLine cmd)
         {
@@ -57,7 +25,7 @@ namespace Xp.Runners.Commands
                     var matches = ns.Matches(sr.ReadLine());
                     if (matches.Count > 0)
                     {
-                        var autoload = Paths.Compose(UserDir(), matches[0].Groups["ns"].Value, "vendor", "autoload.php");
+                        var autoload = Paths.Compose(Paths.UserDir("xp"), matches[0].Groups["ns"].Value, "vendor", "autoload.php");
                         if (File.Exists(autoload))
                         {
                             return base.ClassPathFor(cmd).Append(autoload);
