@@ -1,10 +1,9 @@
-using Xp.Runners;
-using Xp.Runners.IO;
-using System;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Xp.Runners.IO;
+using Xp.Runners;
 
 namespace Xp.Runners.Commands
 {
