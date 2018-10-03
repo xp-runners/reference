@@ -13,8 +13,8 @@ namespace Xp.Runners.Commands
     {
         private static Regex ns = new Regex("\\<\\?php namespace (?<ns>[^;]+);");
 
-        /// <summary>Additional class path entries to load</summary>
-        protected override IEnumerable<string> ClassPathFor(CommandLine cmd)
+        /// <summary>Use path</summary>
+        protected override IEnumerable<string> UseFor(CommandLine cmd)
         {
             var execute = cmd.Arguments.FirstOrDefault();
 
@@ -25,16 +25,17 @@ namespace Xp.Runners.Commands
                     var matches = ns.Matches(sr.ReadLine());
                     if (matches.Count > 0)
                     {
-                        var autoload = Paths.Compose(Paths.UserDir("xp"), matches[0].Groups["ns"].Value, "vendor", "autoload.php");
-                        if (File.Exists(autoload))
+                        var use = Paths.Compose(Paths.UserDir("xp"), matches[0].Groups["ns"].Value, "vendor", "xp-framework", "core");
+                        if (Directory.Exists(use))
                         {
-                            return base.ClassPathFor(cmd).Append(autoload);
+                            return new string[] { use };
                         }
                     }
                 }
             }
 
-            return base.ClassPathFor(cmd);
+            // Use default "use" path
+            return null;
         }
    }
 }

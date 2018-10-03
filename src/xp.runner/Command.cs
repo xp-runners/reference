@@ -27,6 +27,12 @@ namespace Xp.Runners
             }
         }
 
+        /// <summary>Use path. Overwrite in subclasses if necessary!</summary>
+        protected virtual IEnumerable<string> UseFor(CommandLine cmd)
+        {
+            return null;
+        }
+
         /// <summary>Main script, e.g. "class". Overwrite in subclasses if necessary!</summary>
         protected virtual string MainFor(CommandLine cmd)
         {
@@ -80,7 +86,7 @@ namespace Xp.Runners
                 { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? Environment.GetEnvironmentVariable("TZ") ?? "UTC" } },
                 { "extension", configuration.GetExtensions(runtime) }
             };
-            var use = configuration.GetUse() ?? UseComposer();
+            var use = UseFor(cmd) ?? configuration.GetUse() ?? UseComposer();
 
             Encoding encoding;
             Func<string, string> args;
