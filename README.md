@@ -11,7 +11,7 @@ Getting started
 To install the XP runners, you can choose between the generic installer:
 
 ```sh
-$ curl -sSL https://dl.bintray.com/xp-runners/generic/setup-8.1.5.sh | sh
+$ curl -sSL https://dl.bintray.com/xp-runners/generic/setup-8.1.6.sh | sh
 # ...
 ```
 
@@ -32,8 +32,8 @@ $ composer global require xp-framework/core
 # ...
 
 $ xp version
-XP 9.6.0 { PHP 7.2.9 & ZE 3.2.0 } @ Windows NT SLATE 10.0 build 17134 (Windows 10) AMD64
-Copyright (c) 2001-2018 the XP group
+XP 10.0.0-dev { PHP/7.3.7 & Zend/3.3.7 } @ Windows NT SLATE 10.0 build 18362 (Windows 10) AMD64
+Copyright (c) 2001-2019 the XP group
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/resources>
