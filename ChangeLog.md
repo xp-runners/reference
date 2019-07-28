@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.1.6 / 2019-07-28
+
+* Fixed PHP 7.4 compatibility: curly braces as array offsets are now
+  deprecated (https://wiki.php.net/rfc/deprecate_curly_braces_array_access).
+  (@thekid)
+
 ## 8.1.5 / 2018-09-06
 
 * Fixed issue #75: Unhandled exceptions with latest release 8.1.4
