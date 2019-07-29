@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.1.7 / 2019-07-29
+
+* Fixed `include(): xp\xar::stream_set_option is not implemented!` warnings
+  (@thekid)
+
 ## 8.1.6 / 2019-07-28
 
 * Fixed PHP 7.4 compatibility: curly braces as array offsets are now
