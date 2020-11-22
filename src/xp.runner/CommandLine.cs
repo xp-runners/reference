@@ -100,13 +100,13 @@ namespace Xp.Runners
         /// <summary>Creates the commandline representation from argv</summary>
         public CommandLine(string[] argv)
         {
-            Parse(argv, 0, ComposerFile.Empty);
+            Parse(argv, ComposerFile.Empty);
         }
 
         /// <summary>Creates the commandline representation from argv and a composer file</summary>
         public CommandLine(string[] argv, ComposerFile composer)
         {
-            Parse(argv, 0, composer);
+            Parse(argv, composer);
         }
 
         /// <summary>Determines if a command line arg is an option</summary>
@@ -154,10 +154,10 @@ namespace Xp.Runners
         }
 
         /// <summary>Parses command line</summary>
-        private void Parse(string[] argv, int start, ComposerFile composer)
+        private void Parse(string[] argv, ComposerFile composer)
         {
             var offset = 0;
-            for (var i = start; i < argv.Length; i++)
+            for (var i = 0; i < argv.Length; i++)
             {
                 if (aliases.ContainsKey(argv[i]))
                 {
@@ -202,7 +202,7 @@ namespace Xp.Runners
                         command = null;
                         executionModel = null;
                         config = null;
-                        Parse(ArgsOf(composer.Definitions.Scripts[name]).ToArray(), 1, ComposerFile.Empty);
+                        Parse(ArgsOf(composer.Definitions.Scripts[name]).Skip(1).ToArray(), ComposerFile.Empty);
                         arguments = arguments.Concat(argv.Skip(offset));
                         return;
                     }
