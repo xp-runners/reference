@@ -74,6 +74,10 @@ namespace Xp.Runners.Commands
                             .Where(pair => pair.Key.StartsWith(@"root\require\"))
                             .ToDictionary(value => value.Key.Substring(@"root\require\".Length), value => value.First())
                         ;
+                        definitions.Scripts = lookup
+                            .Where(pair => pair.Key.StartsWith(@"root\scripts\"))
+                            .ToDictionary(value => value.Key.Substring(@"root\scripts\".Length), value => value.First())
+                        ;
                     }
                 }
                 return definitions;

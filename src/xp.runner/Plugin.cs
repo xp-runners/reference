@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using System.Runtime.Serialization.Json;
 using Xp.Runners;
 using Xp.Runners.IO;
 using Xp.Runners.Config;
@@ -16,6 +15,8 @@ namespace Xp.Runners
         private string name;
         private EntryPoint entry;
         private IEnumerable<string> modules;
+
+        public string Name { get { return name; }}
 
         public EntryPoint EntryPoint { get { return entry; }}
 
@@ -32,6 +33,7 @@ namespace Xp.Runners
         public override void Initialize(CommandLine cmd, ConfigSource configuration)
         {
             base.Initialize(cmd, configuration);
+
             foreach (var dir in cmd.Path["modules"].Concat(new string[] { "." }))
             {
                 if (null == (entry = FindEntryPoint(dir, name))) continue;
@@ -39,7 +41,6 @@ namespace Xp.Runners
                 modules = new string[] { };
                 return;
             }
-
             foreach (var dir in ComposerLocations())
             {
                 if (null == (entry = FindEntryPoint(dir, name))) continue;

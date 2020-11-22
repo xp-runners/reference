@@ -4,6 +4,7 @@ using Xp.Runners;
 using Xp.Runners.Commands;
 using Xp.Runners.Exec;
 using Xp.Runners.Config;
+using System.IO;
 
 namespace Xp.Runners.Test
 {
@@ -72,6 +73,26 @@ namespace Xp.Runners.Test
         public void ar(string arg)
         {
             Assert.IsType<Ar>(new CommandLine(new string[] { arg }).Command);
+        }
+
+        [Fact]
+        public void plugin()
+        {
+            Assert.IsType<Plugin>(new CommandLine(new string[] { "web" }).Command);
+        }
+
+        [Fact]
+        public void script_via_composer_file()
+        {
+            File.WriteAllText(ComposerFile.NAME, @"{""scripts"":{""serve"":""xp web org.example.web.App""}}");
+            try
+            {
+                Assert.Equal("web", (new CommandLine(new string[] { "serve" }).Command as Plugin).Name);
+            }
+            finally
+            {
+                File.Delete(ComposerFile.NAME);
+            }
         }
 
         [Fact]

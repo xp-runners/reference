@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using Xp.Runners.IO;
+using Xp.Runners.Commands;
 using Xp.Runners.Exec;
 using Xp.Runners.Config;
 
@@ -96,6 +97,12 @@ namespace Xp.Runners
             }
         }
 
+        /// <summary>Creates the commandline representation from argv</summary>
+        public CommandLine(string[] argv)
+        {
+            Parse(argv, 0);
+        }
+
         /// <summary>Determines if a command line arg is an option</summary>
         private bool IsOption(string arg)
         {
@@ -105,28 +112,14 @@ namespace Xp.Runners
         /// <summary>Determines if a command line arg refers to a command</summary>
         private bool IsCommand(string arg)
         {
-            return arg.All(char.IsLower);
+            return arg.All(c => char.IsLower(c) || '-' == c);
         }
 
-        /// <summary>Returns a command by a given name</summary>
-        private Command AsCommand(string arg)
-        {
-            var type = Type.GetType("Xp.Runners.Commands." + arg.UpperCaseFirst());
-            if (null == type)
-            {
-                return new Plugin(arg);
-            }
-            else
-            {
-                return Activator.CreateInstance(type) as Command;
-            }
-        }
-
-        /// <summary>Creates the commandline representation from argv</summary>
-        public CommandLine(string[] argv)
+        /// <summary>Parses command line</summary>
+        private void Parse(string[] argv, int start)
         {
             var offset = 0;
-            for (var i = 0; i < argv.Length; i++)
+            for (var i = start; i < argv.Length; i++)
             {
                 if (aliases.ContainsKey(argv[i]))
                 {
@@ -154,8 +147,36 @@ namespace Xp.Runners
                 }
                 else if (IsCommand(argv[i]))
                 {
-                    command = AsCommand(argv[i]);
+                    var name = argv[i];
                     offset = ++i;
+
+                    // Check builtin commands
+                    var type = Type.GetType("Xp.Runners.Commands." + name.UpperCaseFirst());
+                    if (null != type)
+                    {
+                        command = Activator.CreateInstance(type) as Command;
+                        break;
+                    }
+
+                    // Check composer.json for scripts
+                    if (File.Exists(ComposerFile.NAME))
+                    {
+                        using (var composer = new ComposerFile(ComposerFile.NAME))
+                        {
+                            if (composer.Definitions.Scripts.ContainsKey(name))
+                            {
+                                command = null;
+                                arguments = new string[] { };
+                                executionModel = null;
+                                config = null;
+                                Parse(composer.Definitions.Scripts[name].Split(new char[] { ' ' }), 1);
+                                return;
+                            }
+                        }
+                    }
+
+                    // Otherwise, it's a plugin defined via `bin/xp.{org}.{slug}.{name}`
+                    command = new Plugin(name);
                     break;
                 }
                 else
