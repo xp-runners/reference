@@ -171,6 +171,7 @@ namespace Xp.Runners
                         executionModel = null;
                         config = null;
                         Parse(composer.Definitions.Scripts[name].Split(new char[] { ' ' }), 1, ComposerFile.Empty);
+                        arguments = arguments.Concat(argv.Skip(offset));
                         return;
                     }
 

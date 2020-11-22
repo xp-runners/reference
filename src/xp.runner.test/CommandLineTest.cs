@@ -96,6 +96,16 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
+        public void script_via_composer_file_with_arguments()
+        {
+            var composer = ComposerFile(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}");
+            Assert.Equal(
+                new string[] { "org.example.web.App", "dev" },
+                new CommandLine(new string[] { "serve", "dev" }, composer).Arguments
+            );
+        }
+
+        [Fact]
         public void classpath_initially_empty()
         {
             Assert.Equal(new string[] { }, new CommandLine(new string[] { }).Path["classpath"].ToArray());
