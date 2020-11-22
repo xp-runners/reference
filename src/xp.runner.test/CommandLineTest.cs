@@ -88,11 +88,17 @@ namespace Xp.Runners.Test
             Assert.Equal("web", (new CommandLine(new string[] { "web" }).Command as Plugin).Name);
         }
 
-        [Fact]
-        public void script_via_composer_file()
+        [Theory]
+        [InlineData("xp web org.example.web.App")]
+        [InlineData("xp 'web' org.example.web.App")]
+        [InlineData("xp web 'org.example.web.App'")]
+        [InlineData("xp web 'org.example.web.App")]
+        public void script_via_composer_file(string script)
         {
-            var composer = ComposerFile(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}");
-            Assert.Equal("web", (new CommandLine(new string[] { "serve" }, composer).Command as Plugin).Name);
+            var composer = ComposerFile(@"{""scripts"":{""serve"":""%s""}}".Replace("%s", script));
+            var fixture = new CommandLine(new string[] { "serve" }, composer);
+            Assert.Equal("web", (fixture.Command as Plugin).Name);
+            Assert.Equal(new string[] { "org.example.web.App" }, fixture.Arguments);
         }
 
         [Fact]

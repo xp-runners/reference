@@ -121,6 +121,38 @@ namespace Xp.Runners
             return arg.All(c => char.IsLower(c) || '-' == c);
         }
 
+        /// <summary>Parses arguments from a given string</summary>
+        private IEnumerable<string> ArgsOf(string arg)
+        {
+            int index, quote;
+            var offset = 0;
+            do
+            {
+                if ('"' == arg[offset] || '\'' == arg[offset])
+                {
+                    index = arg.IndexOf(arg[offset], offset + 1);
+                    quote = 1;
+                }
+                else
+                {
+                    index = arg.IndexOf(' ', offset);
+                    quote = 0;
+                }
+
+                if (-1 == index)
+                {
+                    yield return arg.Substring(offset + quote);
+                    break;
+                }
+                else
+                {
+                    yield return arg.Substring(offset + quote, index - offset - quote);
+                    offset = index + 1 + quote;
+                }
+            }
+            while (offset < arg.Length);
+        }
+
         /// <summary>Parses command line</summary>
         private void Parse(string[] argv, int start, ComposerFile composer)
         {
@@ -170,7 +202,7 @@ namespace Xp.Runners
                         command = null;
                         executionModel = null;
                         config = null;
-                        Parse(composer.Definitions.Scripts[name].Split(new char[] { ' ' }), 1, ComposerFile.Empty);
+                        Parse(ArgsOf(composer.Definitions.Scripts[name]).ToArray(), 1, ComposerFile.Empty);
                         arguments = arguments.Concat(argv.Skip(offset));
                         return;
                     }
