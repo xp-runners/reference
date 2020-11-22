@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.2.0 / 2020-11-23
+
+* Merged PR #78: Check `composer.json` for subcommands - @thekid
+
 ## 8.1.7 / 2019-07-29
 
 * Fixed `include(): xp\xar::stream_set_option is not implemented!` warnings

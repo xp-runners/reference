@@ -89,14 +89,13 @@ namespace Xp.Runners.Test
         }
 
         [Theory]
-        [InlineData("xp web org.example.web.App")]
-        [InlineData("xp 'web' org.example.web.App")]
-        [InlineData("xp web 'org.example.web.App'")]
-        [InlineData("xp web 'org.example.web.App")]
-        public void script_via_composer_file(string script)
+        [InlineData(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}")]
+        [InlineData(@"{""scripts"":{""serve"":""xp 'web' org.example.web.App""}}")]
+        [InlineData(@"{""scripts"":{""serve"":""xp web 'org.example.web.App'""}}")]
+        [InlineData(@"{""scripts"":{""serve"":""xp web 'org.example.web.App""}}")]
+        public void script_via_composer_file(string source)
         {
-            var composer = ComposerFile(@"{""scripts"":{""serve"":""%s""}}".Replace("%s", script));
-            var fixture = new CommandLine(new string[] { "serve" }, composer);
+            var fixture = new CommandLine(new string[] { "serve" }, ComposerFile(source));
             Assert.Equal("web", (fixture.Command as Plugin).Name);
             Assert.Equal(new string[] { "org.example.web.App" }, fixture.Arguments);
         }
@@ -109,6 +108,16 @@ namespace Xp.Runners.Test
                 new string[] { "org.example.web.App", "dev" },
                 new CommandLine(new string[] { "serve", "dev" }, composer).Arguments
             );
+        }
+
+        [Theory]
+        [InlineData(@"{}")]
+        [InlineData(@"{""scripts"":{}}")]
+        [InlineData(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}")]
+        [InlineData(@"{""scripts"":{""test"":""phpunit""}}")]
+        public void plugin_when_script_is_not_in_composer_file(string source)
+        {
+            Assert.Equal("test", (new CommandLine(new string[] { "test" }, ComposerFile(source)).Command as Plugin).Name);
         }
 
         [Fact]
