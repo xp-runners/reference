@@ -100,7 +100,13 @@ namespace Xp.Runners
         /// <summary>Creates the commandline representation from argv</summary>
         public CommandLine(string[] argv)
         {
-            Parse(argv, 0);
+            Parse(argv, 0, ComposerFile.Empty);
+        }
+
+        /// <summary>Creates the commandline representation from argv and a composer file</summary>
+        public CommandLine(string[] argv, ComposerFile composer)
+        {
+            Parse(argv, 0, composer);
         }
 
         /// <summary>Determines if a command line arg is an option</summary>
@@ -116,7 +122,7 @@ namespace Xp.Runners
         }
 
         /// <summary>Parses command line</summary>
-        private void Parse(string[] argv, int start)
+        private void Parse(string[] argv, int start, ComposerFile composer)
         {
             var offset = 0;
             for (var i = start; i < argv.Length; i++)
@@ -159,20 +165,13 @@ namespace Xp.Runners
                     }
 
                     // Check composer.json for scripts
-                    if (File.Exists(ComposerFile.NAME))
+                    if (composer.Definitions.Scripts.ContainsKey(name))
                     {
-                        using (var composer = new ComposerFile(ComposerFile.NAME))
-                        {
-                            if (composer.Definitions.Scripts.ContainsKey(name))
-                            {
-                                command = null;
-                                arguments = new string[] { };
-                                executionModel = null;
-                                config = null;
-                                Parse(composer.Definitions.Scripts[name].Split(new char[] { ' ' }), 1);
-                                return;
-                            }
-                        }
+                        command = null;
+                        executionModel = null;
+                        config = null;
+                        Parse(composer.Definitions.Scripts[name].Split(new char[] { ' ' }), 1, ComposerFile.Empty);
+                        return;
                     }
 
                     // Otherwise, it's a plugin defined via `bin/xp.{org}.{slug}.{name}`

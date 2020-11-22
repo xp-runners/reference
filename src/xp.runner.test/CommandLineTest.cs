@@ -5,11 +5,18 @@ using Xp.Runners.Commands;
 using Xp.Runners.Exec;
 using Xp.Runners.Config;
 using System.IO;
+using System.Text;
 
 namespace Xp.Runners.Test
 {
     public class CommandLineTest
     {
+        /// <summary>Helper to create a ComposerFile from a string</summary>
+        private ComposerFile ComposerFile(string declaration)
+        {
+            return new ComposerFile(new MemoryStream(Encoding.UTF8.GetBytes(declaration.Trim())));
+        }
+
         [Fact]
         public void default_command_is_help()
         {
@@ -78,21 +85,14 @@ namespace Xp.Runners.Test
         [Fact]
         public void plugin()
         {
-            Assert.IsType<Plugin>(new CommandLine(new string[] { "web" }).Command);
+            Assert.Equal("web", (new CommandLine(new string[] { "web" }).Command as Plugin).Name);
         }
 
         [Fact]
         public void script_via_composer_file()
         {
-            File.WriteAllText(ComposerFile.NAME, @"{""scripts"":{""serve"":""xp web org.example.web.App""}}");
-            try
-            {
-                Assert.Equal("web", (new CommandLine(new string[] { "serve" }).Command as Plugin).Name);
-            }
-            finally
-            {
-                File.Delete(ComposerFile.NAME);
-            }
+            var composer = ComposerFile(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}");
+            Assert.Equal("web", (new CommandLine(new string[] { "serve" }, composer).Command as Plugin).Name);
         }
 
         [Fact]

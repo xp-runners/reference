@@ -16,6 +16,25 @@ namespace Xp.Runners.Commands
         private Composer definitions;
         private XmlDictionaryReader input;
 
+        /// <summary>Creates an empty composer file</summary>
+        public static ComposerFile Empty
+        {
+            get
+            {
+                var empty = new Composer();
+                empty.Name = "";
+                empty.Require = new Dictionary<string, string>();
+                empty.Scripts = new Dictionary<string, string>();
+                return new ComposerFile(empty);
+            }
+        }
+
+        /// <summary>Creates a composer file with given definitions</summary>
+        public ComposerFile(Composer definitions)
+        {
+            this.definitions = definitions;
+        }
+
         /// <summary>Creates an instance from a given stream</summary>
         public ComposerFile(Stream input)
         {
