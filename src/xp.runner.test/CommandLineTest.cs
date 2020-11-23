@@ -4,11 +4,19 @@ using Xp.Runners;
 using Xp.Runners.Commands;
 using Xp.Runners.Exec;
 using Xp.Runners.Config;
+using System.IO;
+using System.Text;
 
 namespace Xp.Runners.Test
 {
     public class CommandLineTest
     {
+        /// <summary>Helper to create a ComposerFile from a string</summary>
+        private ComposerFile ComposerFile(string declaration)
+        {
+            return new ComposerFile(new MemoryStream(Encoding.UTF8.GetBytes(declaration.Trim())));
+        }
+
         [Fact]
         public void default_command_is_help()
         {
@@ -72,6 +80,45 @@ namespace Xp.Runners.Test
         public void ar(string arg)
         {
             Assert.IsType<Ar>(new CommandLine(new string[] { arg }).Command);
+        }
+
+        [Fact]
+        public void plugin()
+        {
+            Assert.Equal("web", (new CommandLine(new string[] { "web" }).Command as Plugin).Name);
+        }
+
+        [Theory]
+        [InlineData(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}")]
+        [InlineData(@"{""scripts"":{""serve"":""xp 'web' org.example.web.App""}}")]
+        [InlineData(@"{""scripts"":{""serve"":""xp web 'org.example.web.App'""}}")]
+        [InlineData(@"{""scripts"":{""serve"":""xp web 'org.example.web.App""}}")]
+        public void script_via_composer_file(string source)
+        {
+            var fixture = new CommandLine(new string[] { "serve" }, ComposerFile(source));
+            Assert.Equal("web", (fixture.Command as Plugin).Name);
+            Assert.Equal(new string[] { "org.example.web.App" }, fixture.Arguments);
+        }
+
+        [Fact]
+        public void script_via_composer_file_with_arguments()
+        {
+            var composer = ComposerFile(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}");
+            Assert.Equal(
+                new string[] { "org.example.web.App", "dev" },
+                new CommandLine(new string[] { "serve", "dev" }, composer).Arguments
+            );
+        }
+
+        [Theory]
+        [InlineData(@"{}")]
+        [InlineData(@"{""scripts"":{}}")]
+        [InlineData(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}")]
+        [InlineData(@"{""scripts"":{""test"":""phpunit""}}")]
+        [InlineData(@"{""scripts"":{""test"":""xprop""}}")]
+        public void plugin_when_script_is_not_in_composer_file(string source)
+        {
+            Assert.Equal("test", (new CommandLine(new string[] { "test" }, ComposerFile(source)).Command as Plugin).Name);
         }
 
         [Fact]

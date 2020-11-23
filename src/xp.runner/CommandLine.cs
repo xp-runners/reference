@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using Xp.Runners.IO;
+using Xp.Runners.Commands;
 using Xp.Runners.Exec;
 using Xp.Runners.Config;
 
@@ -96,6 +97,18 @@ namespace Xp.Runners
             }
         }
 
+        /// <summary>Creates the commandline representation from argv</summary>
+        public CommandLine(string[] argv)
+        {
+            Parse(argv, ComposerFile.Empty);
+        }
+
+        /// <summary>Creates the commandline representation from argv and a composer file</summary>
+        public CommandLine(string[] argv, ComposerFile composer)
+        {
+            Parse(argv, composer);
+        }
+
         /// <summary>Determines if a command line arg is an option</summary>
         private bool IsOption(string arg)
         {
@@ -105,25 +118,43 @@ namespace Xp.Runners
         /// <summary>Determines if a command line arg refers to a command</summary>
         private bool IsCommand(string arg)
         {
-            return arg.All(char.IsLower);
+            return arg.All(c => char.IsLower(c) || '-' == c);
         }
 
-        /// <summary>Returns a command by a given name</summary>
-        private Command AsCommand(string arg)
+        /// <summary>Parses arguments from a given string</summary>
+        private IEnumerable<string> ArgsOf(string arg)
         {
-            var type = Type.GetType("Xp.Runners.Commands." + arg.UpperCaseFirst());
-            if (null == type)
+            int index, quote;
+            var offset = 0;
+            do
             {
-                return new Plugin(arg);
+                if ('"' == arg[offset] || '\'' == arg[offset])
+                {
+                    index = arg.IndexOf(arg[offset], offset + 1);
+                    quote = 1;
+                }
+                else
+                {
+                    index = arg.IndexOf(' ', offset);
+                    quote = 0;
+                }
+
+                if (-1 == index)
+                {
+                    yield return arg.Substring(offset + quote);
+                    break;
+                }
+                else
+                {
+                    yield return arg.Substring(offset + quote, index - offset - quote);
+                    offset = index + 1 + quote;
+                }
             }
-            else
-            {
-                return Activator.CreateInstance(type) as Command;
-            }
+            while (offset < arg.Length);
         }
 
-        /// <summary>Creates the commandline representation from argv</summary>
-        public CommandLine(string[] argv)
+        /// <summary>Parses command line</summary>
+        private void Parse(string[] argv, ComposerFile composer)
         {
             var offset = 0;
             for (var i = 0; i < argv.Length; i++)
@@ -154,8 +185,30 @@ namespace Xp.Runners
                 }
                 else if (IsCommand(argv[i]))
                 {
-                    command = AsCommand(argv[i]);
+                    var name = argv[i];
                     offset = ++i;
+
+                    // Check builtin commands
+                    var type = Type.GetType("Xp.Runners.Commands." + name.UpperCaseFirst());
+                    if (null != type)
+                    {
+                        command = Activator.CreateInstance(type) as Command;
+                        break;
+                    }
+
+                    // Check composer.json for scripts
+                    if (composer.Definitions.Scripts.ContainsKey(name) && composer.Definitions.Scripts[name].StartsWith("xp "))
+                    {
+                        command = null;
+                        executionModel = null;
+                        config = null;
+                        Parse(ArgsOf(composer.Definitions.Scripts[name]).Skip(1).ToArray(), ComposerFile.Empty);
+                        arguments = arguments.Concat(argv.Skip(offset));
+                        return;
+                    }
+
+                    // Otherwise, it's a plugin defined via `bin/xp.{org}.{slug}.{name}`
+                    command = new Plugin(name);
                     break;
                 }
                 else

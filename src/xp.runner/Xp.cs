@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using Xp.Runners.IO;
+using Xp.Runners.Commands;
 using Xp.Runners.Config;
 
 namespace Xp.Runners
@@ -11,7 +13,14 @@ namespace Xp.Runners
         {
             try
             {
-                return new CommandLine(args).Execute();
+                if (File.Exists(ComposerFile.NAME))
+                {
+                    return new CommandLine(args, new ComposerFile(ComposerFile.NAME)).Execute();
+                }
+                else
+                {
+                    return new CommandLine(args).Execute();
+                }
             }
             catch (ArgumentException e)
             {
