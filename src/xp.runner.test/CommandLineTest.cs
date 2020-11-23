@@ -115,6 +115,7 @@ namespace Xp.Runners.Test
         [InlineData(@"{""scripts"":{}}")]
         [InlineData(@"{""scripts"":{""serve"":""xp web org.example.web.App""}}")]
         [InlineData(@"{""scripts"":{""test"":""phpunit""}}")]
+        [InlineData(@"{""scripts"":{""test"":""xprop""}}")]
         public void plugin_when_script_is_not_in_composer_file(string source)
         {
             Assert.Equal("test", (new CommandLine(new string[] { "test" }, ComposerFile(source)).Command as Plugin).Name);
