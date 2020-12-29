@@ -121,6 +121,15 @@ namespace Xp.Runners.Test
             Assert.Equal("test", (new CommandLine(new string[] { "test" }, ComposerFile(source)).Command as Plugin).Name);
         }
 
+        [Theory]
+        [InlineData(@"")]
+        [InlineData(@"-INVALID-")]
+        [InlineData(@"{""scripts"":{")]
+        public void plugin_when_script_with_invalid_composer_file(string source)
+        {
+            Assert.Equal("serve", (new CommandLine(new string[] { "serve" }, ComposerFile(source)).Command as Plugin).Name);
+        }
+
         [Fact]
         public void classpath_initially_empty()
         {

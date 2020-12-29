@@ -35,16 +35,20 @@ namespace Xp.Runners.Commands
             this.definitions = definitions;
         }
 
-        /// <summary>Creates an instance from a given stream</summary>
-        public ComposerFile(Stream input)
+        /// <summary>Creates an instance from a given stream and source uri</summary>
+        public ComposerFile(Stream input, string sourceUri = "(stream)")
         {
             this.input = JsonReaderWriterFactory.CreateJsonReader(input, new XmlDictionaryReaderQuotas());
+            SourceUri = sourceUri;
         }
 
         /// <summary>Creates an instance from a given file name</summary>
-        public ComposerFile(string file) : this(new FileStream(file, FileMode.Open, FileAccess.Read))
+        public ComposerFile(string file) : this(new FileStream(file, FileMode.Open, FileAccess.Read), file)
         {
         }
+
+        /// <summary>Gets source URI for this file</summary>
+        public string SourceUri { get; private set; }
 
         /// <summary>Structure of a JSON document as a structure useable for lookups</summary>
         private IEnumerable<KeyValuePair<string, string>> StructureOf(XmlDictionaryReader input)
@@ -85,18 +89,25 @@ namespace Xp.Runners.Commands
                 {
                     if (null == definitions)
                     {
-                        var lookup = StructureOf(input).ToLookup(item => item.Key, item => item.Value);
+                        try
+                        {
+                            var lookup = StructureOf(input).ToLookup(item => item.Key, item => item.Value);
 
-                        definitions = new Composer();
-                        definitions.Name = lookup[@"root\name"].FirstOrDefault();
-                        definitions.Require = lookup
-                            .Where(pair => pair.Key.StartsWith(@"root\require\"))
-                            .ToDictionary(value => value.Key.Substring(@"root\require\".Length), value => value.First())
-                        ;
-                        definitions.Scripts = lookup
-                            .Where(pair => pair.Key.StartsWith(@"root\scripts\"))
-                            .ToDictionary(value => value.Key.Substring(@"root\scripts\".Length), value => value.First())
-                        ;
+                            definitions = new Composer();
+                            definitions.Name = lookup[@"root\name"].FirstOrDefault();
+                            definitions.Require = lookup
+                                .Where(pair => pair.Key.StartsWith(@"root\require\"))
+                                .ToDictionary(value => value.Key.Substring(@"root\require\".Length), value => value.First())
+                            ;
+                            definitions.Scripts = lookup
+                                .Where(pair => pair.Key.StartsWith(@"root\scripts\"))
+                                .ToDictionary(value => value.Key.Substring(@"root\scripts\".Length), value => value.First())
+                            ;
+                        }
+                        catch (XmlException e)
+                        {
+                            throw new FormatException(string.Format("Parsing {0} failed: {1}", SourceUri, e.Message), e);
+                        }
                     }
                 }
                 return definitions;

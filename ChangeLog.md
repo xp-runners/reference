@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.2.1 / 2020-12-29
+
+* Fixed issue #79: Malformed composer.json prevents XP runners from working
+  (@thekid)
+
 ## 8.2.0 / 2020-11-23
 
 * Merged PR #78: Check `composer.json` for subcommands using the scripts

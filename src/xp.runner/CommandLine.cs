@@ -197,14 +197,21 @@ namespace Xp.Runners
                     }
 
                     // Check composer.json for scripts
-                    if (composer.Definitions.Scripts.ContainsKey(name) && composer.Definitions.Scripts[name].StartsWith("xp "))
+                    try
                     {
-                        command = null;
-                        executionModel = null;
-                        config = null;
-                        Parse(ArgsOf(composer.Definitions.Scripts[name]).Skip(1).ToArray(), ComposerFile.Empty);
-                        arguments = arguments.Concat(argv.Skip(offset));
-                        return;
+                        if (composer.Definitions.Scripts.ContainsKey(name) && composer.Definitions.Scripts[name].StartsWith("xp "))
+                        {
+                            command = null;
+                            executionModel = null;
+                            config = null;
+                            Parse(ArgsOf(composer.Definitions.Scripts[name]).Skip(1).ToArray(), ComposerFile.Empty);
+                            arguments = arguments.Concat(argv.Skip(offset));
+                            return;
+                        }
+                    }
+                    catch (FormatException e)
+                    {
+                        Console.Error.WriteLine("Warning: {0}", e.Message);
                     }
 
                     // Otherwise, it's a plugin defined via `bin/xp.{org}.{slug}.{name}`
