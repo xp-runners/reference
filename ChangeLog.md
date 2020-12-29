@@ -3,7 +3,7 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
-## 8.3.0 / 2020-12-20
+## 8.3.0 / 2020-12-29
 
 * Suggest PHP 7.4 and PHP 8.0 on Cygwin installations - @thekid
 * Made compatible with `php7.4-cli` and `php8.0-cli` on Ubuntu and Debian
