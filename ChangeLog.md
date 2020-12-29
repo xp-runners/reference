@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.2.2 / 2020-12-29
+
+* Fixed issue #80: Cygwin installation fails (*when Windows curl is used*)
+  (@thekid)
+
 ## 8.2.1 / 2020-12-29
 
 * Fixed issue #79: Malformed composer.json prevents XP runners from working
