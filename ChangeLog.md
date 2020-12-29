@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Made compatible with `php7.4-cli` and `php8.0-cli` on Ubuntu and Debian
+  (@thekid)
+
 ## 8.2.2 / 2020-12-29
 
 * Fixed issue #80: Cygwin installation fails (*when Windows curl is used*)
