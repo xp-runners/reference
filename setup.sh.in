@@ -84,7 +84,7 @@ commands() {
 bundle_php() {
   releases=http://windows.php.net/downloads/releases/
 
-  download $releases - | grep -Eo 'php-[0-9.]+-nts-Win32-[VCx0-9-]+.zip' | sort -rn | uniq > $TEMPFILE
+  download $releases - | grep -Eo 'php-[0-9.]+-nts-Win32-[VCvcsx0-9-]+.zip' | sort -rn | uniq > $TEMPFILE
 
   echo "> Select which PHP version you want to use"
   nl -b a $TEMPFILE
