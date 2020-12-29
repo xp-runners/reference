@@ -180,6 +180,9 @@ main() {
           "extension=php_com_dotnet.dll"
       fi
       EXTRACT="$EXTRACT xar.exe tput.exe"
+
+      # Use current directory in case curl is its Windows version
+      temp=.
       ;;
 
     Ubuntu*|Debian*)
