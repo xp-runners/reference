@@ -3,6 +3,14 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.5.0 / 2021-04-17
+
+* **Heads up:** Migrated away from Bintray before it is sunset. See #81
+  for details and #83 for implementation.
+  (@thekid)
+* Fixed `trap: SIGHUP: bad trap`, see https://unix.stackexchange.com/a/314556
+  (@thekid)
+
 ## 8.4.0 / 2021-04-17
 
 * Included subcommands defined in *composer.json* in `xp list` output
