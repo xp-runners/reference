@@ -6,46 +6,63 @@ set -u
 . ./init.sh
 
 TARGET=$(pwd)/target
-ARCHIVE=$TARGET/xp-runners_${VERSION}.tar.gz
 SETUP=$TARGET/setup-${VERSION}.sh
-SLIM=$TARGET/xp-run-${VERSION}.sh
-BINTRAY=$TARGET/generic.config
+ENTRYPOINT=$TARGET/xp-run-${VERSION}.sh
+TAR=$TARGET/xp-runners_${VERSION}.tar.gz
+ZIP=$TARGET/xp-runners_${VERSION}.zip
+PUBLISH=https://xp.baltorepo.com/xp-runners/distribution/upload/
 
 mkdir -p $TARGET
-rm -f $SETUP $BINTRAY
+rm -rf $TAR $ZIP
 
+# One-line installer
 cat setup.sh.in | sed -e "s/@VERSION@/$VERSION/g" > $SETUP
-tar cvfz $ARCHIVE xp.exe xar.exe tput.exe class-main.php web-main.php
+curl -i \
+  --header "Authorization: Bearer ${BALTO_REPO_TOKEN}" \
+  --form "download=@${SETUP}" \
+  --form "name=installer" \
+  --form "version=${VERSION}" \
+  --form "description=One-line installer" \
+  --form "readme=<README.md" \
+  $PUBLISH
+echo
 
-# Slim runner
-(cat xp-run.sh.in | sed -e "s/@VERSION@/$VERSION/g" ; cat class-main.php ) > $SLIM
+# Shell entrypoint
+(cat xp-run.sh.in | sed -e "s/@VERSION@/$VERSION/g" ; cat class-main.php ) > $ENTRYPOINT
+curl -i \
+  --header "Authorization: Bearer ${BALTO_REPO_TOKEN}" \
+  --form "download=@${ENTRYPOINT}" \
+  --form "name=entrypoint" \
+  --form "version=${VERSION}" \
+  --form "description=Shell entrypoint" \
+  --form "readme=<README.md" \
+  $PUBLISH
+echo
 
-# Bintray configuration
-date=$(date +%Y-%m-%d)
-cat <<-EOF > $BINTRAY
-  {
-    "package": {
-      "name"     : "xp-runners",
-      "repo"     : "generic",
-      "subject"  : "xp-runners"
-    },
-    "version": {
-      "name"     : "${VERSION}",
-      "desc"     : "XP Runners release ${VERSION}",
-      "released" : "${date}",
-      "vcs_tag"  : "${VCS_TAG}",
-      "gpgSign"  : true
-    },
-    "files": [
-      {
-        "includePattern" : "target/(setup.*sh|xp-run.*sh|xp-runners.*tar.gz)",
-        "uploadPattern"  : "\$1",
-        "matrixParams"   : { "override": 1 }
-      }
-    ],
-    "publish": true
-  }
-EOF
+# Tar.gz for Un*x
+tar cvfz $TAR xp.exe xar.exe tput.exe class-main.php web-main.php
+curl -i \
+  --header "Authorization: Bearer ${BALTO_REPO_TOKEN}" \
+  --form "download=@${TAR}" \
+  --form "name=tar" \
+  --form "version=${VERSION}" \
+  --form "description=Gzipped tar archive" \
+  --form "readme=<README.md" \
+  $PUBLISH
+echo
+
+# Zipfile for Windows
+zip -j $ZIP xp.exe xar.exe tput.exe class-main.php web-main.php
+curl -i \
+  --header "Authorization: Bearer ${BALTO_REPO_TOKEN}" \
+  --form "download=@${ZIP}" \
+  --form "name=zip" \
+  --form "version=${VERSION}" \
+  --form "description=Zip file" \
+  --form "readme=<README.md" \
+  $PUBLISH
+echo
 
 # Done
-ls -al $SETUP $ARCHIVE $BINTRAY $SLIM
+echo "Published packages"
+ls -al $SETUP $ENTRYPOINT $TAR $ZIP
