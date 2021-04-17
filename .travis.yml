@@ -26,7 +26,6 @@ script:
 before_deploy:
   - sh bundle.sh
   - sh debian.sh
-  - sh windows.sh
   - sh generic.sh
 
 deploy:
