@@ -59,7 +59,7 @@ cat control
 ar -q $DEB debian-binary control.tar.gz data.tar.xz
 
 # Publish to Balto
-curl --verbose \
+curl -i \
   --header "Authorization: Bearer ${BALTO_REPO_TOKEN}" \
   --form "package=@${DEB}" \
   --form "distribution=all" \
