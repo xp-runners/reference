@@ -18,11 +18,14 @@ $ curl -sSL https://dl.bintray.com/xp-runners/generic/setup-8.4.0.sh | sh
 ...and a Ubuntu/Debian package:
 
 ```sh
-$ echo 'deb https://dl.bintray.com/xp-runners/debian jessie main' | sudo tee -a /etc/apt/sources.list.d/xp.list
-$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D401AB61
+# Only necessary once
+$ curl https://baltocdn.com/xp-framework/signing.asc | sudo apt-key add -
+$ echo 'deb https://baltocdn.com/xp-framework/xp-runners/reference/ all main' | sudo tee -a /etc/apt/sources.list.d/xp.list
+$ sudo apt-get install apt-transport-https --yes
+
+# From then one, this is all you need
 $ sudo apt-get update
 $ sudo apt-get install xp-runners
-# ...
 ```
 
 Then, install the framework and you're all set to go:
