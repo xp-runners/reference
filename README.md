@@ -32,7 +32,7 @@ $ composer global require xp-framework/core
 # ...
 
 $ xp version
-XP 10.5.1 { PHP/7.4.13 & Zend/3.4.0 } @ Windows NT SURFACE 10.0 build 19042 (Windows 10) AMD64
+XP 10.9.1 { PHP/8.0.3 & Zend/4.0.3 } @ Windows NT SURFACE 10.0 build 19042 (Windows 10) AMD64
 Copyright (c) 2001-2021 the XP group
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/php>
