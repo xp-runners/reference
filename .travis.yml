@@ -27,5 +27,5 @@ after_script:
   - if [ ! -z ${TRAVIS_TAG-} ]; then
       sh bundle.sh &&
       sh debian.sh && 
-      sh generic.sh
+      sh generic.sh ;
     fi
