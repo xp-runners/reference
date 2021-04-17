@@ -106,7 +106,10 @@ namespace Xp.Runners
         /// <summary>Creates the commandline representation from argv and a composer file</summary>
         public CommandLine(string[] argv, ComposerFile composer)
         {
-            Parse(argv, composer);
+            using (composer)
+            {
+                Parse(argv, composer);
+            }
         }
 
         /// <summary>Determines if a command line arg is an option</summary>
