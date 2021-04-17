@@ -3,6 +3,13 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.3.1 / 2021-04-17
+
+* Fixed issue #82: Composer file held open - @thekid
+* Fixed shutdown timeout when using `xp-run` as a Docker entrypoint, see
+  xp-forge/web#76
+  (@thekid)
+
 ## 8.3.0 / 2020-12-29
 
 * Suggest PHP 7.4 and PHP 8.0 on Cygwin installations - @thekid
