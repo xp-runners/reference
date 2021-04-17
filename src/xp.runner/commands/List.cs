@@ -86,6 +86,24 @@ namespace Xp.Runners.Commands
                 }
                 Console.WriteLine();
 
+                if (File.Exists(ComposerFile.NAME))
+                {
+                    using (var composer = new ComposerFile(ComposerFile.NAME))
+                    {
+                        if (composer.Definitions.Scripts.Count > 0)
+                        {
+                            Console.WriteLine("\x1b[33;1m>\x1b[0m Defined via scripts in @ {0}", composer.SourceUri);
+                            Console.WriteLine();
+
+                            foreach (var script in composer.Definitions.Scripts)
+                            {
+                                Console.WriteLine("  $ xp {0}", script.Key);
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                }
+
                 foreach (var dir in cmd.Path["modules"])
                 {
                     if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) Console.WriteLine();

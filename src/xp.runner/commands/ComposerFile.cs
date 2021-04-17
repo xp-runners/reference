@@ -100,7 +100,7 @@ namespace Xp.Runners.Commands
                                 .ToDictionary(value => value.Key.Substring(@"root\require\".Length), value => value.First())
                             ;
                             definitions.Scripts = lookup
-                                .Where(pair => pair.Key.StartsWith(@"root\scripts\"))
+                                .Where(pair => pair.Key.StartsWith(@"root\scripts\") && pair.First().StartsWith("xp "))
                                 .ToDictionary(value => value.Key.Substring(@"root\scripts\".Length), value => value.First())
                             ;
                         }

@@ -54,5 +54,24 @@ namespace Xp.Runners.Test
                 Assert.Equal("^6.5", composer.Definitions.Require["xp-framework/io-collections"]);
             }
         }
+
+        [Fact]
+        public void xp_scripts()
+        {
+            using (var composer = ComposerFile(@"{""scripts"" : {""run-tests"" : ""xp test src/test/php""} }"))
+            {
+                Assert.Equal(1, composer.Definitions.Scripts.Count);
+                Assert.Equal("xp test src/test/php", composer.Definitions.Scripts["run-tests"]);
+            }
+        }
+
+        [Fact]
+        public void other_script()
+        {
+            using (var composer = ComposerFile(@"{""scripts"" : {""run-tests"" : ""phpunit""} }"))
+            {
+                Assert.Equal(0, composer.Definitions.Scripts.Count);
+            }
+        }
     }
 }

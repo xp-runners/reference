@@ -202,7 +202,7 @@ namespace Xp.Runners
                     // Check composer.json for scripts
                     try
                     {
-                        if (composer.Definitions.Scripts.ContainsKey(name) && composer.Definitions.Scripts[name].StartsWith("xp "))
+                        if (composer.Definitions.Scripts.ContainsKey(name))
                         {
                             command = null;
                             executionModel = null;

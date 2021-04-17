@@ -3,8 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
-## 8.3.1 / 2021-04-17
+## 8.4.0 / 2021-04-17
 
+* Included subcommands defined in *composer.json* in `xp list` output
+  (@thekid)
 * Fixed issue #82: Composer file held open - @thekid
 * Fixed shutdown timeout when using `xp-run` as a Docker entrypoint, see
   xp-forge/web#76
