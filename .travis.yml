@@ -24,8 +24,8 @@ script:
   - chmod 755 ./xp.exe
 
 after_script:
-  - if [ ! -z ${TRAVIS_TAG-} ]; then \
-      sh bundle.sh ;\
-      sh debian.sh ; \
-      sh generic.sh ; \
+  - if [ ! -z ${TRAVIS_TAG-} ]; then
+      sh bundle.sh &&
+      sh debian.sh && 
+      sh generic.sh
     fi
