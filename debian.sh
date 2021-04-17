@@ -14,12 +14,12 @@ BUILD=$(mktemp -d)
 ORIGIN=$(pwd)
 TARGET=$ORIGIN/target
 DEB=$TARGET/xp-runners_${VERSION}-1_all.deb
-BINTRAY=$TARGET/debian.config
 
 echo "Creating package $DEB in $BUILD"
+cp README.md $BUILD
 
 mkdir -p target
-rm -f $DEB $BINTRAY
+rm -f $DEB
 fakeroot=$(which fakeroot || which fakeroot-ng)
 cd $BUILD
 
@@ -53,43 +53,20 @@ cat <<-EOF > control
 	Provides: xp-runners
 	Description: XP Runners
 EOF
-$fakeroot tar cfz control.tar.gz conffiles control
+$fakeroot tar cfz control.tar.gz ./conffiles ./control
 cat control
 
 ar -q $DEB debian-binary control.tar.gz data.tar.xz
 
-# Bintray configuration
-date=$(date +%Y-%m-%d)
-cat <<-EOF > $BINTRAY
-	{
-	  "package": {
-	    "name"     : "xp-runners",
-	    "repo"     : "debian",
-	    "subject"  : "xp-runners"
-	  },
-	  "version": {
-	    "name"     : "${VERSION}",
-	    "desc"     : "XP Runners release ${VERSION}",
-	    "released" : "${date}",
-	    "vcs_tag"  : "${TRAVIS_TAG}",
-	    "gpgSign"  : true
-	  },
-	  "files": [
-	    {
-	      "includePattern" : "target/(xp-runners.*deb)",
-	      "uploadPattern"  : "\$1",
-	      "matrixParams"   : {
-	        "deb_distribution" : "jessie",
-	        "deb_component"    : "main",
-	        "deb_architecture" : "i386,amd64",
-	        "override"         : 1
-	      }
-	    }
-	  ],
-	  "publish": true
-	}
-EOF
+# Publish to Balto
+curl -i \
+  --header "Authorization: Bearer ${BALTO_REPO_TOKEN}" \
+  --form "package=@${DEB}" \
+  --form "distribution=all" \
+  --form "readme=<README.md" \
+  https://xp.baltorepo.com/xp-runners/reference/upload/
+echo
 
 # Done
 rm -rf $BUILD
-ls -al $DEB $BINTRAY
+ls -al $DEB

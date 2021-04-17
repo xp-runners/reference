@@ -235,7 +235,7 @@ main() {
   esac
 
   TARFILE=$(mktemp -u "$temp/tmp.XXXXXXXXXX")
-  download https://bintray.com/artifact/download/xp-runners/generic/xp-runners_@VERSION@.tar.gz $TARFILE
+  download https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/t/tar/xp-runners_@VERSION@.tar.gz $TARFILE
 
   run 'Extract' "tar xvfz $TARFILE $EXTRACT"
   run 'Test' "ls -al $(pwd)/xp.exe"
