@@ -2,7 +2,7 @@ XP Runners
 ==========
 [![Build Status on TravisCI](https://secure.travis-ci.org/xp-runners/reference.svg)](http://travis-ci.org/xp-runners/reference)
 [![BSD License](https://raw.githubusercontent.com/xp-framework/web/master/static/licence-bsd.png)](https://github.com/xp-runners/reference/blob/master/LICENSE.md)
-
+[![Balto](https://badgen.net/https/xp.baltorepo.com/xp-runners/badge/repos.json)](https://xp.baltorepo.com/xp-runners/)
 
 This is the reference implementation of [XP RFC #0303: Subcommands](https://github.com/xp-framework/rfc/issues/303) supporting Windows, Linux and Mac OS X.
 
