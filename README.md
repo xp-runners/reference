@@ -18,12 +18,11 @@ $ curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/
 ...and a Ubuntu/Debian package:
 
 ```sh
-# Only necessary once
 $ curl https://baltocdn.com/xp-framework/signing.asc | sudo apt-key add -
 $ echo 'deb https://baltocdn.com/xp-framework/xp-runners/reference/ all main' | sudo tee -a /etc/apt/sources.list.d/xp.list
 $ sudo apt-get install apt-transport-https --yes
 
-# From then one, this is all you need
+# ..and then:
 $ sudo apt-get update
 $ sudo apt-get install xp-runners
 ```
@@ -59,13 +58,28 @@ The following commands are built in:
 
 If no command line arguments are given, the help command is run. If command line arguments are given, but no command is passed, the command defaults to *run*.
 
+Local commands
+--------------
+You can define comands in *composer.json* by using its `scripts` section:
+
+```json
+{
+  "require": { ... },
+  "scripts": {
+    "serve": "xp -supervise web -m async -c src/main/etc/dev -a 0.0.0.0:80 com.example.App"
+  }
+}
+```
+
+Typing `xp serve` in the console will run the above command. Any extra arguments will be concatenated to the command line in scripts.
+
 Plugin architecture
 -------------------
 Libraries may provide commands by adding a vendor binary to their composer.json named xp.{vendor}.{name}[.{command}] - for the [test](https://github.com/xp-framework/unittest/blob/master/bin/xp.xp-framework.unittest.test) command, the entry is:
 
 ```json
 {
-    "bin": ["bin/xp.xp-framework.unittest.test"]
+  "bin": ["bin/xp.xp-framework.unittest.test"]
 }
 ```
 
