@@ -3,6 +3,13 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.5.1 / 2021-04-24
+
+* Fixed bootstrapping when *iconv* extension is not available by falling
+  back to *mbstring*, and raising an error when neither are available. See
+  xp-framework/core#270
+  (@thekid)
+
 ## 8.5.0 / 2021-04-17
 
 * **Heads up:** Migrated away from Bintray before it is sunset. See #81
