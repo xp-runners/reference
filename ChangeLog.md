@@ -3,6 +3,11 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.5.3 / 2021-09-19
+
+* Merged PR #84: Port testing and packaging from Travis CI to GitHub actions
+  (@thekid)
+
 ## 8.5.2 / 2021-09-19
 
 * Fixed entry points to work even when `$_SERVER` is not available. This
