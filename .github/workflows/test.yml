@@ -15,9 +15,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Determine version
-      run: sh .github/workflows/version.sh
-
     - name: Set up Mono
       run: sudo apt-get -y install mono-runtime mono-mcs libmono-system-runtime-serialization4.0-cil
 
