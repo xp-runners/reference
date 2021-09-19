@@ -38,7 +38,7 @@ jobs:
       run: sh .github/workflows/bundle.sh
 
     - name: Debian package
-      run: sh .github/workflows/generic.sh
+      run: sh .github/workflows/debian.sh
       env:
         BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
 
