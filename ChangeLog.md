@@ -3,6 +3,13 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.5.2 / 2021-09-19
+
+* Fixed entry points to work even when `$_SERVER` is not available. This
+  may be the (rare) case if *variables_order* does not contain `S`, see
+  https://www.php.net/manual/en/ini.core.php#ini.variables-order
+  (@thekid)
+
 ## 8.5.1 / 2021-04-24
 
 * Fixed bootstrapping when *iconv* extension is not available by falling
