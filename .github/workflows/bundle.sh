@@ -3,8 +3,6 @@
 set -e
 set -u
 
-. ./init.sh
-
 temp=${TMPDIR-${TEMP-${TMP-/tmp}}}
 BUILD=$(mktemp -d "$temp/tmp.XXXXXXXXXX")
 SOURCES="bootstrap.php class-main.php class-path.php scan-path.php web-main.php xar-support.php entry.php stringof.php"
