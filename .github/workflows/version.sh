@@ -9,11 +9,15 @@ else
   BUILD=$GITHUB_RUN_NUMBER
 fi
 
-if [ -z ${GITHUB_REF-} ]; then
-  RELEASE=$(grep '##' ChangeLog.md | grep -v ???? | head -1 | cut -d ' ' -f 2)
-else
-  RELEASE=${GITHUB_REF#v*}
-fi
+case ${GITHUB_REF-} in
+  refs/tags/v*)
+    RELEASE=${GITHUB_REF#refs/tags/v*}
+    ;;
+
+  *)
+    RELEASE=$(grep '##' ChangeLog.md | grep -v ???? | head -1 | cut -d ' ' -f 2)
+    ;;
+esac
 
 echo "Version $RELEASE.$BUILD"
 
