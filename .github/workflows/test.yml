@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set up Mono
-      run: sudo apt install -y mono-mcs mono-runtime
+      run: sudo apt install -y mono-mcs mono-runtime libmono-system-runtime-serialization4.0-cil
 
     - name: Install XUnit
       run: |
