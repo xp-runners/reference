@@ -19,9 +19,9 @@ case ${GITHUB_REF-} in
     ;;
 esac
 
-echo "Version $VERSION build $BUILD_NUM"
-
 rm -f src/xp.runner/AssemblyInfo.cs.patched
 grep -v AssemblyVersion src/xp.runner/AssemblyInfo.cs >> src/xp.runner/AssemblyInfo.cs.patched
 echo '[assembly: AssemblyVersion("'$VERSION.$BUILD_NUM'")]' >> src/xp.runner/AssemblyInfo.cs.patched
 mv src/xp.runner/AssemblyInfo.cs.patched src/xp.runner/AssemblyInfo.cs
+
+cat src/xp.runner/AssemblyInfo.cs
