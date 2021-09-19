@@ -3,8 +3,7 @@
 set -e
 set -u
 
-. .github/workflows/version.sh
-
+VERSION=${GITHUB_REF#refs/tags/v*}
 TARGET=$(pwd)/target
 SETUP=$TARGET/setup-${VERSION}.sh
 ENTRYPOINT=$TARGET/xp-run-${VERSION}.sh

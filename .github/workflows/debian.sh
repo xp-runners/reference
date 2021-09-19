@@ -3,8 +3,7 @@
 set -e
 set -u
 
-. .github/workflows/version.sh
-
+VERSION=${GITHUB_REF#refs/tags/v*}
 BUILD=$(mktemp -d)
 ORIGIN=$(pwd)
 TARGET=$ORIGIN/target
