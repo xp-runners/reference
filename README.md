@@ -1,6 +1,6 @@
 XP Runners
 ==========
-[![Build Status on TravisCI](https://secure.travis-ci.org/xp-runners/reference.svg)](http://travis-ci.org/xp-runners/reference)
+[![Tests on GitHub](https://github.com/xp-runners/reference/workflows/Tests/badge.svg)](https://github.com/xp-runners/reference/actions)
 [![BSD License](https://raw.githubusercontent.com/xp-framework/web/master/static/licence-bsd.png)](https://github.com/xp-runners/reference/blob/master/LICENSE.md)
 [![Balto](https://badgen.net/https/xp.baltorepo.com/xp-runners/badge/repos.json)](https://xp.baltorepo.com/xp-runners/)
 
