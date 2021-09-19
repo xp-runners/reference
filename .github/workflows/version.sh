@@ -3,16 +3,16 @@
 set -e
 set -u 
 
-if [ $TRAVIS_BUILD_NUMBER -gt 65535 ] ; then
-  BUILD=${TRAVIS_BUILD_NUMBER:(-5)}
+if [ $GITHUB_RUN_NUMBER -gt 65535 ] ; then
+  BUILD=${GITHUB_RUN_NUMBER:(-5)}
 else
-  BUILD=$TRAVIS_BUILD_NUMBER
+  BUILD=$GITHUB_RUN_NUMBER
 fi
 
-if [ -z ${TRAVIS_TAG-} ]; then
+if [ -z ${GITHUB_REF-} ]; then
   RELEASE=$(grep '##' ChangeLog.md | grep -v ???? | head -1 | cut -d ' ' -f 2)
 else
-  RELEASE=${TRAVIS_TAG#v*}
+  RELEASE=${GITHUB_REF#v*}
 fi
 
 echo "Version $RELEASE.$BUILD"

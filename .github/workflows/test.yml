@@ -26,6 +26,7 @@ jobs:
 
     - name: Run test suite
       run: |
+        sh version.sh
         mcs --version
         cp testrunner/xunit.1.9.2/lib/net20/xunit.dll .
         cp testrunner/xunit.extensions.1.9.2/lib/net20/xunit.extensions.dll .
