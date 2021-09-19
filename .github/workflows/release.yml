@@ -42,9 +42,9 @@ jobs:
     - name: Debian package
       run: sh .github/workflows/generic.sh
       env:
-        - BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
+        BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
 
     - name: Generic package
       run: sh .github/workflows/generic.sh
       env:
-        - BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
+        BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
