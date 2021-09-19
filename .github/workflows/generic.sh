@@ -3,7 +3,7 @@
 set -e
 set -u
 
-. ./init.sh
+. .github/workflows/version.sh
 
 TARGET=$(pwd)/target
 SETUP=$TARGET/setup-${VERSION}.sh

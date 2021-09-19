@@ -3,12 +3,7 @@
 set -e
 set -u
 
-. ./init.sh
-
-if [ master = $VERSION ]; then
-  echo "Debian packages are not build for master branch, abort." >&2
-  exit 0
-fi
+. .github/workflows/version.sh
 
 BUILD=$(mktemp -d)
 ORIGIN=$(pwd)

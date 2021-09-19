@@ -12,11 +12,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Determine release version
-      run: sh .github/workflows/version.sh
-
     - name: Set up Mono
-      run: sudo apt-get -y install mono-runtime mono-mcs libmono-system-runtime-serialization4.0-cil
+      run: sudo apt-get -y install mono-runtime mono-mcs libmono-system-runtime-serialization4.0-cil fakeroot
 
     - name: Install XUnit
       run: |
@@ -41,6 +38,10 @@ jobs:
 
     - name: Debian package
       run: sh .github/workflows/generic.sh
+      env:
+        - BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
 
     - name: Generic package
       run: sh .github/workflows/generic.sh
+      env:
+        - BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
