@@ -9,7 +9,7 @@ namespace Xp.Runners
 
         // Mapping table generated from
         //
-        // $ curl http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml \
+        // $ curl https://raw.githubusercontent.com/unicode-org/cldr/main/common/supplemental/windowsZones.xml \
         //   | grep 'territory="001"'
         //   | sed -E 's/.+other=("[^"]+").+type=("[^"]+")..+/        { \1, \2 },/g'
         //
