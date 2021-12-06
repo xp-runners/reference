@@ -1,4 +1,5 @@
 using Xunit;
+using Xunit.Extensions;
 using System;
 using System.Linq;
 using System.IO;
@@ -176,5 +177,42 @@ namespace Xp.Runners.Test
             );
         }
 
+        [Theory]
+        [InlineData(null, false)]
+        [InlineData("/home/thekid/.config", true)]
+        public void xdg_system_detection(string config, bool expect)
+        {
+            using (new ModifiedEnvironment().RemoveAny("XDG_").With("XDG_CONFIG_HOME", config))
+            {
+                Assert.Equal(expect, Paths.UseXDG());
+            }
+        }
+
+        [Fact]
+        public void configdir_uses_appdata_if_no_home_variable_is_set()
+        {
+            using (new ModifiedEnvironment().With("HOME", null))
+            {
+                Assert.Equal(Paths.Compose(Environment.SpecialFolder.ApplicationData, "Xp", "test"), Paths.ConfigDir("test"));
+            }
+        }
+
+        [Fact]
+        public void configdir_uses_xdg_config_dir_on_xdg_systems()
+        {
+            using (new ModifiedEnvironment().With("HOME", "home").With("XDG_CONFIG_HOME", "xdg/.config"))
+            {
+                Assert.Equal(Paths.Compose("xdg", ".config", "xp", "test"), Paths.ConfigDir("test"));
+            }
+        }
+
+        [Fact]
+        public void configdir_uses_dot_dir_in_home_by_default()
+        {
+            using (new ModifiedEnvironment().With("HOME", "home").RemoveAny("XDG_"))
+            {
+                Assert.Equal(Paths.Compose(Paths.Home(), ".xp", "test"), Paths.ConfigDir("test"));
+            }
+        }
     }
 }

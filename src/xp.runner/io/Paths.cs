@@ -23,6 +23,17 @@ namespace Xp.Runners.IO
             return filename.Substring(0, filename.LastIndexOf(Path.DirectorySeparatorChar) + 1);
         }
 
+        /// <summary>Returns whether the environment indicates this system conforms to
+        /// https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html</summary>
+        public static bool UseXDG()
+        {
+            foreach (string variable in Environment.GetEnvironmentVariables().Keys)
+            {
+                if (variable.StartsWith("XDG_")) return true;
+            }
+            return false;
+        }
+
         /// <summary>Try to locate a given file inside multiple base paths. Same as Locate() but does not
         /// throw an exception but yields an empty result.</summary>
         public static IEnumerable<string> TryLocate(IEnumerable<string> bases, IEnumerable<string> files)
