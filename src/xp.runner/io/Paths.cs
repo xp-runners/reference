@@ -75,6 +75,31 @@ namespace Xp.Runners.IO
             return Environment.GetEnvironmentVariable("HOME") ?? Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         }
 
+        /// <summary>Returns a configuration directory with a given name:
+        /// * Uses $APPDATA/Xp/$name when no $HOME variable is set
+        /// * Checks $XDG_CONFIG_HOME/xp/$name on XDG environments
+        /// * Uses $HOME/.xp/$name otherwise
+        /// </summary>
+        public static string ConfigDir(string name)
+        {
+            var home = Environment.GetEnvironmentVariable("HOME");
+            if (null == home)
+            {
+                return Compose(Environment.SpecialFolder.ApplicationData, "Xp", name);
+            }
+
+            if (UseXDG())
+            {
+                return Compose(
+                    Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? Paths.Compose(home, ".config"),
+                    "xp",
+                    name
+                );
+            }
+
+            return Compose(home, ".xp", name);
+        }
+
         /// <summary>Resolve a path. If the path is actually a shell link (.lnk file), this link's target path is used</summary>
         public static string Resolve(string path)
         {
