@@ -207,6 +207,16 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
+        public void configdir_uses_default_config_dir_on_xdg_systems()
+        {
+            using (new ModifiedEnvironment().With("HOME", "home").With("XDG_CONFIG_HOME", null).With("XDG_RUNTIME_DIR", "/run/user/1000"))
+            {
+                Assert.Equal(Paths.Compose("home", ".config", "xp", "test"), Paths.ConfigDir("test"));
+            }
+        }
+
+
+        [Fact]
         public void configdir_uses_dot_dir_in_home_by_default()
         {
             using (new ModifiedEnvironment().With("HOME", "home").RemoveAny("XDG_"))
