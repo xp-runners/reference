@@ -67,7 +67,7 @@ namespace Xp.Runners.Commands
                 .Select(library => user.Concat(ComposerLocations())
                     .Where(dir => Directory.Exists(Paths.Compose(dir, library)))
                     .Select(dir => Paths.Compose(dir, "autoload.php"))
-                    .FirstOrDefault(null)
+                    .FirstOrDefault()
                 )
                 .Where(loader => loader != null)
                 .Distinct()
