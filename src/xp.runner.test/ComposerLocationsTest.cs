@@ -38,13 +38,16 @@ namespace Xp.Runners.Test
         [InlineData(false)]
         public void uses_composerdotdir_on_unix(bool exists)
         {
-            Assert.Equal(
-                new string[] {
-                    Paths.Compose(".", ComposerLocations.VENDOR),
-                    Paths.Compose(Paths.Home(), ".composer", ComposerLocations.VENDOR),
-                },
-                ComposerLocations.For(PlatformID.Unix, (dir) => exists).ToArray()
-            );
+            using (new ModifiedEnvironment().RemoveAny("XDG_"))
+            {
+                Assert.Equal(
+                    new string[] {
+                        Paths.Compose(".", ComposerLocations.VENDOR),
+                        Paths.Compose(Paths.Home(), ".composer", ComposerLocations.VENDOR),
+                    },
+                    ComposerLocations.For(PlatformID.Unix, (dir) => exists).ToArray()
+                );
+            }
         }
 
         [Fact]
