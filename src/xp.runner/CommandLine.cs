@@ -221,6 +221,12 @@ namespace Xp.Runners
                     command = new Plugin(name);
                     break;
                 }
+                else if (!argv[i].EndsWith(".class.php") && !argv[i].EndsWith(".xar") && File.Exists(argv[i]))
+                {
+                    command = new Commands.Script(argv[i]);
+                    offset = i + 1;
+                    break;
+                }
                 else
                 {
                     command = new Commands.Run();
