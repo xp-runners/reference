@@ -9,7 +9,7 @@ using Xp.Runners;
 
 namespace Xp.Runners.Commands
 {
-    /// <summary>run $file [$arg0 [$arg1 [...]]]</summary>
+    /// <summary>Runs XP Scripts, extracting dependencies</summary>
     public class Script : Command
     {
         private static Regex _from = new Regex("^use\\s+(.+)\\s+from\\s+'([^'@]+)(@[^']+)?';");
