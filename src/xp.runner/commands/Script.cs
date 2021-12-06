@@ -12,7 +12,7 @@ namespace Xp.Runners.Commands
     /// <summary>run $file [$arg0 [$arg1 [...]]]</summary>
     public class Script : Command
     {
-        private static Regex _from = new Regex("^use (.+) from '([^']+)';");
+        private static Regex _from = new Regex("^use\\s+(.+)\\s+from\\s+'([^'@]+)(@[^']+)?';");
         private string _file;
         private string _namespace = null;
         private HashSet<string> _libraries = null;
@@ -62,8 +62,10 @@ namespace Xp.Runners.Commands
         /// <summary>Additional modules to load.</summary>
         protected override IEnumerable<string> ModulesFor(CommandLine cmd)
         {
+            Parse();
+
             var user = new string[] { Paths.Compose(Paths.ConfigDir(_namespace), "vendor") };
-            return Libraries
+            return _libraries
                 .Select(library => user.Concat(ComposerLocations())
                     .Where(dir => Directory.Exists(Paths.Compose(dir, library)))
                     .Select(dir => Paths.Compose(dir, "autoload.php"))

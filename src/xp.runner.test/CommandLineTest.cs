@@ -326,7 +326,7 @@ namespace Xp.Runners.Test
                 @"<?php",
                 @"",
                 @"use text\csv\{CsvListWriter, CsvFormat} from 'xp-framework/csv';",
-                @"use text\json\Json from 'xp-forge/json';",
+                @"use text\json\Json from 'xp-forge/json@^5.0';",
                 @"",
                 @"use util\cmd\Console;"
             });
