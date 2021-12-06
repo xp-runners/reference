@@ -124,7 +124,7 @@ namespace Xp.Runners.IO
         {
             return string.Join(new string(new char[] { Path.DirectorySeparatorChar }), components
                 .Where(c => !string.IsNullOrEmpty(c))
-                .Select(c => c.TrimEnd(new char[] { Path.DirectorySeparatorChar }))
+                .Select(c => c.Replace('/', Path.DirectorySeparatorChar).TrimEnd(new char[] { Path.DirectorySeparatorChar }))
                 .ToArray()
             );
         }
