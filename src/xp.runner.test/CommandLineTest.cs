@@ -7,6 +7,7 @@ using Xp.Runners.Config;
 using System.IO;
 using System.Text;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Xp.Runners.Test
 {
@@ -334,8 +335,11 @@ namespace Xp.Runners.Test
             using (var file = new TemporaryFile("test.script.php").Containing(code))
             {
                 Assert.Equal(
-                    new string[] { "xp-framework/csv", "xp-forge/json" },
-                    (new CommandLine(new string[] { file.Path }).Command as Script).Libraries.Keys.ToArray()
+                    new Dictionary<string, string>() {
+                        {"xp-framework/csv", "*"},
+                        {"xp-forge/json", "^5.0"},
+                    },
+                    (new CommandLine(new string[] { file.Path }).Command as Script).Libraries
                 );
             }
         }
