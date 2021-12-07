@@ -335,7 +335,7 @@ namespace Xp.Runners.Test
             {
                 Assert.Equal(
                     new string[] { "xp-framework/csv", "xp-forge/json" },
-                    (new CommandLine(new string[] { file.Path }).Command as Script).Libraries.ToArray()
+                    (new CommandLine(new string[] { file.Path }).Command as Script).Libraries.Keys.ToArray()
                 );
             }
         }
