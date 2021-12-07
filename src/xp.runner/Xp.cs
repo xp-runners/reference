@@ -26,20 +26,19 @@ namespace Xp.Runners
                 }
                 catch (CannotExecute e)
                 {
-                    Console.Error.WriteLine("\x1b[33m@{0}\x1b[0m", e.Origin ?? Paths.Binary());
-                    Console.Error.WriteLine("\x1b[1m{0}", e.Message);
+                    Output.Origin(Console.Error, e.Origin ?? Paths.Binary());
+                    Output.Message(Console.Error, e.Message);
                     if (e.Advice != null)
                     {
-                        Console.Error.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
-                        Console.Error.WriteLine();
+                        Output.Separator(Console.Error);
                         Console.Error.WriteLine(e.Advice.TrimEnd());
                     }
                     return 2;
                 }
                 catch (EntryPointNotFoundException e)
                 {
-                    Console.Error.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
-                    Console.Error.WriteLine("Problem executing runtime: {0}", e.Message);
+                    Output.Origin(Console.Error, Paths.Binary());
+                    Output.Message(Console.Error, "Problem executing runtime: " + e.Message);
                     return 2;
                 }
             }

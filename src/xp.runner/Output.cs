@@ -43,6 +43,25 @@ namespace Xp.Runners
             }
         }
 
+        /// <summary>Display @[ORIGIN] in yellow</summary>
+        public static void Origin(TextWriter output, string origin)
+        {
+            output.WriteLine("\x1b[33m@{0}\x1b[0m", origin);
+        }
+
+        /// <summary>Display a message in bold</summary>
+        public static void Message(TextWriter output, string origin)
+        {
+            output.WriteLine("\x1b[1m{0}\x1b[0m", origin);
+        }
+
+        /// <summary>Display a separator line</summary>
+        public static void Separator(TextWriter output)
+        {
+            output.WriteLine("════════════════════════════════════════════════════════════════════════");
+            output.WriteLine();
+        }
+
         public void Dispose()
         {
             if (null != original)
