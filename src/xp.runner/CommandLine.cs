@@ -223,13 +223,13 @@ namespace Xp.Runners
                 }
                 else if (!argv[i].EndsWith(".class.php") && !argv[i].EndsWith(".xar") && File.Exists(argv[i]))
                 {
-                    command = new Commands.Script(argv[i]);
+                    command = new Script(argv[i]);
                     offset = i + 1;
                     break;
                 }
                 else
                 {
-                    command = new Commands.Run();
+                    command = new Run();
                     offset = i;
                     break;
                 }
