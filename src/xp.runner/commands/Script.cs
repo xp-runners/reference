@@ -86,23 +86,26 @@ namespace Xp.Runners.Commands
             // of the required libraries are missing.
             if (loaders.ContainsKey(NotFound))
             {
-                var buffer = new StringBuilder("Cannot find ").Append(string.Join(", ", loaders[NotFound])).Append(" anywhere in {\n");
-                foreach (var location in locations)
-                {
-                    buffer.Append("  ").Append(location).Append("\n");
-                }
-                buffer.Append("}\n\nInstall them by running the following:\n");
+                var error = string.Format(
+                    "Cannot find {0} anywhere in {{\n  {1}\n}}",
+                    string.Join(", ", loaders[NotFound]),
+                    string.Join("\n  ", locations)
+                );
+
+                var advice = new StringBuilder("Install by running the following:\n\n\x1b[36m");
+                advice.Append("mkdir -p '").Append(locations[0]).Append("'").Append("\n");
                 foreach (var missing in loaders[NotFound])
                 {
-                    buffer.Append("composer require -d '").Append(locations[0]).Append("' ").Append(missing.Key);
+                    advice.Append("\x1b[36mcomposer require -d '").Append(locations[0]).Append("' ").Append(missing.Key);
                     if ("*" != missing.Value)
                     {
-                        buffer.Append(" '").Append(missing.Value).Append("'");
+                        advice.Append(" '").Append(missing.Value).Append("'");
                     }
-                    buffer.Append("\n");
+                    advice.Append("\n");
                 }
+                advice.Append("\x1b[0m");
 
-                throw new CannotExecute(buffer.ToString(), Paths.Resolve(_file));
+                throw new CannotExecute(error, Paths.Resolve(_file)).Advise(advice.ToString());
             }
 
             return loaders.Keys;

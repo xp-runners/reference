@@ -27,7 +27,13 @@ namespace Xp.Runners
                 catch (CannotExecute e)
                 {
                     Console.Error.WriteLine("\x1b[33m@{0}\x1b[0m", e.Origin ?? Paths.Binary());
-                    Console.Error.WriteLine(e.Message);
+                    Console.Error.WriteLine("\x1b[1m{0}", e.Message);
+                    if (e.Advice != null)
+                    {
+                        Console.Error.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
+                        Console.Error.WriteLine();
+                        Console.Error.WriteLine(e.Advice.TrimEnd());
+                    }
                     return 2;
                 }
                 catch (EntryPointNotFoundException e)
