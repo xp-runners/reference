@@ -41,7 +41,7 @@ namespace Xp.Runners
                 modules = new string[] { };
                 return;
             }
-            foreach (var dir in ComposerLocations())
+            foreach (var dir in ComposerLocations().Select(dir => Paths.Compose(dir, "vendor")))
             {
                 if (null == (entry = FindEntryPoint(dir, name))) continue;
 

@@ -67,16 +67,15 @@ namespace Xp.Runners.Commands
         /// <summary>Additional class path entries to load.</summary>
         protected override IEnumerable<string> ClassPathFor(CommandLine cmd)
         {
-            var config = Paths.ConfigDir(_namespace);
-            var locations = new string[] { Paths.Compose(config, "vendor") }
+            var locations = new string[] { Paths.ConfigDir(_namespace) }
                 .Concat(ComposerLocations())
                 .Select(Paths.Resolve)
                 .ToArray()
             ;
             var loaders = _libraries
                 .GroupBy(library => locations
-                    .Where(dir => Directory.Exists(Paths.Compose(dir, library.Key)))
-                    .Select(dir => Paths.Compose(dir, "autoload.php"))
+                    .Where(dir => Directory.Exists(Paths.Compose(dir, "vendor", library.Key)))
+                    .Select(dir => Paths.Compose(dir, "vendor", "autoload.php"))
                     .DefaultIfEmpty(NotFound)
                     .First()
                 )
@@ -95,7 +94,7 @@ namespace Xp.Runners.Commands
                 buffer.Append("}\n\nInstall them by running the following:\n");
                 foreach (var missing in loaders[NotFound])
                 {
-                    buffer.Append("composer require -d '").Append(config).Append("' ").Append(missing.Key);
+                    buffer.Append("composer require -d '").Append(locations[0]).Append("' ").Append(missing.Key);
                     if ("*" != missing.Value)
                     {
                         buffer.Append(" '").Append(missing.Value).Append("'");

@@ -14,8 +14,8 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(
                 new string[] {
-                    Paths.Compose(".", ComposerLocations.VENDOR),
-                    Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer", ComposerLocations.VENDOR),
+                    ".",
+                    Paths.Compose(Environment.SpecialFolder.ApplicationData, "Composer"),
                 },
                 ComposerLocations.For(PlatformID.Win32NT).ToArray()
             );
@@ -26,8 +26,8 @@ namespace Xp.Runners.Test
         {
             Assert.Equal(
                 new string[] {
-                    Paths.Compose(".", ComposerLocations.VENDOR),
-                    Paths.Compose(Paths.Home(), ".composer", ComposerLocations.VENDOR),
+                    ".",
+                    Paths.Compose(Paths.Home(), ".composer"),
                 },
                 ComposerLocations.For(PlatformID.MacOSX).ToArray()
             );
@@ -42,8 +42,8 @@ namespace Xp.Runners.Test
             {
                 Assert.Equal(
                     new string[] {
-                        Paths.Compose(".", ComposerLocations.VENDOR),
-                        Paths.Compose(Paths.Home(), ".composer", ComposerLocations.VENDOR),
+                        ".",
+                        Paths.Compose(Paths.Home(), ".composer"),
                     },
                     ComposerLocations.For(PlatformID.Unix, (dir) => exists).ToArray()
                 );
@@ -58,8 +58,8 @@ namespace Xp.Runners.Test
             {
                 Assert.Equal(
                     new string[] {
-                        Paths.Compose(".", ComposerLocations.VENDOR),
-                        Paths.Compose(config, "composer", ComposerLocations.VENDOR),
+                        ".",
+                        Paths.Compose(config, "composer"),
                     },
                     ComposerLocations.For(PlatformID.Unix, (dir) => false).ToArray()
                 );
@@ -73,8 +73,8 @@ namespace Xp.Runners.Test
             {
                 Assert.Equal(
                     new string[] {
-                        Paths.Compose(".", ComposerLocations.VENDOR),
-                        Paths.Compose(Paths.Home(), ".config", "composer", ComposerLocations.VENDOR),
+                        ".",
+                        Paths.Compose(Paths.Home(), ".config", "composer"),
                     },
                     ComposerLocations.For(PlatformID.Unix, (dir) => false).ToArray()
                 );
@@ -88,8 +88,8 @@ namespace Xp.Runners.Test
             {
                 Assert.Equal(
                     new string[] {
-                        Paths.Compose(".", ComposerLocations.VENDOR),
-                        Paths.Compose(Paths.Home(), ".composer", ComposerLocations.VENDOR),
+                        ".",
+                        Paths.Compose(Paths.Home(), ".composer"),
                     },
                     ComposerLocations.For(PlatformID.Unix, (dir) => true).ToArray()
                 );

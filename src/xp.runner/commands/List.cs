@@ -116,7 +116,7 @@ namespace Xp.Runners.Commands
 
                 foreach (var dir in ComposerLocations())
                 {
-                    if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Installed", dir)) Console.WriteLine();
+                    if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Installed", Paths.Compose(dir, "vendor"))) Console.WriteLine();
                 }
             }
             return 0;

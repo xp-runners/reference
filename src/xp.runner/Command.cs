@@ -63,7 +63,7 @@ namespace Xp.Runners
         /// <summary>Use composer to find xp-framework/core</summary>
         private IEnumerable<string> UseComposer()
         {
-            return ComposerLocations().Select(dir => Paths.Compose(dir, "xp-framework", "core")).Where(Directory.Exists);
+            return ComposerLocations().Select(dir => Paths.Compose(dir, "vendor", "xp-framework", "core")).Where(Directory.Exists);
         }
 
         /// <summary>Entry point</summary>
