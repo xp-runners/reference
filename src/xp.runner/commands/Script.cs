@@ -59,8 +59,8 @@ namespace Xp.Runners.Commands
             }
         }
 
-        /// <summary>Additional modules to load.</summary>
-        protected override IEnumerable<string> ModulesFor(CommandLine cmd)
+        /// <summary>Additional class path entries to load.</summary>
+        protected override IEnumerable<string> ClassPathFor(CommandLine cmd)
         {
             Parse();
 
