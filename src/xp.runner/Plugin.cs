@@ -49,7 +49,7 @@ namespace Xp.Runners
                 return;
             }
 
-            throw new CannotExecute("Command not implemented: " + name);
+            throw new CannotExecute("Command not implemented: " + name).Advise("Run `xp list` to see available commands");
         }
 
         /// <summary>Finds command by name in a given directory</summary>
