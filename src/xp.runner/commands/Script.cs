@@ -102,7 +102,7 @@ namespace Xp.Runners.Commands
                     buffer.Append("\n");
                 }
 
-                throw new ArgumentException(buffer.ToString());
+                throw new CannotExecute(buffer.ToString(), Paths.Resolve(_file));
             }
 
             return loaders.Keys;

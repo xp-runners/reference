@@ -23,7 +23,7 @@ namespace Xp.Runners
         {
             if (!configuration.Valid())
             {
-                throw new ArgumentException("Invalid configuration: " + configuration);
+                throw new CannotExecute("Invalid configuration: " + configuration);
             }
         }
 

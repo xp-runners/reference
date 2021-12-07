@@ -293,13 +293,13 @@ namespace Xp.Runners.Test
         [Fact]
         public void unknown_argument()
         {
-            Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-UNKOWN" }));
+            Assert.Throws<CannotExecute>(() => new CommandLine(new string[] { "-UNKOWN" }));
         }
 
         [Fact]
         public void argument_without_required_value()
         {
-            Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-cp" }));
+            Assert.Throws<CannotExecute>(() => new CommandLine(new string[] { "-cp" }));
         }
 
         [Fact]

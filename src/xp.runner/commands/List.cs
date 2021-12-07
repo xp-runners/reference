@@ -71,53 +71,50 @@ namespace Xp.Runners.Commands
         {
             var self = Assembly.GetExecutingAssembly();
 
-            using (new Output())
+            Console.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
+            Console.WriteLine("\x1b[1mXP Subcommands");
+            Console.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
+            Console.WriteLine();
+
+            Console.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
+            Console.WriteLine();
+            foreach (var type in BuiltinsIn(self))
             {
-                Console.WriteLine("\x1b[33m@{0}\x1b[0m", Paths.Binary());
-                Console.WriteLine("\x1b[1mXP Subcommands");
-                Console.WriteLine("\x1b[36m════════════════════════════════════════════════════════════════════════\x1b[0m");
-                Console.WriteLine();
+                Console.WriteLine("  $ xp {0}", type.Name.ToLower());
+            }
+            Console.WriteLine();
 
-                Console.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
-                Console.WriteLine();
-                foreach (var type in BuiltinsIn(self))
+            if (File.Exists(ComposerFile.NAME))
+            {
+                using (var composer = new ComposerFile(ComposerFile.NAME))
                 {
-                    Console.WriteLine("  $ xp {0}", type.Name.ToLower());
-                }
-                Console.WriteLine();
-
-                if (File.Exists(ComposerFile.NAME))
-                {
-                    using (var composer = new ComposerFile(ComposerFile.NAME))
+                    if (composer.Definitions.Scripts.Count > 0)
                     {
-                        if (composer.Definitions.Scripts.Count > 0)
-                        {
-                            Console.WriteLine("\x1b[33;1m>\x1b[0m Defined via scripts in @ {0}", composer.SourceUri);
-                            Console.WriteLine();
+                        Console.WriteLine("\x1b[33;1m>\x1b[0m Defined via scripts in @ {0}", composer.SourceUri);
+                        Console.WriteLine();
 
-                            foreach (var script in composer.Definitions.Scripts)
-                            {
-                                Console.WriteLine("  $ xp {0}", script.Key);
-                            }
-                            Console.WriteLine();
+                        foreach (var script in composer.Definitions.Scripts)
+                        {
+                            Console.WriteLine("  $ xp {0}", script.Key);
                         }
+                        Console.WriteLine();
                     }
                 }
+            }
 
-                foreach (var dir in cmd.Path["modules"])
-                {
-                    if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) Console.WriteLine();
-                }
+            foreach (var dir in cmd.Path["modules"])
+            {
+                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) Console.WriteLine();
+            }
 
-                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
-                {
-                    Console.WriteLine();
-                }
+            if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
+            {
+                Console.WriteLine();
+            }
 
-                foreach (var dir in ComposerLocations())
-                {
-                    if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Installed", Paths.Compose(dir, "vendor"))) Console.WriteLine();
-                }
+            foreach (var dir in ComposerLocations())
+            {
+                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Installed", Paths.Compose(dir, "vendor"))) Console.WriteLine();
             }
             return 0;
         }

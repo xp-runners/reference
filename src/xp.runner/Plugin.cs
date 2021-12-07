@@ -49,7 +49,7 @@ namespace Xp.Runners
                 return;
             }
 
-            throw new NotImplementedException(name);
+            throw new CannotExecute("Command not implemented: " + name);
         }
 
         /// <summary>Finds command by name in a given directory</summary>

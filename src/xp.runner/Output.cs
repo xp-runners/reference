@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Xp.Runners.Exec
+namespace Xp.Runners
 {
     class Output : IDisposable
     {
