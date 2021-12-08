@@ -26,12 +26,12 @@ namespace Xp.Runners
                 }
                 catch (CannotExecute e)
                 {
-                    Console.Error.Write(new Output().Origin(e.Origin ?? Paths.Binary()).Error(e.Message, e.Advice));
+                    new Output(Console.Error).Origin(e.Origin ?? Paths.Binary()).Error(e.Message, e.Advice);
                     return 2;
                 }
                 catch (EntryPointNotFoundException e)
                 {
-                    Console.Error.Write(new Output().Origin(Paths.Binary()).Error("Problem executing runtime", e.Message));
+                    new Output(Console.Error).Origin(Paths.Binary()).Error("Problem executing runtime", e.Message);
                     return 2;
                 }
             }

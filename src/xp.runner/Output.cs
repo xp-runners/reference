@@ -1,15 +1,14 @@
-using System;
-using System.Text;
+using System.IO;
 
 namespace Xp.Runners
 {
-    public class Output : IFormattable
+    public class Output
     {
-        private StringBuilder buffer;
+        private TextWriter writer;
 
-        public Output()
+        public Output(TextWriter writer)
         {
-            buffer = new StringBuilder();
+            this.writer = writer;
         }
 
         /// <summary>Append a line</summary>
@@ -17,48 +16,34 @@ namespace Xp.Runners
         {
             foreach (var s in args)
             {
-                buffer.Append(s);
+                writer.Write(s);
             }
-            buffer.Append(Environment.NewLine);
+            writer.WriteLine();
             return this;
         }
 
         /// <summary>Append @[ORIGIN] in yellow</summary>
         public Output Origin(string origin)
         {
-            buffer
-                .Append("\x1b[33m@")
-                .Append(origin)
-                .Append("\x1b[0m")
-                .Append(Environment.NewLine)
-            ;
+            writer.WriteLine("\x1b[33m@{0}\x1b[0m", origin);
             return this;
         }
 
         /// <summary>Append a message in bold</summary>
         public Output Message(string message)
         {
-            buffer
-                .Append("\x1b[1m")
-                .Append(message)
-                .Append("\x1b[0m")
-                .Append(Environment.NewLine)
-            ;
+            writer.WriteLine("\x1b[1m@{0}\x1b[0m", message);
             return this;
         }
 
         /// <summary>Display an error message and an optional advice</summary>
         public Output Error(string message, string advice = null)
         {
-            buffer
-                .Append("\x1b[41;1;37m ERROR \x1b[0;37m ")
-                .Append(message)
-                .Append("\x1b[0m")
-                .Append(Environment.NewLine)
-            ;
+            writer.WriteLine("\x1b[41;1;37m ERROR \x1b[0;37m {0}\x1b[0m", message);
             if (advice != null)
             {
-                buffer.Append(Environment.NewLine).Append(advice.TrimEnd()).Append(Environment.NewLine);
+                writer.WriteLine();
+                writer.WriteLine(advice.TrimEnd());
             }
             return this;
         }
@@ -66,18 +51,9 @@ namespace Xp.Runners
         /// <summary>Append a separator line</summary>
         public Output Separator()
         {
-            buffer
-                .Append("════════════════════════════════════════════════════════════════════════")
-                .Append(Environment.NewLine)
-                .Append(Environment.NewLine)
-            ;
+            writer.WriteLine("════════════════════════════════════════════════════════════════════════");
+            writer.WriteLine();
             return this;
-        }
-
-        /// <summary>IFormattable implementation</summary>
-        public string ToString(string format, IFormatProvider provider)
-        {
-            return this.buffer.ToString();
         }
     }
 }
