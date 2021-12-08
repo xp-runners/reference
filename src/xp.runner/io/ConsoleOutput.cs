@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Xp.Runners
+namespace Xp.Runners.IO
 {
     class ConsoleOutput : IDisposable
     {
