@@ -76,6 +76,26 @@ namespace Xp.Runners.IO
             }
         }
 
+        /// <summary>Escape arguments</summary>
+        public static IEnumerable<string> Escape(IEnumerable<string> arguments)
+        {
+            foreach (var arg in arguments)
+            {
+                if (null == arg)
+                {
+                    // Skip
+                }
+                else if (0 == arg.Length || arg.IndexOfAny(new char[] { '?', '*', '>', '<', '|', '"', '^', '~', '\\' }) >= 0)
+                {
+                    yield return "'" + arg + "'";
+                }
+                else
+                {
+                    yield return arg;
+                }
+            }
+        }
+
         public override int GetHashCode()
         {
             var code = base.GetHashCode() ^ executable.GetHashCode();

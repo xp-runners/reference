@@ -1,5 +1,7 @@
 using Xunit;
+using Xunit.Extensions;
 using System;
+using System.Linq;
 using Xp.Runners.IO;
 
 namespace Xp.Runners.Test
@@ -88,6 +90,31 @@ namespace Xp.Runners.Test
                 new Shell("php", new string[] { "\"test\"" }),
                 Shell.Parse("php \"test")
             );
+        }
+
+        [Theory]
+        [InlineData("*")]
+        [InlineData("?")]
+        [InlineData("^5.0")]
+        public void escapes(string input)
+        {
+            Assert.Equal("'" + input + "'", Shell.Escape(new string[] { input }).First());
+        }
+
+        [Theory]
+        [InlineData("composer")]
+        [InlineData("xp-framework/core")]
+        public void does_not_escape(string input)
+        {
+            Assert.Equal(input , Shell.Escape(new string[] { input }).First());
+        }
+
+        [Theory]
+        [InlineData(null, "xp-framework/core")]
+        [InlineData("5.0", "5.0")]
+        public void escaping_skips_oper_null(string input, string expected)
+        {
+            Assert.Equal(expected, Shell.Escape(new string[] { "xp-framework/core", input }).Last());
         }
     }
 }
