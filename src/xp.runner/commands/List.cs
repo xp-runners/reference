@@ -44,42 +44,37 @@ namespace Xp.Runners.Commands
             ;
         }
 
-        /// <summary>Display commands of a certain kind in a given directory</summary>
-        private bool DisplayCommandsIn(string kind, string dir)
+        /// <summary>Appends commands of a certain kind in a given directory</summary>
+        private void AppendCommands(Output output, string kind, string dir)
         {
-            var empty = true;
             var bin = Paths.Compose(dir, "bin");
             if (Directory.Exists(bin))
             {
-                foreach (var entry in ScriptsIn(bin))
+                var section = new Output().Line();
+                var count = ScriptsIn(bin)
+                    .Select(entry => section.Line("$ xp " + entry.Command + " (» \x1b[35;1;4mfrom " + entry.Module + "\x1b[0m)"))
+                    .Count()
+                ;
+
+                if (count > 0)
                 {
-                    if (empty)
-                    {
-                        Console.WriteLine("{0} @ {1}", kind, dir);
-                        Console.WriteLine();
-                        empty = false;
-                    }
-                    Console.WriteLine("  $ xp {0} (» \x1b[35;1;4mfrom {1}\x1b[0m)", entry.Command, entry.Module);
+                    output.Section(kind + " " + dir, section);
                 }
             }
-
-            return !empty;
         }
 
         /// <summary>Entry point</summary>
         public override int Execute(CommandLine cmd, ConfigSource configuration)
         {
-            var self = Assembly.GetExecutingAssembly();
-
-            new Output(Console.Out).Origin(Paths.Binary()).Message("XP Subcommands").Separator();
-
-            Console.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
-            Console.WriteLine();
-            foreach (var type in BuiltinsIn(self))
-            {
-                Console.WriteLine("  $ xp {0}", type.Name.ToLower());
-            }
-            Console.WriteLine();
+            var assembly = Assembly.GetExecutingAssembly();
+            var output = new Output(Console.Out)
+                .Origin(Paths.Binary())
+                .Header("XP Subcommands")
+                .Section("Builtin @ " + assembly.GetName().Version, new Output()
+                    .Line()
+                    .Each(BuiltinsIn(assembly), (self, type) => self.Line("$ xp " + type.Name.ToLower()))
+                )
+            ;
 
             if (File.Exists(ComposerFile.NAME))
             {
@@ -87,31 +82,24 @@ namespace Xp.Runners.Commands
                 {
                     if (composer.Definitions.Scripts.Count > 0)
                     {
-                        Console.WriteLine("\x1b[33;1m>\x1b[0m Defined via scripts in @ {0}", composer.SourceUri);
-                        Console.WriteLine();
-
-                        foreach (var script in composer.Definitions.Scripts)
-                        {
-                            Console.WriteLine("  $ xp {0}", script.Key);
-                        }
-                        Console.WriteLine();
+                        output.Section("Defined via scripts in @ " + composer.SourceUri, new Output()
+                            .Line()
+                            .Each(composer.Definitions.Scripts, (self, script) => self.Line("$ xp " + script.Key))
+                        );
                     }
                 }
             }
 
             foreach (var dir in cmd.Path["modules"])
             {
-                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Module", Paths.Resolve(dir))) Console.WriteLine();
+                AppendCommands(output, "Module", Paths.Resolve(dir));
             }
 
-            if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Local", Directory.GetCurrentDirectory()))
-            {
-                Console.WriteLine();
-            }
+            AppendCommands(output, "Local", Directory.GetCurrentDirectory());
 
             foreach (var dir in ComposerLocations())
             {
-                if (DisplayCommandsIn("\x1b[33;1m>\x1b[0m Installed", Paths.Compose(dir, "vendor"))) Console.WriteLine();
+                AppendCommands(output, "Installed",  Paths.Compose(dir, "vendor"));
             }
             return 0;
         }

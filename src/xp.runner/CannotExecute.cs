@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Xp.Runners
 {
@@ -23,6 +24,13 @@ namespace Xp.Runners
         public CannotExecute Advise(string advice)
         {
             Advice = advice;
+            return this;
+        }
+
+        /// <summary>Sets advice - steps users can perform to prevent this error</summary>
+        public CannotExecute Advise(Output advice)
+        {
+            Advice = advice.ToString();
             return this;
         }
     }

@@ -88,31 +88,23 @@ namespace Xp.Runners
             // of the required libraries are missing.
             if (loaders.ContainsKey(NotFound))
             {
-                var error = "Cannot find " + string.Join(", ", loaders[NotFound]);
-                var advice = new StringBuilder();
-
-                // List search paths
-                advice.Append("> Search paths:\n  ").Append(locations[0]).Append(" (» \x1b[35;1;4mdefault\x1b[0m)\n");
-                foreach (var location in locations.Skip(1))
-                {
-                    advice.Append("  ").Append(location).Append("\n");
-                }
-                advice.Append("\n");
-
-                // Show commands to install
-                advice.Append("> Install by running the following:\n");
-                advice.Append("\x1b[34m  mkdir -p '").Append(locations[0]).Append("'").Append("\x1b[0m\n");
-                foreach (var missing in loaders[NotFound])
-                {
-                    advice.Append("\x1b[34m  composer require -d '").Append(locations[0]).Append("' ").Append(missing.Key);
-                    if ("*" != missing.Value)
-                    {
-                        advice.Append(" '").Append(missing.Value).Append("'");
-                    }
-                    advice.Append("\x1b[0\n");
-                }
-
-                throw new CannotExecute(error, Paths.Resolve(_file)).Advise(advice.ToString());
+                throw new CannotExecute("Cannot find " + string.Join(", ", loaders[NotFound]), Paths.Resolve(_file)).Advise(new Output()
+                    .Section("Search paths:", new Output()
+                        .Line(locations[0], " (» \x1b[35;1;4mdefault\x1b[0m)")
+                        .Each(locations.Skip(1), (self, location) => self.Line(location))
+                    )
+                    .Section("Install by running the following:", new Output()
+                        .Command("mkdir", "-p", locations[0])
+                        .Each(loaders[NotFound], (self, missing) => self.Command(
+                            "composer",
+                            "require",
+                            "-d",
+                            locations[0],
+                            missing.Key,
+                            "*" == missing.Value ? null : missing.Value
+                        ))
+                    )
+                );
             }
 
             return loaders.Keys;
