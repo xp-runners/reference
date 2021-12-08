@@ -26,8 +26,10 @@ namespace Xp.Runners
         {
             _file = file;
 
+            var l = 0;
             foreach (string line in File.ReadAllLines(_file))
             {
+                l++;
                 if (line.StartsWith("<?php namespace "))
                 {
                     var p = "<?php namespace ".Length;
@@ -86,24 +88,29 @@ namespace Xp.Runners
             // of the required libraries are missing.
             if (loaders.ContainsKey(NotFound))
             {
-                var error = string.Format(
-                    "Cannot find {0} anywhere in {{\n  {1}\n}}",
-                    string.Join(", ", loaders[NotFound]),
-                    string.Join("\n  ", locations)
-                );
+                var error = "Cannot find " + string.Join(", ", loaders[NotFound]);
+                var advice = new StringBuilder();
 
-                var advice = new StringBuilder("Install by running the following:\n\n\x1b[34m");
-                advice.Append("mkdir -p '").Append(locations[0]).Append("'").Append("\n");
+                // List search paths
+                advice.Append("> Search paths:\n  ").Append(locations[0]).Append(" (» \x1b[35;1;4mdefault\x1b[0m)\n");
+                foreach (var location in locations.Skip(1))
+                {
+                    advice.Append("  ").Append(location).Append("\n");
+                }
+                advice.Append("\n");
+
+                // Show commands to install
+                advice.Append("> Install by running the following:\n");
+                advice.Append("\x1b[34m  mkdir -p '").Append(locations[0]).Append("'").Append("\x1b[0m\n");
                 foreach (var missing in loaders[NotFound])
                 {
-                    advice.Append("\x1b[34mcomposer require -d '").Append(locations[0]).Append("' ").Append(missing.Key);
+                    advice.Append("\x1b[34m  composer require -d '").Append(locations[0]).Append("' ").Append(missing.Key);
                     if ("*" != missing.Value)
                     {
                         advice.Append(" '").Append(missing.Value).Append("'");
                     }
-                    advice.Append("\n");
+                    advice.Append("\x1b[0\n");
                 }
-                advice.Append("\x1b[0m");
 
                 throw new CannotExecute(error, Paths.Resolve(_file)).Advise(advice.ToString());
             }

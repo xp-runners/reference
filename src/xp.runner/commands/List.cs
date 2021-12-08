@@ -71,9 +71,7 @@ namespace Xp.Runners.Commands
         {
             var self = Assembly.GetExecutingAssembly();
 
-            Output.Origin(Console.Out, Paths.Binary());
-            Output.Message(Console.Out, "XP Subcommands");
-            Output.Separator(Console.Out);
+            Console.Write(new Output().Origin(Paths.Binary()).Message("XP Subcommands").Separator());
 
             Console.WriteLine("\x1b[33;1m>\x1b[0m Builtin @ {0}", self.GetName().Version);
             Console.WriteLine();

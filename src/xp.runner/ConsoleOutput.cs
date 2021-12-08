@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Xp.Runners
 {
-    class Output : IDisposable
+    class ConsoleOutput : IDisposable
     {
         Encoding original = null;
         TextWriter output = null;
@@ -24,7 +24,7 @@ namespace Xp.Runners
         const int ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
 
         /// <summary>Starts output, enabling ANSI color support when necessary</summary>
-        public Output()
+        public ConsoleOutput()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -43,25 +43,7 @@ namespace Xp.Runners
             }
         }
 
-        /// <summary>Display @[ORIGIN] in yellow</summary>
-        public static void Origin(TextWriter output, string origin)
-        {
-            output.WriteLine("\x1b[33m@{0}\x1b[0m", origin);
-        }
-
-        /// <summary>Display a message in bold</summary>
-        public static void Message(TextWriter output, string origin)
-        {
-            output.WriteLine("\x1b[1m{0}\x1b[0m", origin);
-        }
-
-        /// <summary>Display a separator line</summary>
-        public static void Separator(TextWriter output)
-        {
-            output.WriteLine("════════════════════════════════════════════════════════════════════════");
-            output.WriteLine();
-        }
-
+        /// <summary>Ends output, restoring previous console</summary>
         public void Dispose()
         {
             if (null != original)
