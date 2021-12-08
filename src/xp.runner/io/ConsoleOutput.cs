@@ -3,9 +3,9 @@ using System.IO;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Xp.Runners.Exec
+namespace Xp.Runners.IO
 {
-    class Output : IDisposable
+    class ConsoleOutput : IDisposable
     {
         Encoding original = null;
         TextWriter output = null;
@@ -24,7 +24,7 @@ namespace Xp.Runners.Exec
         const int ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004;
 
         /// <summary>Starts output, enabling ANSI color support when necessary</summary>
-        public Output()
+        public ConsoleOutput()
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -43,6 +43,7 @@ namespace Xp.Runners.Exec
             }
         }
 
+        /// <summary>Ends output, restoring previous console</summary>
         public void Dispose()
         {
             if (null != original)

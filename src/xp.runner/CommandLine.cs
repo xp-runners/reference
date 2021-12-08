@@ -172,7 +172,7 @@ namespace Xp.Runners
                 {
                     if (i >= argv.Length - 1)
                     {
-                        throw new ArgumentException("Argument `" + argv[i] + "` requires a value");
+                        throw new CannotExecute("Argument `" + argv[i] + "` requires a value");
                     }
                     options[argv[i]](this, argv[++i]);
                     offset = i + 1;
@@ -184,7 +184,7 @@ namespace Xp.Runners
                 }
                 else if (IsOption(argv[i]))
                 {
-                    throw new ArgumentException("Unknown argument `" + argv[i] + "`");
+                    throw new CannotExecute("Unknown argument `" + argv[i] + "`");
                 }
                 else if (IsCommand(argv[i]))
                 {
@@ -221,9 +221,15 @@ namespace Xp.Runners
                     command = new Plugin(name);
                     break;
                 }
+                else if (!argv[i].EndsWith(".class.php") && !argv[i].EndsWith(".xar") && File.Exists(argv[i]))
+                {
+                    command = new Script(argv[i]);
+                    offset = i + 1;
+                    break;
+                }
                 else
                 {
-                    command = new Commands.Run();
+                    command = new Run();
                     offset = i;
                     break;
                 }

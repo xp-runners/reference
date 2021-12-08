@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Diagnostics;
+using Xp.Runners;
 
 namespace Xp.Runners.Exec
 {
@@ -17,7 +18,7 @@ namespace Xp.Runners.Exec
             }
             catch (Exception e)
             {
-                throw new ArgumentException("Repeat: " + e.Message, e);
+                throw new CannotExecute("Repeat: " + e.Message, e);
             }
         }
 

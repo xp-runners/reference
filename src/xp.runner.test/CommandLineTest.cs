@@ -6,6 +6,8 @@ using Xp.Runners.Exec;
 using Xp.Runners.Config;
 using System.IO;
 using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Xp.Runners.Test
 {
@@ -80,6 +82,18 @@ namespace Xp.Runners.Test
         public void ar(string arg)
         {
             Assert.IsType<Ar>(new CommandLine(new string[] { arg }).Command);
+        }
+
+        [Fact]
+        public void runs_class_file()
+        {
+            Assert.IsType<Run>(new CommandLine(new string[] { "Test.class.php" }).Command);
+        }
+
+        [Fact]
+        public void runs_xar_archive()
+        {
+            Assert.IsType<Run>(new CommandLine(new string[] { "app.xar" }).Command);
         }
 
         [Fact]
@@ -279,13 +293,70 @@ namespace Xp.Runners.Test
         [Fact]
         public void unknown_argument()
         {
-            Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-UNKOWN" }));
+            Assert.Throws<CannotExecute>(() => new CommandLine(new string[] { "-UNKOWN" }));
         }
 
         [Fact]
         public void argument_without_required_value()
         {
-            Assert.Throws<System.ArgumentException>(() => new CommandLine(new string[] { "-cp" }));
+            Assert.Throws<CannotExecute>(() => new CommandLine(new string[] { "-cp" }));
+        }
+
+        [Fact]
+        public void runs_script()
+        {
+            using (var file = new TemporaryFile("test.script.php").Containing("<?php echo 'Hello, World';"))
+            {
+                Assert.IsType<Script>(new CommandLine(new string[] { file.Path }).Command);
+            }
+        }
+
+        [Fact]
+        public void runs_empty_script()
+        {
+            using (var file = new TemporaryFile("test.script.php").Empty())
+            {
+                Assert.IsType<Script>(new CommandLine(new string[] { file.Path }).Command);
+            }
+        }
+
+        [Fact]
+        public void extracts_libraries_from_script()
+        {
+            var code = string.Join("\n", new string[] {
+                @"<?php",
+                @"",
+                @"use text\csv\{CsvListWriter, CsvFormat} from 'xp-framework/csv';",
+                @"use text\json\Json from 'xp-forge/json@^5.0';",
+                @"",
+                @"use util\cmd\Console;"
+            });
+
+            using (var file = new TemporaryFile("test.script.php").Containing(code))
+            {
+                Assert.Equal(
+                    new Dictionary<string, string>() {
+                        {"xp-framework/csv", "*"},
+                        {"xp-forge/json", "^5.0"},
+                    },
+                    (new CommandLine(new string[] { file.Path }).Command as Script).Libraries
+                );
+            }
+        }
+
+        [Theory]
+        [InlineData("<?php namespace test;", "test")]
+        [InlineData("<?php\nnamespace test;", "test")]
+        [InlineData("<?php", null)]
+        public void parses_namespace_from_script(string declaration, string expect)
+        {
+            using (var file = new TemporaryFile("test.script.php").Containing(declaration))
+            {
+                Assert.Equal(
+                    expect,
+                    (new CommandLine(new string[] { file.Path }).Command as Script).Namespace
+                );
+            }
         }
     }
 }

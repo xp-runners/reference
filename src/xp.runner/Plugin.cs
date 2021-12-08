@@ -41,7 +41,7 @@ namespace Xp.Runners
                 modules = new string[] { };
                 return;
             }
-            foreach (var dir in ComposerLocations())
+            foreach (var dir in ComposerLocations().Select(dir => Paths.Compose(dir, "vendor")))
             {
                 if (null == (entry = FindEntryPoint(dir, name))) continue;
 
@@ -49,7 +49,7 @@ namespace Xp.Runners
                 return;
             }
 
-            throw new NotImplementedException(name);
+            throw new CannotExecute("Command not implemented: " + name).Advise("Run `xp list` to see available commands");
         }
 
         /// <summary>Finds command by name in a given directory</summary>

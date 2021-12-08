@@ -11,31 +11,29 @@ namespace Xp.Runners
         /// <summary>Entry point</summary>
         public static int Main(string[] args)
         {
-            try
+            using (new ConsoleOutput())
             {
-                if (File.Exists(ComposerFile.NAME))
+                try
                 {
-                    return new CommandLine(args, new ComposerFile(ComposerFile.NAME)).Execute();
+                    if (File.Exists(ComposerFile.NAME))
+                    {
+                        return new CommandLine(args, new ComposerFile(ComposerFile.NAME)).Execute();
+                    }
+                    else
+                    {
+                        return new CommandLine(args).Execute();
+                    }
                 }
-                else
+                catch (CannotExecute e)
                 {
-                    return new CommandLine(args).Execute();
+                    new Output(Console.Error).Origin(e.Origin ?? Paths.Binary()).Error(e.Message, e.Advice);
+                    return 2;
                 }
-            }
-            catch (ArgumentException e)
-            {
-                Console.Error.WriteLine(e.Message);
-                return 2;
-            }
-            catch (NotImplementedException e)
-            {
-                Console.Error.WriteLine("Command not implemented: {0}", e.Message);
-                return 2;
-            }
-            catch (EntryPointNotFoundException e)
-            {
-                Console.Error.WriteLine("Problem executing runtime: {0}", e.Message);
-                return 2;
+                catch (EntryPointNotFoundException e)
+                {
+                    new Output(Console.Error).Origin(Paths.Binary()).Error("Problem executing runtime", e.Message);
+                    return 2;
+                }
             }
         }
     }
