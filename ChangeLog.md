@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #85: Parse scripts from XP runners and pass libraries' autoloaders
+  (@thekid)
+
 ## 8.5.3 / 2021-09-19
 
 * Merged PR #84: Port testing and packaging from Travis CI to GitHub actions
