@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.6.0 / 2021-12-08
+
 * Merged PR #85: Parse scripts from XP runners and pass libraries' autoloaders
   (@thekid)
 
