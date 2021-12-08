@@ -3,6 +3,13 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.6.1 / 2021-12-08
+
+* Fixed PHP 8.2 compatibility in XAR support by declaring *xar::$context*.
+  Test runs now include PHP 8.2, see xp-runners/main@e0d3d7a and
+  https://github.com/xp-runners/main/actions/runs/1555384298
+  (@thekid)
+
 ## 8.6.0 / 2021-12-08
 
 * Merged PR #85: Parse scripts from XP runners and pass libraries' autoloaders
