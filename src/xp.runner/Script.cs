@@ -92,11 +92,11 @@ namespace Xp.Runners
                     string.Join("\n  ", locations)
                 );
 
-                var advice = new StringBuilder("Install by running the following:\n\n\x1b[36m");
+                var advice = new StringBuilder("Install by running the following:\n\n\x1b[34m");
                 advice.Append("mkdir -p '").Append(locations[0]).Append("'").Append("\n");
                 foreach (var missing in loaders[NotFound])
                 {
-                    advice.Append("\x1b[36mcomposer require -d '").Append(locations[0]).Append("' ").Append(missing.Key);
+                    advice.Append("\x1b[34mcomposer require -d '").Append(locations[0]).Append("' ").Append(missing.Key);
                     if ("*" != missing.Value)
                     {
                         advice.Append(" '").Append(missing.Value).Append("'");
