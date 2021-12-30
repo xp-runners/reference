@@ -11,7 +11,7 @@ Getting started
 To install the XP runners, you can choose between the generic installer:
 
 ```sh
-$ curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/i/installer/setup-8.6.1.sh | sh
+$ curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/i/installer/setup-8.6.2.sh | sh
 # ...
 ```
 
@@ -34,7 +34,7 @@ $ composer global require xp-framework/core
 # ...
 
 $ xp version
-XP 11.0.0 { PHP/8.1.0 & Zend/8.1.0 } @ Windows NT SURFACE 10.0 build 22000 (Windows 10) AMD64
+XP 11.0.0 { PHP/8.1.1 & Zend/8.1.1 } @ Windows NT SURFACE 10.0 build 22000 (Windows 10) AMD64
 Copyright (c) 2001-2021 the XP group
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/php>
