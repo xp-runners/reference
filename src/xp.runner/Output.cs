@@ -60,7 +60,7 @@ namespace Xp.Runners
             if (advice != null)
             {
                 Writer.WriteLine();
-                Writer.WriteLine(advice.TrimEnd());
+                Writer.WriteLine(advice.TrimEnd(new char[] { '\r', '\n' }));
             }
             return this;
         }

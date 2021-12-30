@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.6.2 / 2021-12-30
+
+* Fixed *Method not found: "System.String System.String.TrimEnd()"*
+  exception when running on .NET < 6
+  (@thekid)
+
 ## 8.6.1 / 2021-12-08
 
 * Fixed PHP 8.2 compatibility in XAR support by declaring *xar::$context*.
