@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.6.3 / 2022-06-18
+
+* Fixed reading from standard input in `xp-run` entrypoint. See
+  https://github.com/xp-forge/web/issues/76#issuecomment-1159455304
+  (@thekid)
+
 ## 8.6.2 / 2021-12-30
 
 * Fixed *Method not found: "System.String System.String.TrimEnd()"*

@@ -16,7 +16,7 @@ sed '1,/^EOF;$/d' $0 > "$entry/class-main.php"
 
 # Run PHP
 trap 'echo' HUP INT TERM STOP
-$php -C -q -d include_path="$use" -d date.timezone="$tz" "$entry/class-main.php" "$@" &
+$php -C -q -d include_path="$use" -d date.timezone="$tz" "$entry/class-main.php" "$@" <&1 &
 pid=$!
 wait $pid
 result=$?
