@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.7.0 / 2023-10-10
+
+* Added support for `php8.2-cli` and `php8.1-cli` as dependencies
+  in Ubuntu / Debian. See issue #86
+  (@thekid)
+
 ## 8.6.3 / 2022-06-18
 
 * Fixed reading from standard input in `xp-run` entrypoint. See
