@@ -108,20 +108,12 @@ namespace Xp.Runners
         {
             using (composer)
             {
-                try
-                {
-                    path["classpath"].Add(
-                        "?" + Paths.Compose(Paths.DirName(composer.SourceUri),
-                        composer.Definitions.VendorDir,
-                        "autoload.php"
-                    ));
-                    Parse(argv, composer);
-                }
-                catch (FileFormatException e)
-                {
-                    Console.Error.WriteLine("Warning: {0}", e.Message);
-                    Parse(argv, ComposerFile.Empty);
-                }
+                path["classpath"].Add(
+                    "?" + Paths.Compose(Paths.DirName(composer.SourceUri),
+                    composer.Definitions.VendorDir,
+                    "autoload.php"
+                ));
+                Parse(argv, composer);
             }
         }
 

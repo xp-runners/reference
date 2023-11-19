@@ -17,7 +17,10 @@ namespace Xp.Runners.Test
         /// <summary>Helper to create a ComposerFile from a string</summary>
         private ComposerFile ComposerFile(string declaration)
         {
-            return new ComposerFile(new MemoryStream(Encoding.UTF8.GetBytes(declaration.Trim())));
+            return new ComposerFile(
+                new MemoryStream(Encoding.UTF8.GetBytes(declaration.Trim())),
+                Paths.Compose(".", "composer.json")
+            );
         }
 
         [Fact]
@@ -137,12 +140,11 @@ namespace Xp.Runners.Test
         }
 
         [Theory]
-        [InlineData(@"")]
-        [InlineData(@"-INVALID-")]
+        [InlineData(@"# YAML")]
         [InlineData(@"{""scripts"":{")]
-        public void plugin_when_script_with_invalid_composer_file(string source)
+        public void invalid_composer_file(string source)
         {
-            Assert.Equal("serve", (new CommandLine(new string[] { "serve" }, ComposerFile(source)).Command as Plugin).Name);
+            Assert.Throws<FileFormatException>(() => new CommandLine(new string[] { "serve" }, ComposerFile(source)));
         }
 
         [Fact]
@@ -193,13 +195,10 @@ namespace Xp.Runners.Test
         [InlineData(@"{""config"":{""vendor-dir"":""bundle""}}", "bundle")]
         public void passes_autoload_via_class_path_if_composer_file_present(string composer, string vendor)
         {
-            using (var file = new TemporaryFile("composer.json").Containing(composer))
-            {
-                Assert.Equal(
-                    new string[] { "?" + Paths.Compose(Paths.DirName(file.Path), vendor, "autoload.php") },
-                    new CommandLine(new string[] { }, new ComposerFile(file.Path)).Path["classpath"].ToArray()
-                );
-            }
+            Assert.Equal(
+                new string[] { "?" + Paths.Compose(".", vendor, "autoload.php") },
+                new CommandLine(new string[] { }, ComposerFile(composer)).Path["classpath"].ToArray()
+            );
         }
 
         [Fact]

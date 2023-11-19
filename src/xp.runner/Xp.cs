@@ -17,12 +17,17 @@ namespace Xp.Runners
                 {
                     if (File.Exists(ComposerFile.NAME))
                     {
-                        return new CommandLine(args, new ComposerFile(ComposerFile.NAME)).Execute();
+                        try
+                        {
+                            return new CommandLine(args, new ComposerFile(ComposerFile.NAME)).Execute();
+                        }
+                        catch (FileFormatException e)
+                        {
+                            Console.Error.WriteLine("Warning: {0}", e.Message);
+                        }
                     }
-                    else
-                    {
-                        return new CommandLine(args).Execute();
-                    }
+
+                    return new CommandLine(args).Execute();
                 }
                 catch (CannotExecute e)
                 {
