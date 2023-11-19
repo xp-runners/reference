@@ -24,6 +24,7 @@ namespace Xp.Runners
                         catch (FileFormatException e)
                         {
                             Console.Error.WriteLine("Warning: {0}", e.Message);
+                            // Fall through, continuing as if no composer file was present
                         }
                     }
 
