@@ -95,6 +95,7 @@ namespace Xp.Runners.Commands
 
                             definitions = new Composer();
                             definitions.Name = lookup[@"root\name"].FirstOrDefault();
+                            definitions.VendorDir = lookup[@"root\config\vendor-dir"].FirstOrDefault() ?? "vendor";
                             definitions.Require = lookup
                                 .Where(pair => pair.Key.StartsWith(@"root\require\"))
                                 .ToDictionary(value => value.Key.Substring(@"root\require\".Length), value => value.First())

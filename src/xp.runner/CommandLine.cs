@@ -108,8 +108,20 @@ namespace Xp.Runners
         {
             using (composer)
             {
-                Parse(argv, composer);
-                path["classpath"].Add("?" + Paths.Compose(Paths.DirName(composer.SourceUri), "vendor", "autoload.php"));
+                try
+                {
+                    path["classpath"].Add(
+                        "?" + Paths.Compose(Paths.DirName(composer.SourceUri),
+                        composer.Definitions.VendorDir,
+                        "autoload.php"
+                    ));
+                    Parse(argv, composer);
+                }
+                catch (FormatException e)
+                {
+                    Console.Error.WriteLine("Warning: {0}", e.Message);
+                    Parse(argv, ComposerFile.Empty);
+                }
             }
         }
 
@@ -201,21 +213,14 @@ namespace Xp.Runners
                     }
 
                     // Check composer.json for scripts
-                    try
+                    if (composer.Definitions.Scripts.ContainsKey(name))
                     {
-                        if (composer.Definitions.Scripts.ContainsKey(name))
-                        {
-                            command = null;
-                            executionModel = null;
-                            config = null;
-                            Parse(ArgsOf(composer.Definitions.Scripts[name]).Skip(1).ToArray(), ComposerFile.Empty);
-                            arguments = arguments.Concat(argv.Skip(offset));
-                            return;
-                        }
-                    }
-                    catch (FormatException e)
-                    {
-                        Console.Error.WriteLine("Warning: {0}", e.Message);
+                        command = null;
+                        executionModel = null;
+                        config = null;
+                        Parse(ArgsOf(composer.Definitions.Scripts[name]).Skip(1).ToArray(), ComposerFile.Empty);
+                        arguments = arguments.Concat(argv.Skip(offset));
+                        return;
                     }
 
                     // Otherwise, it's a plugin defined via `bin/xp.{org}.{slug}.{name}`

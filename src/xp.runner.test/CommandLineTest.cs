@@ -187,13 +187,15 @@ namespace Xp.Runners.Test
             );
         }
 
-        [Fact]
-        public void passes_autoload_via_class_path_if_composer_file_present()
+        [Theory]
+        [InlineData(@"{}", "vendor")]
+        [InlineData(@"{""config"":{""vendor-dir"":""bundle""}}", "bundle")]
+        public void passes_autoload_via_class_path_if_composer_file_present(string composer, string vendor)
         {
-            using (var file = new TemporaryFile("composer.json").Empty())
+            using (var file = new TemporaryFile("composer.json").Containing(composer))
             {
                 Assert.Equal(
-                    new string[] { "?" + Paths.Compose(Paths.DirName(file.Path), "vendor", "autoload.php") },
+                    new string[] { "?" + Paths.Compose(Paths.DirName(file.Path), vendor, "autoload.php") },
                     new CommandLine(new string[] { }, new ComposerFile(file.Path)).Path["classpath"].ToArray()
                 );
             }
