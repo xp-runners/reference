@@ -117,7 +117,7 @@ namespace Xp.Runners
                     ));
                     Parse(argv, composer);
                 }
-                catch (FormatException e)
+                catch (FileFormatException e)
                 {
                     Console.Error.WriteLine("Warning: {0}", e.Message);
                     Parse(argv, ComposerFile.Empty);

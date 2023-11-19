@@ -5,6 +5,7 @@ using System.Xml;
 using System.Runtime.Serialization.Json;
 using System.Collections.Generic;
 using Xp.Runners;
+using Xp.Runners.IO;
 
 namespace Xp.Runners.Commands
 {
@@ -107,7 +108,7 @@ namespace Xp.Runners.Commands
                         }
                         catch (XmlException e)
                         {
-                            throw new FormatException(string.Format("Parsing {0} failed: {1}", SourceUri, e.Message), e);
+                            throw new FileFormatException(string.Format("Parsing {0} failed: {1}", SourceUri, e.Message), e);
                         }
                     }
                 }
