@@ -189,6 +189,7 @@ namespace Xp.Runners.Test
 
         [Theory]
         [InlineData(@"{}", "vendor")]
+        [InlineData(@"{""config"":{}}", "vendor")]
         [InlineData(@"{""config"":{""vendor-dir"":""bundle""}}", "bundle")]
         public void passes_autoload_via_class_path_if_composer_file_present(string composer, string vendor)
         {
