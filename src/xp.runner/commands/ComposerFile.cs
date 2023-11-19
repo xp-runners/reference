@@ -5,6 +5,7 @@ using System.Xml;
 using System.Runtime.Serialization.Json;
 using System.Collections.Generic;
 using Xp.Runners;
+using Xp.Runners.IO;
 
 namespace Xp.Runners.Commands
 {
@@ -95,6 +96,7 @@ namespace Xp.Runners.Commands
 
                             definitions = new Composer();
                             definitions.Name = lookup[@"root\name"].FirstOrDefault();
+                            definitions.VendorDir = lookup[@"root\config\vendor-dir"].FirstOrDefault() ?? "vendor";
                             definitions.Require = lookup
                                 .Where(pair => pair.Key.StartsWith(@"root\require\"))
                                 .ToDictionary(value => value.Key.Substring(@"root\require\".Length), value => value.First())
@@ -106,7 +108,7 @@ namespace Xp.Runners.Commands
                         }
                         catch (XmlException e)
                         {
-                            throw new FormatException(string.Format("Parsing {0} failed: {1}", SourceUri, e.Message), e);
+                            throw new FileFormatException(string.Format("Parsing {0} failed: {1}", SourceUri, e.Message), e);
                         }
                     }
                 }

@@ -8,6 +8,8 @@ namespace Xp.Runners.Commands
     {
         public string Name { get; set; }
 
+        public string VendorDir { get; set; }
+
         public Dictionary<string, string> Require { get; set; }
 
         public Dictionary<string, string> Scripts { get; set; }
