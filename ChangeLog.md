@@ -3,6 +3,12 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 8.8.0 / 2023-11-19
+
+* Merged PR #88: Add `?[vendor-dir]/autoload.php` to class path if a
+  *composer.json* file file is present.
+  (@thekid)
+
 ## 8.7.0 / 2023-10-10
 
 * Added support for `php8.2-cli` and `php8.1-cli` as dependencies
