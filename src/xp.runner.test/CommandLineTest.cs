@@ -144,7 +144,7 @@ namespace Xp.Runners.Test
         [InlineData(@"{""scripts"":{")]
         public void invalid_composer_file(string source)
         {
-            Assert.Throws<FileFormatException>(() => new CommandLine(new string[] { "serve" }, ComposerFile(source)));
+            Assert.Throws<FileFormatException>(() => new CommandLine(new string[] { }, ComposerFile(source)));
         }
 
         [Fact]
