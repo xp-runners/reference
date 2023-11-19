@@ -4,6 +4,7 @@ using Xp.Runners;
 using Xp.Runners.Commands;
 using Xp.Runners.Exec;
 using Xp.Runners.Config;
+using Xp.Runners.IO;
 using System.IO;
 using System.Text;
 using System.Linq;
@@ -184,6 +185,18 @@ namespace Xp.Runners.Test
                 new string[] { "?src/main/php" },
                 new CommandLine(new string[] { "-cp?", "src/main/php" }).Path["classpath"].ToArray()
             );
+        }
+
+        [Fact]
+        public void passes_autoload_via_class_path_if_composer_file_present()
+        {
+            using (var file = new TemporaryFile("composer.json").Empty())
+            {
+                Assert.Equal(
+                    new string[] { "?" + Paths.Compose(Paths.DirName(file.Path), "vendor", "autoload.php") },
+                    new CommandLine(new string[] { }, new ComposerFile(file.Path)).Path["classpath"].ToArray()
+                );
+            }
         }
 
         [Fact]

@@ -109,6 +109,7 @@ namespace Xp.Runners
             using (composer)
             {
                 Parse(argv, composer);
+                path["classpath"].Add("?" + Paths.Compose(Paths.DirName(composer.SourceUri), "vendor", "autoload.php"));
             }
         }
 
