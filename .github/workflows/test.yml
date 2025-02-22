@@ -19,7 +19,7 @@ jobs:
       run: sh .github/workflows/version.sh
 
     - name: Set up Mono
-      run: sudo apt-get -y install mono-runtime mono-mcs libmono-system-runtime-serialization4.0-cil libmono-system-componentmodel-composition4.0-cil
+      run: sudo apt-get -y install mono-runtime mono-mcs libmono-system-runtime-serialization4.0-cil libmono-system-componentmodel-composition4.0-cil libmono-microsoft-build-utilities-v4.0-4.0-cil libmono-windowsbase4.0-cil libmono-system-net4.0-cil libmono-system-net-http-formatting4.0-cil libmono-system-net-http-webrequest4.0-cil libmono-system-net-http4.0-cil libmono-system-io-compression4.0-cil libmono-system-data-services-client4.0-cil libmono-system-servicemodel4.0a-cil 
 
     - name: Set up NuGet
       uses: nuget/setup-nuget@v2
