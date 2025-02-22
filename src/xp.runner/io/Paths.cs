@@ -51,7 +51,6 @@ namespace Xp.Runners.IO
             }
         }
 
-
         /// <summary>Locate a given file inside multiple base paths. Throw an exception if the file cannot
         /// be found. Similar to what is done when looking up program names in $ENV{PATH}.</summary>
         public static IEnumerable<string> Locate(IEnumerable<string> bases, IEnumerable<string> files)
