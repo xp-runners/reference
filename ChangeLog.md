@@ -3,6 +3,14 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 9.0.0 / 2025-02-22
+
+* Upgraded Debian dependencies to include PHP 8.3 *and* (for forward
+  compatibility) PHP 8.4, adding support for noble and oracular
+  (@thekid)
+* **Heads up:** Dropped support for PHP < 7.4, see xp-framework/rfc#343
+  (@thekid)
+
 ## 8.8.0 / 2023-11-19
 
 * Merged PR #88: Add `?[vendor-dir]/autoload.php` to class path if a

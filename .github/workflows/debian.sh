@@ -43,7 +43,7 @@ cat <<-EOF > control
 	Maintainer: XP Team <xp-runners@xp-framework.net>
 	Architecture: all
 	Version: ${VERSION}-1
-	Depends: php8.2-cli | php8.1-cli | php8.0-cli | php7.4-cli | php7.2-cli | php7.1-cli | php7.0-cli | php5-cli, libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil
+	Depends: php8.4-cli | php8.3-cli | php8.2-cli | php8.1-cli | php8.0-cli | php7.4-cli, libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil
 	Provides: xp-runners
 	Description: XP Runners
 EOF
