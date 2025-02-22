@@ -76,7 +76,6 @@ namespace Xp.Runners
             var runtime = configuration.GetRuntime();
             var ini = new Dictionary<string, IEnumerable<string>>()
             {
-                { "magic_quotes_gpc", new string[] { "0" } },
                 { "date.timezone", new string[] { TimeZoneInfo.Local.Olson() ?? Environment.GetEnvironmentVariable("TZ") ?? "UTC" } },
                 { "extension", configuration.GetExtensions(runtime) }
             };
@@ -116,10 +115,17 @@ namespace Xp.Runners
             );
 
             var env = proc.StartInfo.EnvironmentVariables;
-            env["XP_EXE"]= binary;
-            env["XP_VERSION"]= Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            env["XP_MODEL"]= cmd.ExecutionModel.Name;
-            env["XP_COMMAND"]= GetType().Name.ToLower();
+            env["XP_EXE"] = binary;
+            env["XP_VERSION"] = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            env["XP_MODEL"] = cmd.ExecutionModel.Name;
+            env["XP_COMMAND"] = GetType().Name.ToLower();
+            foreach (var config in cmd.EnvFiles)
+            {
+                foreach (var key in config.Keys("default"))
+                {
+                    env[key] = config.Get("default", key).Trim('"');
+                }
+            }
 
             return cmd.ExecutionModel.Execute(proc, encoding);
         }
