@@ -6,7 +6,7 @@ XP Runners change log
 ## 9.0.0 / 2025-02-22
 
 * Upgraded Debian dependencies to include PHP 8.3 *and* (for forward
-  compatibility) PHP 8.4, adding support for noble and oracular
+  compatibility) PHP 8.4, adding support for Ubuntu noble and oracular
   (@thekid)
 * **Heads up:** Dropped support for PHP < 7.4, see xp-framework/rfc#343
   (@thekid)
