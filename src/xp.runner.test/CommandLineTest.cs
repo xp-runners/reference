@@ -226,6 +226,50 @@ namespace Xp.Runners.Test
         }
 
         [Fact]
+        public void env_initially_empty()
+        {
+            Assert.Equal(new Ini[] { }, new CommandLine(new string[] { }).EnvFiles.ToArray());
+        }
+
+        [Fact]
+        public void one_environment_entry()
+        {
+            Assert.Equal(
+                new Ini[] { new Ini(".env") },
+                new CommandLine(new string[] { "-env", ".env" }).EnvFiles.ToArray()
+            );
+        }
+
+        [Fact]
+        public void multiple_environment_entries()
+        {
+            Assert.Equal(
+                new Ini[] { new Ini(".env"), new Ini(".env.prod") },
+                new CommandLine(new string[] { "-env", ".env", "-env", ".env.prod" }).EnvFiles.ToArray()
+            );
+        }
+
+        [Fact]
+        public void try_adding_env_file()
+        {
+            var fixture = new CommandLine(new string[] { });
+
+            using (var file = new TemporaryFile(".env.test").Containing("KEY=value"))
+            {
+                fixture.TryAddEnv(file.Path);
+                Assert.Equal(new Ini[] { new Ini(file.Path) }, fixture.EnvFiles.ToArray());
+            }
+        }
+
+        [Fact]
+        public void try_adding_nonexistant_env_file()
+        {
+            var fixture = new CommandLine(new string[] { });
+            fixture.TryAddEnv(".env.nonexistant");
+            Assert.Equal(new Ini[] { }, fixture.EnvFiles.ToArray());
+        }
+
+        [Fact]
         public void runonce_is_default_execution_model()
         {
             Assert.IsType<RunOnce>(new CommandLine(new string[] { }).ExecutionModel);

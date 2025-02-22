@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Xp.Runners.Config
 {
-    class Ini
+    public class Ini
     {
         private static char[] SEPARATOR = new char[] { '=' };
 
@@ -96,6 +96,18 @@ namespace Xp.Runners.Config
             Parse(false);
             if (!sections.ContainsKey(section)) return defaultValue;
             return sections[section].Keys;
+        }
+
+        /// <summary>Tests for equality</summary>
+        public override bool Equals(Object obj)
+        {
+            return obj is Ini && ((Ini) obj).file == this.file;
+        }
+
+        /// <summary>Hashcode implementation</summary>
+        public override int GetHashCode()
+        {
+            return this.file.GetHashCode();
         }
     }
 }
