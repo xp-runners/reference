@@ -38,6 +38,7 @@ namespace Xp.Runners
                 {
                     commandLine.TryAddEnv(".env." + env);
                 }
+                commandLine.TryAddEnv(".env.local");
 
                 try
                 {
