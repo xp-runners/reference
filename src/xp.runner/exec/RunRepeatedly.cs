@@ -29,13 +29,13 @@ namespace Xp.Runners.Exec
         public Schedule Schedule { get { return schedule; } }
 
         /// <summary>Execute the process and return its exitcode</summary>
-        public override int Execute(Process proc, Encoding encoding)
+        public override int Execute(Process proc)
         {
             int exitcode = 0;
 
             while (schedule.Continue())
             {
-                exitcode = schedule.Run(() => Run(proc, encoding));
+                exitcode = schedule.Run(() => Run(proc));
             }
             return exitcode;
         }

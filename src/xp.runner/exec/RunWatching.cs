@@ -25,14 +25,14 @@ namespace Xp.Runners.Exec
         public string Path { get { return watcher.Path; }}
 
         /// <summary>Execute the process and return its exitcode</summary>
-        public override int Execute(Process proc, Encoding encoding)
+        public override int Execute(Process proc)
         {
             using (watcher)
             {
                 watcher.EnableRaisingEvents = true;
                 do
                 {
-                    Run(proc, encoding);
+                    Run(proc);
                 } while (!watcher.WaitForChanged(WatcherChangeTypes.Changed).TimedOut);
             }
 
