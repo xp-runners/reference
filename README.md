@@ -11,7 +11,7 @@ Getting started
 To install the XP runners, you can choose between the generic installer:
 
 ```sh
-$ curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/i/installer/setup-8.8.0.sh | sh
+$ curl -sSL https://baltocdn.com/xp-framework/xp-runners/distribution/downloads/i/installer/setup-9.0.0.sh | sh
 # ...
 ```
 
