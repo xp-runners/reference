@@ -20,31 +20,5 @@ namespace Xp.Runners
 
             return ret.ToString();
         }
-
-        /// <summary>Escape string as command line argument</summary>
-        public static string Escape(this string self)
-        {
-            var ret = new StringBuilder();
-
-            ret.Append('"');
-            for (var i = 0; i < self.Length; i++)
-            {
-                if ('"' == self[i])
-                {
-                    ret.Append("\"\"");     // Double-quote -> double double-quote
-                }
-                else if ('\\' == self[i])
-                {
-                    ret.Append("\\\\");     // Backslash -> double backslash
-                }
-                else
-                {
-                    ret.Append(self[i]);
-                }
-            }
-            ret.Append('"');
-
-            return ret.ToString();
-        }
     }
 }

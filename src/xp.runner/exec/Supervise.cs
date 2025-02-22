@@ -18,7 +18,7 @@ namespace Xp.Runners.Exec
         public override string Name { get { return "supervise"; } }
 
         /// <summary>Execute the process and return its exitcode</summary>
-        public override int Execute(Process proc, Encoding encoding)
+        public override int Execute(Process proc)
         {
             Action shutdown = proc.Kill;
 
@@ -56,7 +56,7 @@ namespace Xp.Runners.Exec
             do
             {
                 var start = DateTime.Now;
-                code = Run(proc, encoding, () =>
+                code = Run(proc, () =>
                 {
                     cancel.Reset();
                     proc.StandardInput.Close();

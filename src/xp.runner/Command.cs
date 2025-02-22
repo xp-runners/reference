@@ -27,12 +27,6 @@ namespace Xp.Runners
             }
         }
 
-        /// <summary>Main script, e.g. "class". Overwrite in subclasses if necessary!</summary>
-        protected virtual string MainFor(CommandLine cmd)
-        {
-            return "class";
-        }
-
         /// <summary>Additional modules to load. Overwrite in subclasses if necessary!</summary>
         protected virtual IEnumerable<string> ModulesFor(CommandLine cmd)
         {
@@ -80,24 +74,7 @@ namespace Xp.Runners
                 { "extension", configuration.GetExtensions(runtime) }
             };
             var use = configuration.GetUse() ?? UseComposer();
-
-            Encoding encoding;
-            Func<string, string> args;
-            var main = Paths.TryLocate(use, new string[] { Paths.Compose("tools", MainFor(cmd) + ".php") }).FirstOrDefault();
-            if (null == main)
-            {
-                main = Paths.Locate(new string[] { Paths.DirName(binary) }, new string[] { MainFor(cmd) + "-main.php" }).First();
-
-                // Arguments are encoded in utf-7, which is binary-safe
-                args = Arguments.Encode;
-                encoding = Encoding.UTF8;
-            }
-            else
-            {
-                args = Arguments.Escape;
-                encoding = Encoding.GetEncoding("iso-8859-1");
-            }
-
+            var main = Paths.Locate(new string[] { Paths.DirName(binary) }, new string[] { "class-main.php" }).First();
             var shell = Shell.Parse(configuration.GetExecutable(runtime) ?? (runtime ?? "php"));
             var dot = new string[] { "." };
 
@@ -111,7 +88,7 @@ namespace Xp.Runners
                 string.Join(Paths.Separator, dot.Concat(cmd.Path["classpath"].Concat(ClassPathFor(cmd)))),
                 string.Join(" ", IniSettings(ini.Concat(configuration.GetArgs(runtime)))),
                 main,
-                string.Join(" ", ArgumentsFor(cmd).Select(args))
+                string.Join(" ", ArgumentsFor(cmd).Select(Arguments.Encode))
             );
 
             var env = proc.StartInfo.EnvironmentVariables;
@@ -120,7 +97,7 @@ namespace Xp.Runners
             env["XP_MODEL"] = cmd.ExecutionModel.Name;
             env["XP_COMMAND"] = GetType().Name.ToLower();
 
-            return cmd.ExecutionModel.Execute(proc, encoding);
+            return cmd.ExecutionModel.Execute(proc);
         }
     }
 }

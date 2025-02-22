@@ -9,9 +9,9 @@ namespace Xp.Runners.Exec
         public override string Name { get { return "default"; } }
 
         /// <summary>Execute the process and return its exitcode</summary>
-        public override int Execute(Process proc, Encoding encoding)
+        public override int Execute(Process proc)
         {
-            return Run(proc, encoding);
+            return Run(proc);
         }
     }
 }

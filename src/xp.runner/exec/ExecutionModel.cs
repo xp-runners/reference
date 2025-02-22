@@ -13,10 +13,10 @@ namespace Xp.Runners.Exec
         public abstract string Name { get; }
 
         /// <summary>Execute the process and return its exitcode</summary>
-        public abstract int Execute(Process proc, Encoding encoding);
+        public abstract int Execute(Process proc);
 
         /// <summary>Run the process and return its exitcode</summary>
-        protected int Run(Process proc, Encoding encoding, Func<int> wait = null)
+        protected int Run(Process proc, Func<int> wait = null)
         {
             proc.StartInfo.RedirectStandardOutput = false;
             proc.StartInfo.RedirectStandardError = false;
