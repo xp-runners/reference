@@ -21,8 +21,10 @@ jobs:
     - name: Set up Mono
       run: sudo apt-get -y install mono-runtime mono-mcs libmono-system-runtime-serialization4.0-cil
 
-    - name: Install XUnit
+    - name: Set up NuGet
       uses: nuget/setup-nuget@v2
+
+    - name: Install XUnit
       run: |
         nuget install xunit -Version 1.9.2 -OutputDirectory testrunner
         nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
