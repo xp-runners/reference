@@ -10,7 +10,7 @@ namespace Xp.Runners
     {
 
         /// <summary>Creates a command line based on a composer file</summary>
-        public static CommandLine WithComposer(string[] args)
+        private static CommandLine WithComposer(string[] args)
         {
             try
             {
@@ -31,14 +31,17 @@ namespace Xp.Runners
             {
                 var commandLine = File.Exists(ComposerFile.NAME) ? WithComposer(args) : new CommandLine(args);
 
-                // Load existing environment files
-                commandLine.TryAddEnv(".env");
-                var env = Environment.GetEnvironmentVariable("XP_ENV");
-                if (null != env)
+                // Load existing environment files unless explicitely supplied
+                if (0 == commandLine.EnvFiles.Count)
                 {
-                    commandLine.TryAddEnv(".env." + env);
+                    commandLine.TryAddEnv(".env");
+                    var env = Environment.GetEnvironmentVariable("XP_ENV");
+                    if (null != env)
+                    {
+                        commandLine.TryAddEnv(".env." + env);
+                    }
+                    commandLine.TryAddEnv(".env.local");
                 }
-                commandLine.TryAddEnv(".env.local");
 
                 try
                 {
