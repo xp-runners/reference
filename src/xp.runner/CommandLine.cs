@@ -139,15 +139,16 @@ namespace Xp.Runners
         /// <summary>Expand environment variables</summary>
         public IEnumerable<KeyValuePair<string, string>> Expand(StringDictionary env)
         {
-            var expand = new Regex("\\$((?<name>[a-zA-Z_]+)|{(?<name>[^}]+)})");
+            var expand = new Regex("(?<!\\\\)\\$((?<name>[a-zA-Z_]+)|{(?<name>[^}]+)})");
             foreach (var envFile in envFiles)
             {
                 foreach (var key in envFile.Keys("default"))
                 {
-                    yield return new KeyValuePair<string, string>(key, expand.Replace(
+                    var expanded = expand.Replace(
                         envFile.Get("default", key, ""),
                         match => env[match.Groups["name"].Value] // Doesn't throw if name doesn't exist
-                    ));
+                    );
+                    yield return new KeyValuePair<string, string>(key, expanded.Replace("\\$", "$"));
                 }
             }
         }
