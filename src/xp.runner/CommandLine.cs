@@ -105,6 +105,20 @@ namespace Xp.Runners
             }
         }
 
+        /// <summary>Environment variables</summary>
+        public IEnumerable<KeyValuePair<string, string>> EnvVariables
+        {
+            get {
+                foreach (var envFile in envFiles)
+                {
+                    foreach (var key in envFile.Keys("default"))
+                    {
+                        yield return new KeyValuePair<string, string>(key, envFile.Get("default", key, ""));
+                    }
+                }
+            }
+        }
+
         /// <summary>Creates the commandline representation from argv</summary>
         public CommandLine(string[] argv)
         {

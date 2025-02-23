@@ -96,12 +96,9 @@ namespace Xp.Runners
             env["XP_VERSION"] = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             env["XP_MODEL"] = cmd.ExecutionModel.Name;
             env["XP_COMMAND"] = GetType().Name.ToLower();
-            foreach (var config in cmd.EnvFiles)
+            foreach (var pair in cmd.EnvVariables)
             {
-                foreach (var key in config.Keys("default"))
-                {
-                    env[key] = config.Get("default", key).Trim('"');
-                }
+                env[pair.Key] = pair.Value;
             }
 
             return cmd.ExecutionModel.Execute(proc);

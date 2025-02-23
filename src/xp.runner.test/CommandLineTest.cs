@@ -269,6 +269,22 @@ namespace Xp.Runners.Test
             Assert.Equal(new Ini[] { }, fixture.EnvFiles.ToArray());
         }
 
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("KEY=", "KEY=")]
+        [InlineData("KEY=value", "KEY=value")]
+        [InlineData("KEY=value\nCOLOR=green", "KEY=value,COLOR=green")]
+        public void environment_variables(string contents, string expected)
+        {
+            var fixture = new CommandLine(new string[] { });
+
+            using (var file = new TemporaryFile(".env.test").Containing(contents))
+            {
+                fixture.TryAddEnv(file.Path);
+                Assert.Equal(expected, string.Join(",", fixture.EnvVariables.Select(e => e.Key + "=" + e.Value)));
+            }
+        }
+
         [Fact]
         public void runonce_is_default_execution_model()
         {
