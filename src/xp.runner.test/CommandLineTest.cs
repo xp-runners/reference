@@ -252,10 +252,9 @@ namespace Xp.Runners.Test
         [Fact]
         public void try_adding_env_file()
         {
-            var fixture = new CommandLine(new string[] { });
-
             using (var file = new TemporaryFile(".env.test").Containing("KEY=value"))
             {
+                var fixture = new CommandLine(new string[] { });
                 fixture.TryAddEnv(file.Path);
                 Assert.Equal(new Ini[] { new Ini(file.Path) }, fixture.EnvFiles.ToArray());
             }
@@ -276,10 +275,9 @@ namespace Xp.Runners.Test
         [InlineData("KEY=value\nCOLOR=green", "KEY=value,COLOR=green")]
         public void environment_variables(string contents, string expected)
         {
-            var fixture = new CommandLine(new string[] { });
-
             using (var file = new TemporaryFile(".env.test").Containing(contents))
             {
+                var fixture = new CommandLine(new string[] { });
                 fixture.TryAddEnv(file.Path);
                 Assert.Equal(expected, string.Join(",", fixture.EnvVariables.Select(e => e.Key + "=" + e.Value)));
             }
