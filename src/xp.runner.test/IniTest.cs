@@ -70,36 +70,45 @@ namespace Xp.Runners.Test
         [Fact]
         public void keys_contains_key_with_empty_value()
         {
-            var ini = fixture("key=");
-            Assert.Equal(new string[] {"key"}, ini.Keys("default").ToArray());
+            Assert.Equal(new string[] {"key"}, fixture("key=").Keys("default").ToArray());
         }
 
-        [Fact]
-        public void get_key_from_default_section()
+        [Theory]
+        [InlineData("key=value", "value")]
+        [InlineData("key=`value`", "value")]
+        [InlineData("key='value'", "value")]
+        [InlineData("key=\"value\"", "value")]
+        [InlineData("key='\"Test\"'", "\"Test\"")]
+        [InlineData("key='Timm\\'s'", "Timm's")]
+        [InlineData("key=`Type \\`sh\\``", "Type `sh`")]
+        [InlineData("key=\"A \\\"test\\\"\"", "A \"test\"")]
+        public void get_key_from_default_section(string section, string expected)
         {
-            var ini = fixture("key=value");
-            Assert.Equal("value", ini.Get("default", "key"));
+            Assert.Equal(expected, fixture(section).Get("default", "key"));
         }
 
         [Fact]
         public void get_key_from_section()
         {
-            var ini = fixture("[section]\nkey=value");
-            Assert.Equal("value", ini.Get("section", "key"));
+            Assert.Equal("value", fixture("[section]\nkey=value").Get("section", "key"));
         }
 
         [Fact]
         public void get_empty_value()
         {
-            var ini = fixture("key=");
-            Assert.Equal(null, ini.Get("default", "key"));
+            Assert.Equal(null, fixture("key=").Get("default", "key"));
         }
 
-        [Fact]
-        public void key_and_values_are_trimmed()
+        [Theory]
+        [InlineData("key= value")]
+        [InlineData("key =value")]
+        [InlineData("key = value")]
+        [InlineData(" key = value")]
+        [InlineData("\tkey=value")]
+        [InlineData("key=\tvalue")]
+        public void key_and_values_are_trimmed(string section)
         {
-            var ini = fixture("key = value");
-            Assert.Equal("value", ini.Get("default", "key"));
+            Assert.Equal("value", fixture(section).Get("default", "key"));
         }
 
         [Theory]
@@ -107,9 +116,15 @@ namespace Xp.Runners.Test
         [InlineData("default")]
         public void default_value_returned_for_nonexistant_key_from_get(string section)
         {
-            var ini = fixture("");
             var defaultValue = "defaulted";
-            Assert.Equal(defaultValue, ini.Get(section, "key", defaultValue));
+            Assert.Equal(defaultValue, fixture("").Get(section, "key", defaultValue));
+        }
+
+        [Fact]
+        public void default_value_returned_for_empty_key_from_get()
+        {
+            var defaultValue = "defaulted";
+            Assert.Equal(defaultValue, fixture("key=").Get("default", "key", defaultValue));
         }
 
         [Fact]

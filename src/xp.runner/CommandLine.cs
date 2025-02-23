@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 using Xp.Runners.IO;
 using Xp.Runners.Commands;
 using Xp.Runners.Exec;
@@ -28,6 +30,7 @@ namespace Xp.Runners
             { "-cp?", (self, value) => self.path["classpath"].Add("?" + value) },
             { "-cp!", (self, value) => self.path["classpath"].Add("!" + value) },
             { "-m", (self, value) => self.path["modules"].Add(value) },
+            { "-env", (self, value) => self.envFiles.Add(new Ini(value)) },
             { "-watch", (self, value) => self.executionModel = new RunWatching(value) },
             { "-repeat", (self, value) => self.executionModel = new RunRepeatedly(value) },
             { "-c", (self, value) => self.config = new CompositeConfigSource(
@@ -45,9 +48,10 @@ namespace Xp.Runners
         private Dictionary<string, List<string>> path = new Dictionary<string, List<string>>()
         {
             { "classpath", new List<string>() },
-            { "modules", new List<string>() }
+            { "modules", new List<string>() },
         };
 
+        private List<Ini> envFiles = new List<Ini>();
         private Command command;
         private IEnumerable<string> arguments;
         private ExecutionModel executionModel;
@@ -57,6 +61,12 @@ namespace Xp.Runners
         public Dictionary<string, List<string>> Path
         {
             get { return path; }
+        }
+
+        /// <summary>.env files</summary>
+        public List<Ini> EnvFiles
+        {
+            get { return envFiles; }
         }
 
         /// <summary>Subcommand name</summary>
@@ -114,6 +124,32 @@ namespace Xp.Runners
                     "autoload.php"
                 ));
                 Parse(argv, composer);
+            }
+        }
+
+        /// <summary>Adds an environment file if it exists</summary>
+        public void TryAddEnv(string file)
+        {
+            if (File.Exists(file))
+            {
+                this.envFiles.Add(new Ini(file));
+            }
+        }
+
+        /// <summary>Expand environment variables</summary>
+        public IEnumerable<KeyValuePair<string, string>> Expand(StringDictionary env)
+        {
+            var expand = new Regex("(?<!\\\\)\\$((?<name>[a-zA-Z0-9_]+)|{(?<name>[^}]+)})");
+            foreach (var envFile in envFiles)
+            {
+                foreach (var key in envFile.Keys("default"))
+                {
+                    var expanded = expand.Replace(
+                        envFile.Get("default", key, ""),
+                        match => env[match.Groups["name"].Value] // Doesn't throw if name doesn't exist
+                    );
+                    yield return new KeyValuePair<string, string>(key, expanded.Replace("\\$", "$"));
+                }
             }
         }
 
