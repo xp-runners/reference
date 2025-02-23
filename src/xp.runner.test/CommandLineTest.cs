@@ -275,6 +275,7 @@ namespace Xp.Runners.Test
         [InlineData("KEY=value", new string[] { "KEY=value" })]
         [InlineData("KEY=value\nCOLOR=green", new string[] { "KEY=value", "COLOR=green" })]
         [InlineData("KEY=\\$value", new string[] { "KEY=$value" })]
+        [InlineData("PROMPT=$PS1", new string[] { "PROMPT=user@host$" })]
         [InlineData("AUTH=$USER:$PASS", new string[] { "AUTH=testing:" })]
         [InlineData("PASS=secret\nAUTH=$USER:$PASS", new string[] { "PASS=secret", "AUTH=testing:secret" })]
         [InlineData("PASS=secret\nAUTH=${USER}:${PASS}", new string[] { "PASS=secret", "AUTH=testing:secret" })]
@@ -285,6 +286,7 @@ namespace Xp.Runners.Test
             {
                 var env = new StringDictionary();
                 env.Add("USER", "testing");
+                env.Add("PS1", "user@host$");
 
                 var fixture = new CommandLine(new string[] { });
                 fixture.TryAddEnv(file.Path);
