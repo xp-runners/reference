@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 using Xp.Runners.IO;
 using Xp.Runners.Commands;
 using Xp.Runners.Exec;
@@ -105,20 +107,6 @@ namespace Xp.Runners
             }
         }
 
-        /// <summary>Environment variables</summary>
-        public IEnumerable<KeyValuePair<string, string>> EnvVariables
-        {
-            get {
-                foreach (var envFile in envFiles)
-                {
-                    foreach (var key in envFile.Keys("default"))
-                    {
-                        yield return new KeyValuePair<string, string>(key, envFile.Get("default", key, ""));
-                    }
-                }
-            }
-        }
-
         /// <summary>Creates the commandline representation from argv</summary>
         public CommandLine(string[] argv)
         {
@@ -145,6 +133,22 @@ namespace Xp.Runners
             if (File.Exists(file))
             {
                 this.envFiles.Add(new Ini(file));
+            }
+        }
+
+        /// <summary>Expand environment variables</summary>
+        public IEnumerable<KeyValuePair<string, string>> Expand(StringDictionary env)
+        {
+            var expand = new Regex("\\$((?<name>[a-zA-Z_]+)|{(?<name>[^}]+)})");
+            foreach (var envFile in envFiles)
+            {
+                foreach (var key in envFile.Keys("default"))
+                {
+                    yield return new KeyValuePair<string, string>(key, expand.Replace(
+                        envFile.Get("default", key, ""),
+                        match => env[match.Groups["name"].Value] // Doesn't throw if name doesn't exist
+                    ));
+                }
             }
         }
 

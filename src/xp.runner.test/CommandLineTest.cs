@@ -9,6 +9,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace Xp.Runners.Test
 {
@@ -269,17 +270,33 @@ namespace Xp.Runners.Test
         }
 
         [Theory]
-        [InlineData("", "")]
-        [InlineData("KEY=", "KEY=")]
-        [InlineData("KEY=value", "KEY=value")]
-        [InlineData("KEY=value\nCOLOR=green", "KEY=value,COLOR=green")]
-        public void environment_variables(string contents, string expected)
+        [InlineData("", new string[] {})]
+        [InlineData("KEY=", new string[] { "KEY=" })]
+        [InlineData("KEY=value", new string[] { "KEY=value" })]
+        [InlineData("KEY=value\nCOLOR=green", new string[] { "KEY=value", "COLOR=green" })]
+        [InlineData("AUTH=$USER:$PASS", new string[] { "AUTH=testing:" })]
+        [InlineData("PASS=secret\nAUTH=$USER:$PASS", new string[] { "PASS=secret", "AUTH=testing:secret" })]
+        [InlineData("PASS=secret\nAUTH=${USER}:${PASS}", new string[] { "PASS=secret", "AUTH=testing:secret" })]
+        [InlineData("AUTH=$USER:$PASS\nPASS=secret", new string[] { "AUTH=testing:", "PASS=secret" })]
+        public void environment_variables(string contents, string[] expected)
         {
             using (var file = new TemporaryFile(".env.test").Containing(contents))
             {
+                var env = new StringDictionary();
+                env.Add("USER", "testing");
+
                 var fixture = new CommandLine(new string[] { });
                 fixture.TryAddEnv(file.Path);
-                Assert.Equal(expected, string.Join(",", fixture.EnvVariables.Select(e => e.Key + "=" + e.Value)));
+
+                // Perform expansion, updating env while doing so
+                var actual = new List<string>();
+                foreach (var pair in fixture.Expand(env))
+                {
+                    env[pair.Key] = pair.Value;
+                    actual.Add(pair.Key + "=" + pair.Value);
+                }
+
+                Assert.Equal(expected, actual.ToArray());
             }
         }
 
