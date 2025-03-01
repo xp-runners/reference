@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 9.1.0 / 2025-03-01
+
 * Merged PR #89: Environment variables, which automatically reads .env
   files; inspired by [Bun](https://bun.sh/docs/runtime/env).
   (@thekid)
