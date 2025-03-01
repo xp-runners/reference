@@ -3,6 +3,10 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Merged PR #89: Environment variables, which automatically reads .env
+  files; inspired by [Bun](https://bun.sh/docs/runtime/env).
+  (@thekid)
+
 ## 9.0.0 / 2025-02-22
 
 * Upgraded Debian dependencies to include PHP 8.3 *and* (for forward
