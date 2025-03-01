@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Xp.Runners.Config
 {
-    class Ini
+    public class Ini
     {
         private static char[] SEPARATOR = new char[] { '=' };
 
@@ -62,7 +62,22 @@ namespace Xp.Runners.Config
                         {
                             sections[section][key] = new List<string>();
                         }
-                        if ("" != val)
+                        if (0 == val.Length) continue;
+
+                        // Handle double and single quotes as well as backticks, and their escaping.
+                        if (val.StartsWith("\"") && val.EndsWith("\""))
+                        {
+                            sections[section][key].Add(val.Substring(1, val.Length - 2).Replace("\\\"", "\""));
+                        }
+                        else if (val.StartsWith("'") && val.EndsWith("'"))
+                        {
+                            sections[section][key].Add(val.Substring(1, val.Length - 2).Replace("\\'", "'"));
+                        }
+                        else if (val.StartsWith("`") && val.EndsWith("`"))
+                        {
+                            sections[section][key].Add(val.Substring(1, val.Length - 2).Replace("\\`", "`"));
+                        }
+                        else
                         {
                             sections[section][key].Add(val);
                         }
@@ -78,7 +93,7 @@ namespace Xp.Runners.Config
             Parse(false);
             if (!sections.ContainsKey(section)) return defaultValue;
             if (!sections[section].ContainsKey(key)) return defaultValue;
-            return sections[section][key].FirstOrDefault();
+            return sections[section][key].FirstOrDefault() ?? defaultValue;
         }   
 
         /// <summary>Gets all values for a key</summary>
@@ -96,6 +111,18 @@ namespace Xp.Runners.Config
             Parse(false);
             if (!sections.ContainsKey(section)) return defaultValue;
             return sections[section].Keys;
+        }
+
+        /// <summary>Tests for equality</summary>
+        public override bool Equals(Object obj)
+        {
+            return obj is Ini && ((Ini) obj).file == this.file;
+        }
+
+        /// <summary>Hashcode implementation</summary>
+        public override int GetHashCode()
+        {
+            return this.file.GetHashCode();
         }
     }
 }

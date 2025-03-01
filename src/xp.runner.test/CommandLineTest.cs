@@ -9,6 +9,7 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace Xp.Runners.Test
 {
@@ -223,6 +224,83 @@ namespace Xp.Runners.Test
                 new string[] { "test", "data" },
                 new CommandLine(new string[] { "-m", "test", "-m", "data" }).Path["modules"].ToArray()
             );
+        }
+
+        [Fact]
+        public void env_initially_empty()
+        {
+            Assert.Equal(new Ini[] { }, new CommandLine(new string[] { }).EnvFiles.ToArray());
+        }
+
+        [Fact]
+        public void one_environment_entry()
+        {
+            Assert.Equal(
+                new Ini[] { new Ini(".env") },
+                new CommandLine(new string[] { "-env", ".env" }).EnvFiles.ToArray()
+            );
+        }
+
+        [Fact]
+        public void multiple_environment_entries()
+        {
+            Assert.Equal(
+                new Ini[] { new Ini(".env"), new Ini(".env.prod") },
+                new CommandLine(new string[] { "-env", ".env", "-env", ".env.prod" }).EnvFiles.ToArray()
+            );
+        }
+
+        [Fact]
+        public void try_adding_env_file()
+        {
+            using (var file = new TemporaryFile(".env.test").Containing("KEY=value"))
+            {
+                var fixture = new CommandLine(new string[] { });
+                fixture.TryAddEnv(file.Path);
+                Assert.Equal(new Ini[] { new Ini(file.Path) }, fixture.EnvFiles.ToArray());
+            }
+        }
+
+        [Fact]
+        public void try_adding_nonexistant_env_file()
+        {
+            var fixture = new CommandLine(new string[] { });
+            fixture.TryAddEnv(".env.nonexistant");
+            Assert.Equal(new Ini[] { }, fixture.EnvFiles.ToArray());
+        }
+
+        [Theory]
+        [InlineData("", new string[] {})]
+        [InlineData("KEY=", new string[] { "KEY=" })]
+        [InlineData("KEY=value", new string[] { "KEY=value" })]
+        [InlineData("KEY=value\nCOLOR=green", new string[] { "KEY=value", "COLOR=green" })]
+        [InlineData("KEY=\\$value", new string[] { "KEY=$value" })]
+        [InlineData("PROMPT=$PS1", new string[] { "PROMPT=user@host$" })]
+        [InlineData("AUTH=$USER:$PASS", new string[] { "AUTH=testing:" })]
+        [InlineData("PASS=secret\nAUTH=$USER:$PASS", new string[] { "PASS=secret", "AUTH=testing:secret" })]
+        [InlineData("PASS=secret\nAUTH=${USER}:${PASS}", new string[] { "PASS=secret", "AUTH=testing:secret" })]
+        [InlineData("AUTH=$USER:$PASS\nPASS=secret", new string[] { "AUTH=testing:", "PASS=secret" })]
+        public void environment_variables(string contents, string[] expected)
+        {
+            using (var file = new TemporaryFile(".env.test").Containing(contents))
+            {
+                var env = new StringDictionary();
+                env.Add("USER", "testing");
+                env.Add("PS1", "user@host$");
+
+                var fixture = new CommandLine(new string[] { });
+                fixture.TryAddEnv(file.Path);
+
+                // Perform expansion, updating env while doing so
+                var actual = new List<string>();
+                foreach (var pair in fixture.Expand(env))
+                {
+                    env[pair.Key] = pair.Value;
+                    actual.Add(pair.Key + "=" + pair.Value);
+                }
+
+                Assert.Equal(expected, actual.ToArray());
+            }
         }
 
         [Fact]
