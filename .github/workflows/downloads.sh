@@ -4,7 +4,7 @@ set -e
 set -u
 
 VERSION=${GITHUB_REF#refs/tags/v*}
-TARGET=$(pwd)/target
+TARGET=$(pwd)/$1
 SETUP=$TARGET/setup-${VERSION}.sh
 ENTRYPOINT=$TARGET/xp-run-${VERSION}.sh
 TAR=$TARGET/xp-runners_${VERSION}.tar.gz

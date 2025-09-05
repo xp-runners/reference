@@ -44,32 +44,10 @@ jobs:
       run: sh .github/workflows/bundle.sh
 
     - name: Create downloads
-      run: sh .github/workflows/downloads.sh
+      run: sh .github/workflows/downloads.sh target/
 
-    - name: One-line installer
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.release-version }}-setup
-        path: target/setup-*.sh
-        overwrite: true
-
-    - name: Shell entrypoint
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.release-version }}-run
-        path: target/xp-run-*.sh
-        overwrite: true
-
-    - name: Tar.gz for Un*x
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.release-version }}-tar
-        path: target/xp-runners_*.tar.gz
-        overwrite: true
-
-    - name: Zipfile for Windows
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.release-version }}-zip
-        path: target/xp-runners_*.zip
-        overwrite: true
+    - name: Create release-version
+      run: gh release upload ${{ env.release-version }} target/* --clobber
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
