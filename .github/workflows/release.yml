@@ -43,12 +43,33 @@ jobs:
     - name: Bundle entrypoint
       run: sh .github/workflows/bundle.sh
 
-    - name: Debian package
-      run: sh .github/workflows/debian.sh
-      env:
-        BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
+    - name: Create downloads
+      run: sh .github/workflows/downloads.sh
 
-    - name: Generic package
-      run: sh .github/workflows/generic.sh
-      env:
-        BALTO_REPO_TOKEN: ${{secrets.BALTO_REPO_TOKEN}}
+    - name: One-line installer
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.release-version }}-setup
+        path: target/setup-*.sh
+        overwrite: true
+
+    - name: Shell entrypoint
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.release-version }}-run
+        path: target/xp-run-*.sh
+        overwrite: true
+
+    - name: Tar.gz for Un*x
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.release-version }}-tar
+        path: target/xp-runners_*.tar.gz
+        overwrite: true
+
+    - name: Zipfile for Windows
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.release-version }}-zip
+        path: target/xp-runners_*.zip
+        overwrite: true
