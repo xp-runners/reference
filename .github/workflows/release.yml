@@ -46,8 +46,9 @@ jobs:
     - name: Create downloads
       run: sh .github/workflows/downloads.sh target/
 
-    - name: Create release-version
-      run: gh release upload ${{ env.release-version }} target/* --clobber
-      shell: bash
+    - name: Create release ${{ github.ref }}
+      run: |
+        gh release create ${{ github.ref }}
+        gh release upload ${{ github.ref }} target/* --clobber
       env:
         GH_TOKEN: ${{ github.token }}

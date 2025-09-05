@@ -25,6 +25,3 @@ echo '[assembly: AssemblyVersion("'$VERSION.$BUILD_NUM'")]' >> src/xp.runner/Ass
 mv src/xp.runner/AssemblyInfo.cs.patched src/xp.runner/AssemblyInfo.cs
 
 cat src/xp.runner/AssemblyInfo.cs
-
-# Export to environment
-echo release-version=${GITHUB_REF#refs/tags/v*} >> $GITHUB_ENV
