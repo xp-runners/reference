@@ -3,6 +3,9 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+* Moved releases away from Balto, which has been sunset in 2025, see #90
+  (@thekid)
+
 ## 9.1.0 / 2025-03-01
 
 * Merged PR #89: Environment variables, which automatically reads .env
