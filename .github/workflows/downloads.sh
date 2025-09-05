@@ -24,15 +24,6 @@ tar cvfz $TAR xp.exe xar.exe tput.exe class-main.php web-main.php
 
 # Zipfile for Windows
 zip -j $ZIP xp.exe xar.exe tput.exe class-main.php web-main.php
-curl -i \
-  --header "Authorization: Bearer ${BALTO_REPO_TOKEN}" \
-  --form "download=@${ZIP}" \
-  --form "name=zip" \
-  --form "version=${VERSION}" \
-  --form "description=Zip file" \
-  --form "readme=<README.md" \
-  $PUBLISH
-echo
 
 # Done
 echo "Downloads"
