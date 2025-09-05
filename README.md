@@ -15,18 +15,6 @@ $ curl -sSL https://github.com/xp-runners/reference/releases/download/v9.2.0/xp-
 # ...
 ```
 
-...and a Ubuntu/Debian package:
-
-```sh
-$ curl https://baltocdn.com/xp-framework/signing.asc | sudo apt-key add -
-$ echo 'deb https://baltocdn.com/xp-framework/xp-runners/reference/ all main' | sudo tee -a /etc/apt/sources.list.d/xp.list
-$ sudo apt-get install apt-transport-https --yes
-
-# ..and then:
-$ sudo apt-get update
-$ sudo apt-get install xp-runners
-```
-
 Then, install the framework and you're all set to go:
 
 ```sh
