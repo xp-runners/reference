@@ -51,16 +51,16 @@ $fakeroot tar cfJ data.tar.xz usr/bin/*
 size=$(du -k usr/bin | cut -f 1)
 echo -n '' > conffiles
 cat <<-EOF > control
-  Package: xp-runners
-  Priority: extra
-  Section: devel
-  Installed-Size: ${size}
-  Maintainer: XP Team <xp-runners@xp-framework.net>
-  Architecture: all
-  Version: ${VERSION}-1
-  Depends: php8.4-cli | php8.3-cli | php8.2-cli | php8.1-cli | php8.0-cli | php7.4-cli, libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil
-  Provides: xp-runners
-  Description: XP Runners
+	Package: xp-runners
+	Priority: extra
+	Section: devel
+	Installed-Size: ${size}
+	Maintainer: XP Team <xp-runners@xp-framework.net>
+	Architecture: all
+	Version: ${VERSION}-1
+	Depends: php8.4-cli | php8.3-cli | php8.2-cli | php8.1-cli | php8.0-cli | php7.4-cli, libmono-corlib4.5-cil, libmono-system-core4.0-cil, libmono-system-runtime-serialization4.0-cil
+	Provides: xp-runners
+	Description: XP Runners
 EOF
 $fakeroot tar cfz control.tar.gz ./conffiles ./control
 cat control
