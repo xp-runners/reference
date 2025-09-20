@@ -3,6 +3,8 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 9.2.0 / 2025-09-20
+
 * Moved releases away from Balto, which has been sunset in 2025, see #90
   (@thekid)
 
