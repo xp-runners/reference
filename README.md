@@ -10,7 +10,7 @@ Getting started
 To install the XP runners, you can choose between the generic installer:
 
 ```sh
-$ curl -sSL https://github.com/xp-runners/reference/releases/download/v9.2.0/setup-9.2.0.sh | sh
+$ curl -sSL https://github.com/xp-runners/reference/releases/download/v9.3.0/setup-9.3.0.sh | sh
 # ...
 ```
 
