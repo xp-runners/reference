@@ -21,8 +21,8 @@ $ composer global require xp-framework/core
 # ...
 
 $ xp version
-XP 12.6.2-dev { PHP/8.4.11 & Zend/4.4.11 } @ Windows NT SURFACE 10.0 build 26100 (Windows 11) AMD64
-Copyright (c) 2001-2025 the XP group
+XP 12.10.1-dev { PHP/8.5.7 & Zend/4.5.7 } @ Windows NT SURFACE 10.0 build 26200 (Windows 11) AMD64
+Copyright (c) 2001-2026 the XP group
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/test/php>
 FileSystemCL<$APPDATA/Composer/vendor/xp-framework/core/src/main/resources>
