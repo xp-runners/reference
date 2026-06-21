@@ -3,6 +3,13 @@ XP Runners change log
 
 ## ?.?.? / ????-??-??
 
+## 9.3.0 / 2026-06-21
+
+* Extend copyright year to 2026, include PHP 8.5 in Debian control file
+  (@thekid)
+* Made it possible to close XAR archives, see xp-framework/core#365
+  (@thekid)
+
 ## 9.2.0 / 2025-09-20
 
 * Moved releases away from Balto, which has been sunset in 2025, see #90
